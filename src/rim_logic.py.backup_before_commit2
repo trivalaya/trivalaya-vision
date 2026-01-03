@@ -1,0 +1,188 @@
+import cv2
+import numpy as np
+import logging
+from typing import Optional, Tuple
+
+# Import centralized config and validated utilities
+try:
+    from src.config import RimRecoveryConfig
+    from src.math_utils import validate_rim_recovery
+except ImportError:
+    logging.warning("Config/Utils import failed. Using defaults.")
+    class RimRecoveryConfig:
+        SEARCH_PAD_RATIO = 1.0
+        SEED_RADIUS_TOLERANCE = 0.9
+        HOUGH_DP = 1.5
+        HOUGH_MIN_DIST = 1000
+        HOUGH_PARAM1 = 100
+        HOUGH_PARAM2 = 30
+        EDGE_SUPPORT_MIN = 0.15
+        EDGE_SUPPORT_FALLBACK = 0.12
+        EDGE_RING_THICKNESS = 3
+    
+    # Minimal fallback validation if utils missing
+    def validate_rim_recovery(rec, seed, shape): 
+        return True
+
+logger = logging.getLogger(__name__)
+
+def recover_rim(image_bgr: np.ndarray, 
+               seed_contour: np.ndarray) -> Tuple[Optional[np.ndarray], float]:
+    """
+    Layer 1.5: Circle Hypothesis and Rim Recovery.
+    Uses a 'seed' (proven internal contour) to hypothesize a missing 'parent' (broken rim).
+    """
+    if seed_contour is None or len(seed_contour) < 3:
+        return None, 0
+    
+    h, w = image_bgr.shape[:2]
+    x, y, w_box, h_box = cv2.boundingRect(seed_contour)
+    
+    # 1. DEFINE SEARCH REGION
+    pad = int(max(w_box, h_box) * RimRecoveryConfig.SEARCH_PAD_RATIO)
+    x1 = max(0, x - pad)
+    y1 = max(0, y - pad)
+    x2 = min(w, x + w_box + pad)
+    y2 = min(h, y + h_box + pad)
+    
+    roi = image_bgr[y1:y2, x1:x2]
+    if roi.size == 0: 
+        return None, 0
+    
+    roi_gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+    roi_blur = cv2.GaussianBlur(roi_gray, (9, 9), 2)
+    
+    # 2. CONSTRAIN SEARCH SPACE
+    seed_radius = int(max(w_box, h_box) / 2)
+    min_rad = int(seed_radius * RimRecoveryConfig.SEED_RADIUS_TOLERANCE)
+    max_rad = int(min(w, h) / 2)
+    
+    # 3. GENERATE HYPOTHESES (Hough)
+    circles = cv2.HoughCircles(
+        roi_blur, 
+        cv2.HOUGH_GRADIENT, 
+        dp=RimRecoveryConfig.HOUGH_DP, 
+        minDist=RimRecoveryConfig.HOUGH_MIN_DIST, 
+        param1=RimRecoveryConfig.HOUGH_PARAM1, 
+        param2=RimRecoveryConfig.HOUGH_PARAM2, 
+        minRadius=min_rad,
+        maxRadius=max_rad
+    )
+    
+    if circles is None: 
+        return None, 0
+    
+    # 4. VALIDATE HYPOTHESES
+    best_circle = None
+    best_score = 0
+    
+    circles = np.uint16(np.around(circles))
+    
+    # Pre-compute edges once
+    edges = cv2.Canny(image_bgr, 50, 150)
+    
+    # Get seed center for alignment check
+    M = cv2.moments(seed_contour)
+    if M["m00"] == 0:
+        return None, 0
+    seed_cx = int(M["m10"] / M["m00"])
+    seed_cy = int(M["m01"] / M["m00"])
+    
+    for i in circles[0, :]:
+        cx, cy, r = int(i[0]), int(i[1]), int(i[2])  # Cast to int immediately
+        
+        # Map to global coordinates
+        global_cx = x1 + cx
+        global_cy = y1 + cy
+        
+        # Quick validation using utility
+        theta = np.linspace(0, 2*np.pi, 36)
+        tx = global_cx + r * np.cos(theta)
+        ty = global_cy + r * np.sin(theta)
+        temp_contour = np.column_stack((tx, ty)).astype(np.int32)
+        
+        if not validate_rim_recovery(temp_contour, seed_contour, (h, w)):
+            continue
+        else:
+            logger.debug(f"Circle candidate passed validation: r={r}, center=({global_cx}, {global_cy})")
+        
+        # CHECK 1: Center Alignment
+        dist = np.sqrt((global_cx - seed_cx)**2 + (global_cy - seed_cy)**2)
+        if dist > r * 0.8: 
+            continue
+        
+        # CHECK 2: Edge Support
+        mask = np.zeros((h, w), dtype=np.uint8)
+        cv2.circle(mask, (global_cx, global_cy), r, 255, RimRecoveryConfig.EDGE_RING_THICKNESS)
+        
+        mask_pixels = cv2.countNonZero(mask)
+        if mask_pixels == 0: 
+            continue
+        
+        overlap = cv2.bitwise_and(mask, edges)
+        hit_ratio = cv2.countNonZero(overlap) / mask_pixels
+        
+        # CHECK 3: Gradient Score
+        grad_score = compute_radial_gradient_score(image_bgr, (global_cx, global_cy), r)
+        
+        # Combined score
+        combined_score = hit_ratio * 0.7 + grad_score * 0.3
+        
+        if combined_score > best_score:
+            best_score = combined_score
+            best_circle = (global_cx, global_cy, r)
+
+    # 5. RETURN BEST RESULT
+    threshold = (RimRecoveryConfig.EDGE_SUPPORT_FALLBACK 
+                 if best_score < 0.20 
+                 else RimRecoveryConfig.EDGE_SUPPORT_MIN)
+    
+    if best_circle and best_score > threshold:
+        cx, cy, r = best_circle
+        theta = np.linspace(0, 2*np.pi, 360)
+        x_pts = cx + r * np.cos(theta)
+        y_pts = cy + r * np.sin(theta)
+        new_contour = np.column_stack((x_pts, y_pts)).astype(np.int32).reshape((-1, 1, 2))
+        return new_contour, best_score
+
+    logger.debug(f"Rim recovery failed: best_score={best_score:.3f}, threshold={threshold:.3f}, found {len(circles[0])} circles")
+    return None, 0
+
+def compute_radial_gradient_score(image_bgr, center, radius):
+    """Helper: Checks if gradients point toward the center."""
+    gray = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2GRAY)
+    grad_x = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)
+    grad_y = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)
+    
+    cx, cy = center
+    angles = np.linspace(0, 2*np.pi, 36)
+    scores = []
+    
+    for angle in angles:
+        px = int(cx + radius * np.cos(angle))
+        py = int(cy + radius * np.sin(angle))
+        
+        if px < 0 or px >= gray.shape[1] or py < 0 or py >= gray.shape[0]: 
+            continue
+        
+        # FIXED: Cast to float BEFORE subtraction to avoid overflow
+        dx = float(px) - float(cx)
+        dy = float(py) - float(cy)
+        norm = np.sqrt(dx*dx + dy*dy)
+        if norm == 0: 
+            continue
+        dx, dy = dx/norm, dy/norm
+        
+        # Gradient vector
+        # Fix the typo:
+        gx = float(grad_x[py, px])
+        gy = float(grad_y[py, px])  # FIXED: was py, py
+        gnorm = np.sqrt(gx*gx + gy*gy)
+        if gnorm == 0: 
+            continue
+        gx, gy = gx/gnorm, gy/gnorm
+        
+        # Dot product
+        scores.append(abs(dx*gx + dy*gy))
+        
+    return np.mean(scores) if scores else 0.0

@@ -1,0 +1,21 @@
+# Python environments
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Data & outputs
+extracted_data/
+data/
+experiments/
+
+# Debug / diagnostics
+debug_*.jpg
+diagnostic_*.jpg
+
+# Archives
+*.zip
+
+# Editor / OS
+.vscode/
+.DS_Store

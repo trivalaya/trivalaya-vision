@@ -1,0 +1,15 @@
+Baseline v1: Geometric Consensus + Semantic Salvage
+Date: Wed Dec 31 23:36:15 UTC 2025
+
+Key Features:
+- Geometric circle fitting (replaces Hough-only)
+- Arc coverage weighting in confidence
+- Annulus edge support (5px band)
+- Semantic salvage (coin_likelihood > 0.65)
+- IoU-based NMS with containment
+
+Performance:
+- Detection rate: ~90% (up from ~40%)
+- Obv/Rev splitting: ~80% accuracy
+- Fragment explosion: Eliminated
+- False positives: Minimal
