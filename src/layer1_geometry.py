@@ -210,8 +210,13 @@ def _try_two_coin_resolution(img: np.ndarray,
         return None
     
     # Attempt resolution (reuse the same resolver instance)
-    result = resolver.resolve(img, binary, gray)
-    
+    # --- CRITICAL FIX: Pass 'bbox' to the optimized resolver ---
+    try:
+        result = resolver.resolve(img, binary, gray, candidate['bbox'])
+    except TypeError:
+        # Fallback if old version of resolver is somehow loaded
+        result = resolver.resolve(img, binary, gray)
+
     if result['status'] != 'split':
         # Failed - return None to fall back to single-blob result
         # But flag it for review
@@ -223,14 +228,14 @@ def _try_two_coin_resolution(img: np.ndarray,
                 "debug_data": {
                     **candidate.get("debug_data", {}),
                     "two_coin_attempted": True,
-                    "two_coin_failed": result['debug']
+                    "two_coin_failed": result.get('debug', {})
                 }
             }],
             "two_coin_resolution": {
                 "triggered": True,
                 "status": "failed",
                 "method": result.get('method'),
-                "debug": result['debug']
+                "debug": result.get('debug')
             }
         }
     
@@ -240,7 +245,6 @@ def _try_two_coin_resolution(img: np.ndarray,
     for coin in result['coins']:
         # The crop is a sub-image, we need to record its position in the original
         crop = coin['crop']
-        crop_h, crop_w = crop.shape[:2]
         
         # Create a synthetic contour from the circular detection
         cx, cy = coin['center']
@@ -288,6 +292,6 @@ def _try_two_coin_resolution(img: np.ndarray,
             "triggered": True,
             "status": "split",
             "method": result['method'],
-            "pair_score": result['debug'].get('pair_score', 0)
+            "pair_score": result['debug'].get('score', 0)
         }
     }
