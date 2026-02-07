@@ -234,7 +234,7 @@ class TwoCoinResolver:
     def _extract_crop(self, img, cx, cy, r, shape):
         # (Standard crop logic, omitted for brevity)
         h, w = shape
-        s = int(r * 1.05) # box size
+        s = int(r * 1.15) # box size — 15% padding for Hough radius underestimation
         x1, y1 = max(0, int(cx)-s), max(0, int(cy)-s)
         x2, y2 = min(w, int(cx)+s), min(h, int(cy)+s)
         return img[y1:y2, x1:x2].copy(), (x1, y1, x2-x1, y2-y1)
