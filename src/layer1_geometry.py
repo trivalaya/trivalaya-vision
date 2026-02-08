@@ -26,51 +26,132 @@ except ImportError:
     TWO_COIN_RESOLVER_AVAILABLE = False
 
 
-def layer_1_structural_salience(image_path: str, sensitivity: str = "standard") -> Dict:
+def _suppress_contained(candidates: List[Dict]) -> List[Dict]:
     """
-    Main entry point for Layer 1 structural analysis.
-    
-    Now includes two-coin detection: if a single merged blob is detected
-    with low circularity and wide aspect ratio, attempts to split it into
-    separate obverse/reverse detections.
+    Remove small candidates fully contained inside a larger, high-quality
+    candidate.  Targets punch-mark shadows and internal blobs that survive
+    NMS because they don't overlap enough with the parent coin.
+
+    Suppression rule (all must be true):
+      - child_area / parent_area  <= 0.35
+      - containment (intersection / child_area) >= 0.85
+      - child is weak: circularity < 0.82  OR  edge_support < 0.50
+      - parent is strong: circularity > 0.85
     """
-    img = cv2.imread(image_path)
-    if img is None:
-        return {"layer": 1, "status": "error", "error": "image_load_failed"}
+    if len(candidates) <= 1:
+        return candidates
 
-    h, w = img.shape[:2]
-    total_area = h * w
+    suppressed = set()
 
-    # --- Grayscale + background handling ---
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    avg_bg, _ = detect_background_histogram(gray)
+    for i, parent in enumerate(candidates):
+        if i in suppressed:
+            continue
+        p_area = parent["geometry"]["area"]
+        p_circ = parent["geometry"]["circularity"]
+        if p_circ <= 0.85:
+            continue
+        px, py, pw, ph = parent["bbox"]
+        px2, py2 = px + pw, py + ph
 
-    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
-    gray_enhanced = clahe.apply(gray)
+        for j, child in enumerate(candidates):
+            if j == i or j in suppressed:
+                continue
+            c_area = child["geometry"]["area"]
+            if c_area == 0 or c_area / p_area > 0.35:
+                continue
 
-    # --- Threshold polarity ---
-    thresh_type = (
-        cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU
-        if avg_bg > Layer1Config.BRIGHT_BACKGROUND_THRESHOLD
-        else cv2.THRESH_BINARY + cv2.THRESH_OTSU
-    )
+            cx, cy, cw, ch = child["bbox"]
+            cx2, cy2 = cx + cw, cy + ch
 
-    # --- Edge detection ---
-    v = np.median(gray_enhanced)
-    sigma = Layer1Config.Standard.CANNY_SIGMA
-    lower = int(max(0, (1.0 - sigma) * v))
-    upper = int(min(255, (1.0 + sigma) * v))
-    edges = cv2.Canny(gray_enhanced, lower, upper)
+            # Intersection
+            ix1 = max(px, cx)
+            iy1 = max(py, cy)
+            ix2 = min(px2, cx2)
+            iy2 = min(py2, cy2)
+            inter = max(0, ix2 - ix1) * max(0, iy2 - iy1)
 
-    edge_zone = cv2.dilate(
-        edges,
-        cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
-    )
+            child_box_area = cw * ch
+            if child_box_area == 0:
+                continue
+            containment = inter / child_box_area
+            if containment < 0.85:
+                continue
 
-    # --- Binary segmentation ---
+            c_circ = child["geometry"]["circularity"]
+            c_edge = child["classification"]["confidence"]
+            if c_circ >= 0.82 and c_edge >= 0.50:
+                continue
+
+            suppressed.add(j)
+
+    if not suppressed:
+        return candidates
+    return [c for i, c in enumerate(candidates) if i not in suppressed]
+
+
+def _suppress_background_noise(candidates: List[Dict]) -> List[Dict]:
+    """
+    When strong coin detections are present, suppress tiny weak detections
+    that are likely background noise (e.g. shadows between coins on dark
+    backgrounds).
+
+    Only fires when at least one dominant detection exists (circularity > 0.85
+    AND edge support >= 0.70).  Suppresses candidates where:
+      - area < 20% of the largest dominant detection
+      - circularity < 0.80
+      - edge support < 0.50
+    """
+    if len(candidates) <= 1:
+        return candidates
+
+    # Find the largest dominant detection
+    max_dominant_area = 0
+    for c in candidates:
+        circ = c["geometry"]["circularity"]
+        edge = c["classification"]["confidence"]
+        area = c["geometry"]["area"]
+        if circ > 0.85 and edge >= 0.70 and area > max_dominant_area:
+            max_dominant_area = area
+
+    if max_dominant_area == 0:
+        return candidates
+
+    area_floor = 0.20 * max_dominant_area
+    kept = []
+    for c in candidates:
+        area = c["geometry"]["area"]
+        circ = c["geometry"]["circularity"]
+        edge = c["classification"]["confidence"]
+        if area < area_floor and circ < 0.80 and edge < 0.50:
+            continue
+        kept.append(c)
+
+    return kept
+
+
+def _flip_thresh_type(thresh_type: int) -> int:
+    """Flip Otsu threshold polarity (binary <-> binary_inv)."""
+    if thresh_type == cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU:
+        return cv2.THRESH_BINARY + cv2.THRESH_OTSU
+    return cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU
+
+
+def _segment_and_extract_candidates(
+    img: np.ndarray,
+    gray_enhanced: np.ndarray,
+    edge_zone: np.ndarray,
+    thresh_type: int,
+    h: int, w: int,
+    total_area: int,
+) -> tuple:
+    """
+    Run binary segmentation with given threshold polarity and extract
+    structural candidates.
+
+    Returns (candidates_list, binary_mask).
+    """
     blurred = cv2.GaussianBlur(gray_enhanced, (7, 7), 0)
     _, binary = cv2.threshold(blurred, 0, 255, thresh_type)
-
     binary = cv2.morphologyEx(
         binary,
         cv2.MORPH_CLOSE,
@@ -82,7 +163,6 @@ def layer_1_structural_salience(image_path: str, sensitivity: str = "standard") 
         binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
     )
 
-    # --- Initial candidate extraction ---
     candidates: List[Dict] = []
 
     for c in contours:
@@ -157,6 +237,68 @@ def layer_1_structural_salience(image_path: str, sensitivity: str = "standard") 
             }
         })
 
+    return candidates, binary
+
+
+def layer_1_structural_salience(image_path: str, sensitivity: str = "standard") -> Dict:
+    """
+    Main entry point for Layer 1 structural analysis.
+    
+    Now includes two-coin detection: if a single merged blob is detected
+    with low circularity and wide aspect ratio, attempts to split it into
+    separate obverse/reverse detections.
+    """
+    img = cv2.imread(image_path)
+    if img is None:
+        return {"layer": 1, "status": "error", "error": "image_load_failed"}
+
+    h, w = img.shape[:2]
+    total_area = h * w
+
+    # --- Grayscale + background handling ---
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    avg_bg, _ = detect_background_histogram(gray)
+
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+    gray_enhanced = clahe.apply(gray)
+
+    # --- Threshold polarity ---
+    thresh_type = (
+        cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU
+        if avg_bg > Layer1Config.BRIGHT_BACKGROUND_THRESHOLD
+        else cv2.THRESH_BINARY + cv2.THRESH_OTSU
+    )
+
+    # --- Edge detection ---
+    v = np.median(gray_enhanced)
+    sigma = Layer1Config.Standard.CANNY_SIGMA
+    lower = int(max(0, (1.0 - sigma) * v))
+    upper = int(min(255, (1.0 + sigma) * v))
+    edges = cv2.Canny(gray_enhanced, lower, upper)
+
+    edge_zone = cv2.dilate(
+        edges,
+        cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
+    )
+
+    # --- Segmentation + candidate extraction ---
+    candidates, binary = _segment_and_extract_candidates(
+        img, gray_enhanced, edge_zone, thresh_type, h, w, total_area
+    )
+
+    # --- Polarity-flip fallback ---
+    # If primary polarity yields no candidates (e.g. bright coins on bright
+    # background merge into a single full-image blob), retry with the
+    # opposite threshold polarity and keep the better result.
+    if not candidates:
+        flipped_type = _flip_thresh_type(thresh_type)
+        candidates_alt, binary_alt = _segment_and_extract_candidates(
+            img, gray_enhanced, edge_zone, flipped_type, h, w, total_area
+        )
+        if candidates_alt:
+            candidates = candidates_alt
+            binary = binary_alt
+
     if not candidates:
         return {"layer": 1, "status": "no_structurally_valid_object"}
 
@@ -166,6 +308,14 @@ def layer_1_structural_salience(image_path: str, sensitivity: str = "standard") 
         iou_threshold=Layer1Config.NMS_IOU_THRESHOLD,
         containment_threshold=0.40
     )
+
+    # --- Containment suppression ---
+    # Remove small interior blobs (punch marks, shadows) inside real coins
+    candidates = _suppress_contained(candidates)
+
+    # --- Background noise suppression ---
+    # Remove tiny weak detections when strong coins are present
+    candidates = _suppress_background_noise(candidates)
 
     # === TWO-COIN RESOLUTION CHECK ===
     # Trigger conditions:
