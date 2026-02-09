@@ -43,77 +43,89 @@ class TwoCoinResolver:
         if cand['geometry']['circularity'] > self.config.TRIGGER_CIRCULARITY_MAX: return False, None
         return True, cand
 
+    def _remap_coins_to_original(self, result: Dict, image: np.ndarray,
+                                  scale: float, x1: int, y1: int) -> Dict:
+        """Remap split coin coordinates: working-space -> crop-space -> original image."""
+        h_img, w_img = image.shape[:2]
+        final_coins = []
+        for c in result['coins']:
+            cx_c = c['center'][0] / scale
+            cy_c = c['center'][1] / scale
+            r_c = c['radius'] / scale
+
+            cx_final = cx_c + x1
+            cy_final = cy_c + y1
+
+            coin_crop, bbox = self._extract_crop(image, cx_final, cy_final, r_c, (h_img, w_img))
+            final_coins.append({
+                'crop': coin_crop,
+                'bbox': bbox,
+                'center': (cx_final, cy_final),
+                'radius': r_c,
+                'side': c['side'],
+            })
+        return final_coins
+
     def resolve(self, image: np.ndarray, binary_mask: np.ndarray, gray: np.ndarray, candidate_bbox: Tuple[int,int,int,int]) -> Dict:
         """
         Speed-optimized resolve flow:
         1. CROP to the candidate blob (ignore background)
         2. DOWNSCALE the crop
         3. DETECT using vectorized operations
+
+        Always returns a dict with 'status' key ('split' or 'failed').
         """
+        try:
+            return self._resolve_inner(image, binary_mask, gray, candidate_bbox)
+        except Exception as e:
+            return {'status': 'failed', 'reason': f'resolver_exception: {e}'}
+
+    def _resolve_inner(self, image: np.ndarray, binary_mask: np.ndarray, gray: np.ndarray, candidate_bbox: Tuple[int,int,int,int]) -> Dict:
         cfg = self.config
-        
+
         # --- OPTIMIZATION 1: CROP FIRST ---
-        # Don't resize/process the empty background. 
-        # Add a small safety margin to the bbox.
         bx, by, bw, bh = candidate_bbox
         h_img, w_img = image.shape[:2]
-        
+
         margin = int(max(bw, bh) * 0.1)
         x1 = max(0, bx - margin)
         y1 = max(0, by - margin)
         x2 = min(w_img, bx + bw + margin)
         y2 = min(h_img, by + bh + margin)
-        
-        # All processing happens on this crop
+
         gray_crop = gray[y1:y2, x1:x2]
-        
+
         # --- OPTIMIZATION 2: DOWNSCALE THE CROP ---
         h_crop, w_crop = gray_crop.shape
         scale = 1.0
         if max(h_crop, w_crop) > cfg.WORKING_MAX_DIM:
             scale = cfg.WORKING_MAX_DIM / max(h_crop, w_crop)
             dsize = (int(w_crop * scale), int(h_crop * scale))
-            gray_working = cv2.resize(gray_crop, dsize, interpolation=cv2.INTER_NEAREST) # Nearest is fastest
+            gray_working = cv2.resize(gray_crop, dsize, interpolation=cv2.INTER_NEAREST)
         else:
             gray_working = gray_crop
-            
+
         # Pre-compute edges once on small working image
         blurred = cv2.GaussianBlur(gray_working, (5, 5), 0)
         edges_working = cv2.Canny(blurred, 50, 150)
-        
+
         # --- EXECUTE HOUGH ---
         result = self._vectorized_hough(gray_working, edges_working)
-        
-        if result['status'] == 'split':
-            # Remap coordinates: Working -> Crop -> Original
-            final_coins = []
-            for c in result['coins']:
-                # Un-scale
-                cx_c = c['center'][0] / scale
-                cy_c = c['center'][1] / scale
-                r_c  = c['radius'] / scale
-                
-                # Un-crop (add top-left offset)
-                cx_final = cx_c + x1
-                cy_final = cy_c + y1
-                
-                # Extract final high-res crop
-                coin_crop, bbox = self._extract_crop(image, cx_final, cy_final, r_c, (h_img, w_img))
-                final_coins.append({
-                    'crop': coin_crop,
-                    'bbox': bbox,
-                    'center': (cx_final, cy_final),
-                    'radius': r_c,
-                    'side': c['side']
-                })
-            return {'status': 'split', 'method': 'hough', 'coins': final_coins, 'debug': result['debug']}
 
-        # Fallback to watershed only if Hough failed (omitted for brevity, assume similar structure)
+        if result.get('status') == 'split':
+            final_coins = self._remap_coins_to_original(result, image, scale, x1, y1)
+            return {'status': 'split', 'method': 'hough', 'coins': final_coins, 'debug': result.get('debug', {})}
+
+        # --- FALLBACK: WATERSHED ---
         ws_result = self._try_watershed_fallback(gray_working, edges_working)
-        if ws_result['status'] == 'split':
-             # ... (Copy the same un-scaling logic as Hough block above) ...
-             # I can write the full block if you need it.
-             pass
+
+        if ws_result.get('status') == 'split':
+            final_coins = self._remap_coins_to_original(ws_result, image, scale, x1, y1)
+            return {'status': 'split', 'method': 'watershed', 'coins': final_coins, 'debug': ws_result.get('debug', {})}
+
+        # --- TERMINAL FALLBACK ---
+        return {'status': 'failed', 'reason': 'hough_and_watershed_failed',
+                'debug': result.get('debug', {})}
 
     def _vectorized_hough(self, gray: np.ndarray, edges: np.ndarray) -> Dict:
         """

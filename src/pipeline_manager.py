@@ -88,10 +88,14 @@ def analyze_image(image_path):
                 "layer_2": l2_result
             })
 
-        return {
-            "status": "success", 
-            "detections": final_results 
+        out = {
+            "status": "success",
+            "detections": final_results,
         }
+        # Propagate two-coin resolver metadata for upstream logging
+        if "two_coin_resolution" in l1_result:
+            out["two_coin_resolution"] = l1_result["two_coin_resolution"]
+        return out
 
     finally:
         if os.path.exists(working_path): os.remove(working_path)
