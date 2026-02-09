@@ -25,77 +25,75 @@ def _load_and_resize(image_path):
 def analyze_image(image_path):
     img, scale = _load_and_resize(image_path)
     if img is None: return {"status": "error", "error": "Load failed"}
-    working_path = f"temp_work_{os.path.basename(image_path)}.jpg"
-    cv2.imwrite(working_path, img)
-    
-    try:
-        # 1. Run Layer 1
-        l1_result = layer_1_structural_salience(working_path, sensitivity="standard")
-        
-        if "objects" not in l1_result:
-             l1_result = layer_1_structural_salience(working_path, sensitivity="high")
-             
-        if "objects" not in l1_result:
-             return {"status": "failed", "last_error": "No objects found"}
 
-        # 2. Run Layer 2 on EACH object
-        detected_objects = l1_result["objects"]
-        final_results = []
-        
-        for i, obj_data in enumerate(detected_objects):
-            single_l1 = {
-                "layer": 1,
-                "classification": obj_data["classification"],
-                "geometry": obj_data["geometry"],
-                "contour": obj_data["contour"],
-                "debug_data": obj_data["debug_data"]
-            }
-            
-            l2_result = layer_2_context_probe(working_path, single_l1)
-            
-            container = l2_result['context_classification']['inferred_container']
-            
-            # === SEMANTIC SALVAGE RULE (Commit 3) ===
-            # High coin_likelihood overrides irregular geometry
-            # Handles: incuse reverses, thick flans, shadow-heavy photos
-            coin_likelihood = single_l1['geometry'].get('coin_likelihood', 0)
-            area = single_l1['geometry']['area']
-            circularity = single_l1['geometry']['circularity']
-            
-            # Strong coin evidence - trust it even if geometry irregular
-            if coin_likelihood > 0.65 and area > 10000:
-                if circularity > 0.60:
-                    final_decision = "Round Object (Coin/Medallion)"
-                else:
-                    final_decision = "Round Object (Coin/Medallion)"  # Still a coin!
-            
-            # Standard mapping for lower confidence
-            elif container == "Round_Artifact":
-                final_decision = "Round Object (Coin/Medallion)"
-            elif container == "Coin_Planchet":
-                final_decision = "Round Object (Coin)"
-            elif container == "Fragment":
-                final_decision = "Fragment"
-            elif obj_data['classification']['label'] in ["Circle", "Polygon"]:
-                final_decision = "Geometric Form"
-            else:
-                final_decision = "Artifact (Isolated)"
-            
-            final_results.append({
-                "id": i+1,
-                "final_classification": final_decision,
-                "layer_1": single_l1,
-                "layer_2": l2_result
-            })
+    # Pass ndarray directly — no temp JPEG re-encoding.
+    # This eliminates pixel-level differences between direct L1 calls
+    # and the full pipeline path.
 
-        out = {
-            "status": "success",
-            "detections": final_results,
+    # 1. Run Layer 1
+    l1_result = layer_1_structural_salience(img, sensitivity="standard")
+
+    if "objects" not in l1_result:
+         l1_result = layer_1_structural_salience(img, sensitivity="high")
+
+    if "objects" not in l1_result:
+         return {"status": "failed", "last_error": "No objects found"}
+
+    # 2. Run Layer 2 on EACH object
+    detected_objects = l1_result["objects"]
+    final_results = []
+
+    for i, obj_data in enumerate(detected_objects):
+        single_l1 = {
+            "layer": 1,
+            "classification": obj_data["classification"],
+            "geometry": obj_data["geometry"],
+            "contour": obj_data["contour"],
+            "debug_data": obj_data["debug_data"]
         }
-        # Propagate two-coin resolver metadata for upstream logging
-        if "two_coin_resolution" in l1_result:
-            out["two_coin_resolution"] = l1_result["two_coin_resolution"]
-        return out
 
-    finally:
-        if os.path.exists(working_path): os.remove(working_path)
+        l2_result = layer_2_context_probe(img, single_l1)
+
+        container = l2_result['context_classification']['inferred_container']
+
+        # === SEMANTIC SALVAGE RULE (Commit 3) ===
+        # High coin_likelihood overrides irregular geometry
+        # Handles: incuse reverses, thick flans, shadow-heavy photos
+        coin_likelihood = single_l1['geometry'].get('coin_likelihood', 0)
+        area = single_l1['geometry']['area']
+        circularity = single_l1['geometry']['circularity']
+
+        # Strong coin evidence - trust it even if geometry irregular
+        if coin_likelihood > 0.65 and area > 10000:
+            if circularity > 0.60:
+                final_decision = "Round Object (Coin/Medallion)"
+            else:
+                final_decision = "Round Object (Coin/Medallion)"  # Still a coin!
+
+        # Standard mapping for lower confidence
+        elif container == "Round_Artifact":
+            final_decision = "Round Object (Coin/Medallion)"
+        elif container == "Coin_Planchet":
+            final_decision = "Round Object (Coin)"
+        elif container == "Fragment":
+            final_decision = "Fragment"
+        elif obj_data['classification']['label'] in ["Circle", "Polygon"]:
+            final_decision = "Geometric Form"
+        else:
+            final_decision = "Artifact (Isolated)"
+
+        final_results.append({
+            "id": i+1,
+            "final_classification": final_decision,
+            "layer_1": single_l1,
+            "layer_2": l2_result
+        })
+
+    out = {
+        "status": "success",
+        "detections": final_results,
+    }
+    # Propagate two-coin resolver metadata for upstream logging
+    if "two_coin_resolution" in l1_result:
+        out["two_coin_resolution"] = l1_result["two_coin_resolution"]
+    return out

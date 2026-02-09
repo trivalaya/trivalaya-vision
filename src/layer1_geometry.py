@@ -339,15 +339,21 @@ def _validate_split(
     return True
 
 
-def layer_1_structural_salience(image_path: str, sensitivity: str = "standard") -> Dict:
+def layer_1_structural_salience(image_or_path, sensitivity: str = "standard") -> Dict:
     """
     Main entry point for Layer 1 structural analysis.
-    
+
+    Args:
+        image_or_path: file path (str) or BGR ndarray
+
     Now includes two-coin detection: if a single merged blob is detected
     with low circularity and wide aspect ratio, attempts to split it into
     separate obverse/reverse detections.
     """
-    img = cv2.imread(image_path)
+    if isinstance(image_or_path, np.ndarray):
+        img = image_or_path
+    else:
+        img = cv2.imread(image_or_path)
     if img is None:
         return {"layer": 1, "status": "error", "error": "image_load_failed"}
 

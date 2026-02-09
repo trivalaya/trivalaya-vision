@@ -1,12 +1,15 @@
 import cv2
 import numpy as np
 
-def layer_2_context_probe(image_path, layer_1_result):
+def layer_2_context_probe(image_or_path, layer_1_result):
     # 1. Input Validation
     if "geometry" not in layer_1_result:
         return {"status": "skipped_no_layer1_target"}
-        
-    img = cv2.imread(image_path)
+
+    if isinstance(image_or_path, np.ndarray):
+        img = image_or_path
+    else:
+        img = cv2.imread(image_or_path)
     if img is None: return {"status": "error_loading_image"}
     
     h, w = img.shape[:2]
