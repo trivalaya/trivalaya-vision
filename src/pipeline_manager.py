@@ -56,22 +56,9 @@ def analyze_image(image_path):
 
         container = l2_result['context_classification']['inferred_container']
 
-        # === SEMANTIC SALVAGE RULE (Commit 3) ===
-        # High coin_likelihood overrides irregular geometry
-        # Handles: incuse reverses, thick flans, shadow-heavy photos
-        coin_likelihood = single_l1['geometry'].get('coin_likelihood', 0)
-        area = single_l1['geometry']['area']
-        circularity = single_l1['geometry']['circularity']
-
-        # Strong coin evidence - trust it even if geometry irregular
-        if coin_likelihood > 0.65 and area > 10000:
-            if circularity > 0.60:
-                final_decision = "Round Object (Coin/Medallion)"
-            else:
-                final_decision = "Round Object (Coin/Medallion)"  # Still a coin!
-
-        # Standard mapping for lower confidence
-        elif container == "Round_Artifact":
+        # Standard L2 container → classification mapping
+        # (Semantic salvage rule removed in PR-5 — L5 salvage gates handle this)
+        if container == "Round_Artifact":
             final_decision = "Round Object (Coin/Medallion)"
         elif container == "Coin_Planchet":
             final_decision = "Round Object (Coin)"
@@ -96,4 +83,8 @@ def analyze_image(image_path):
     # Propagate two-coin resolver metadata for upstream logging
     if "two_coin_resolution" in l1_result:
         out["two_coin_resolution"] = l1_result["two_coin_resolution"]
+    # Propagate enclosure A/B trace (PR-6) into each detection for SideRecord
+    if "l3_l4_ab" in l1_result:
+        for det in final_results:
+            det["l3_l4_ab"] = l1_result["l3_l4_ab"]
     return out

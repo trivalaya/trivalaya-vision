@@ -17,6 +17,7 @@ from src.math_utils import (
     validate_rim_recovery
 )
 from src.rim_logic import recover_rim
+from src.crop_quality import get_detection_quality_flag
 
 # Import two-coin resolver (graceful fallback if not available)
 # Kill-switch: set TRIVALAYA_DISABLE_TWO_COIN_RESOLVER=1 to force off
@@ -173,8 +174,6 @@ def _segment_and_extract_candidates(
             continue
 
         area = cv2.contourArea(c)
-        if area > Layer1Config.MAX_AREA_RATIO * total_area:
-            continue
 
         # --- Edge support ---
         perimeter_mask = np.zeros((h, w), np.uint8)
@@ -186,10 +185,7 @@ def _segment_and_extract_candidates(
         overlap = cv2.bitwise_and(perimeter_mask, edge_zone)
         edge_support = cv2.countNonZero(overlap) / perimeter_px
 
-        # Allow circular shapes through even with weaker edges
         circularity = compute_circularity_safe(c)
-        if edge_support < Layer1Config.Standard.EDGE_SUPPORT_MIN and circularity < 0.70:
-            continue
 
         # --- Optional rim recovery ---
         final_c = c
@@ -422,6 +418,16 @@ def layer_1_structural_salience(image_or_path, sensitivity: str = "standard") ->
     # Remove tiny weak detections when strong coins are present
     candidates = _suppress_background_noise(candidates)
 
+    # --- Enclosure A/B trace (PR-6) ---
+    _l4_mode = _os.environ.get("TRIVALAYA_L4_SELECTOR_MODE", "control")
+    l3_l4_ab_trace = None
+    if _l4_mode != "control":
+        try:
+            from src.enclosure_scorer import rank_candidates_ab
+            l3_l4_ab_trace = rank_candidates_ab(candidates, (h, w))
+        except Exception:
+            pass  # never break L1 for instrumentation
+
     # === TWO-COIN RESOLUTION CHECK ===
     # Trigger conditions:
     # 1. Exactly one candidate
@@ -435,13 +441,18 @@ def layer_1_structural_salience(image_or_path, sensitivity: str = "standard") ->
         )
         
         if two_coin_result is not None:
+            if l3_l4_ab_trace is not None:
+                two_coin_result["l3_l4_ab"] = l3_l4_ab_trace
             return two_coin_result
 
-    return {
+    result = {
         "layer": 1,
         "status": "success",
-        "objects": candidates[:Layer1Config.MAX_DETECTIONS]
+        "objects": candidates[:Layer1Config.MAX_DETECTIONS],
     }
+    if l3_l4_ab_trace is not None:
+        result["l3_l4_ab"] = l3_l4_ab_trace
+    return result
 
 
 def _midpoint_binary_split(binary: np.ndarray,
@@ -510,7 +521,11 @@ def _coins_to_candidates(coins: list, method: str, shape: tuple, img: np.ndarray
     """Convert split coin dicts to L1 candidate format."""
     h, w = shape
     split_candidates = []
-    for coin in coins:
+
+    # PR-7A: compute neighbor midpoint for quality flag
+    neighbor_midpoint = int((coins[0]['center'][0] + coins[1]['center'][0]) / 2)
+
+    for idx, coin in enumerate(coins):
         cx, cy = coin['center']
         r = coin['radius']
 
@@ -532,6 +547,16 @@ def _coins_to_candidates(coins: list, method: str, shape: tuple, img: np.ndarray
         y2c = min(h, int(cy) + s)
         bbox = (x1c, y1c, x2c - x1c, y2c - y1c)
 
+        # PR-7A: crop quality flag
+        side_label = 'left' if idx == 0 else 'right'
+        flag, primary_reason, details = get_detection_quality_flag(
+            candidate={"solidity": 0.95, "cx": cx, "cy": cy},
+            crop_box=(x1c, y1c, x2c, y2c),
+            img_w=w, img_h=h,
+            neighbor_midpoint=neighbor_midpoint,
+            side=side_label,
+        )
+
         split_candidates.append({
             "score": area,
             "classification": {"label": "Circle", "confidence": 0.85},
@@ -549,6 +574,9 @@ def _coins_to_candidates(coins: list, method: str, shape: tuple, img: np.ndarray
             "debug_data": {
                 "from_two_coin_split": True,
                 "split_method": method,
+                "quality_flag": flag,
+                "quality_reason": primary_reason,
+                "quality_metrics": details.get("metrics", {}),
             },
         })
     return split_candidates
