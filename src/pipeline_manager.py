@@ -1,8 +1,11 @@
 import cv2
 import numpy as np
 import os
+from typing import Literal
 from src.layer1_geometry import layer_1_structural_salience
 from src.layer2_context import layer_2_context_probe
+
+SourceType = Literal["auction", "unknown"]
 
 MAX_DIMENSION = 3200 
 
@@ -22,7 +25,7 @@ def _load_and_resize(image_path):
         img = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_AREA)
     return img, scale
 
-def analyze_image(image_path):
+def analyze_image(image_path, source_type: SourceType = "unknown"):
     img, scale = _load_and_resize(image_path)
     if img is None: return {"status": "error", "error": "Load failed"}
 
@@ -31,10 +34,10 @@ def analyze_image(image_path):
     # and the full pipeline path.
 
     # 1. Run Layer 1
-    l1_result = layer_1_structural_salience(img, sensitivity="standard")
+    l1_result = layer_1_structural_salience(img, sensitivity="standard", source_type=source_type)
 
     if "objects" not in l1_result:
-         l1_result = layer_1_structural_salience(img, sensitivity="high")
+         l1_result = layer_1_structural_salience(img, sensitivity="high", source_type=source_type)
 
     if "objects" not in l1_result:
          return {"status": "failed", "last_error": "No objects found"}

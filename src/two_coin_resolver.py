@@ -4,29 +4,46 @@ Status: MAX SPEED
 """
 import cv2
 import numpy as np
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Literal, Tuple, Optional
 from dataclasses import dataclass
+
+SourceType = Literal["auction", "unknown"]
 
 @dataclass
 class CoinPairConfig:
     # Aggressive downscaling
-    WORKING_MAX_DIM: int = 800  
-    
+    WORKING_MAX_DIM: int = 800
+
     # Hough Params
     HOUGH_DP: float = 1.2
     HOUGH_PARAM1: int = 100
     HOUGH_PARAM2: int = 25  # Slightly looser, we filter later
-    
+
     # Geometric Constraints
     Y_ALIGNMENT_MAX: float = 0.15
     RADIUS_RATIO_MIN: float = 0.70
-    
+
     # Validation
     RIM_EDGE_DENSITY_MIN: float = 0.08
-    
+
     # Triggers
     TRIGGER_CIRCULARITY_MAX: float = 0.65
     TRIGGER_ASPECT_RATIO_MIN: float = 1.35
+    TRIGGER_ASPECT_RATIO_MAX: float = 999.0
+
+    @classmethod
+    def for_auction(cls) -> "CoinPairConfig":
+        """Relaxed config for known auction images (side-by-side layout is a trusted prior)."""
+        return cls(
+            TRIGGER_CIRCULARITY_MAX=999.0,
+            TRIGGER_ASPECT_RATIO_MIN=1.50,
+            TRIGGER_ASPECT_RATIO_MAX=2.40,
+        )
+
+    @classmethod
+    def for_unknown(cls) -> "CoinPairConfig":
+        """Strict config for unknown-source images (default thresholds)."""
+        return cls()
 
 class TwoCoinResolver:
     def __init__(self, config: Optional[CoinPairConfig] = None):
@@ -39,6 +56,7 @@ class TwoCoinResolver:
         # Fast aspect ratio check
         w, h = cand['bbox'][2], cand['bbox'][3]
         if w/h < self.config.TRIGGER_ASPECT_RATIO_MIN: return False, None
+        if w/h > self.config.TRIGGER_ASPECT_RATIO_MAX: return False, None
         # Circularity check
         if cand['geometry']['circularity'] > self.config.TRIGGER_CIRCULARITY_MAX: return False, None
         return True, cand
