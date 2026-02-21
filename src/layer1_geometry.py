@@ -445,6 +445,9 @@ def layer_1_structural_salience(image_or_path, sensitivity: str = "standard") ->
                 two_coin_result["l3_l4_ab"] = l3_l4_ab_trace
             return two_coin_result
 
+    # --- Quality flags for non-split detections ---
+    _flag_single_coin_candidates(candidates, (h, w))
+
     result = {
         "layer": 1,
         "status": "success",
@@ -517,6 +520,52 @@ def _midpoint_binary_split(binary: np.ndarray,
     return coins
 
 
+def _flag_single_coin_candidates(candidates: List[Dict], shape: tuple) -> None:
+    """Add quality flags to candidates that don't already have one.
+
+    Called for non-split detections so every L1 candidate gets a
+    quality_flag/quality_reason/quality_metrics in its debug_data.
+    """
+    h, w = shape
+    for cand in candidates:
+        dd = cand.get("debug_data", {})
+        if dd.get("quality_flag"):
+            continue  # already flagged (e.g. from two-coin split)
+
+        solidity = cand["geometry"]["solidity"]
+
+        # Centroid from contour moments
+        contour = cand["contour"]
+        M = cv2.moments(contour)
+        if M["m00"] > 0:
+            cx = M["m10"] / M["m00"]
+            cy = M["m01"] / M["m00"]
+        else:
+            bx, by, bw, bh = cand["bbox"]
+            cx = bx + bw / 2
+            cy = by + bh / 2
+
+        # Crop box from bbox + margin
+        bx, by, bw, bh = cand["bbox"]
+        m = int(max(bw, bh) * 0.12)
+        crop_box = (max(0, bx - m), max(0, by - m),
+                    min(w, bx + bw + m), min(h, by + bh + m))
+
+        flag, primary_reason, details = get_detection_quality_flag(
+            candidate={"solidity": solidity, "cx": cx, "cy": cy},
+            crop_box=crop_box,
+            img_w=w, img_h=h,
+            neighbor_midpoint=None,
+            side=None,
+            crop_margin_px=m,
+        )
+
+        dd["quality_flag"] = flag
+        dd["quality_reason"] = primary_reason
+        dd["quality_metrics"] = details.get("metrics", {})
+        cand["debug_data"] = dd
+
+
 def _coins_to_candidates(coins: list, method: str, shape: tuple, img: np.ndarray) -> list:
     """Convert split coin dicts to L1 candidate format."""
     h, w = shape
@@ -549,12 +598,14 @@ def _coins_to_candidates(coins: list, method: str, shape: tuple, img: np.ndarray
 
         # PR-7A: crop quality flag
         side_label = 'left' if idx == 0 else 'right'
+        split_margin = int(r * 0.15)
         flag, primary_reason, details = get_detection_quality_flag(
             candidate={"solidity": 0.95, "cx": cx, "cy": cy},
             crop_box=(x1c, y1c, x2c, y2c),
             img_w=w, img_h=h,
             neighbor_midpoint=neighbor_midpoint,
             side=side_label,
+            crop_margin_px=split_margin,
         )
 
         split_candidates.append({
@@ -645,17 +696,19 @@ def _try_two_coin_resolution(img: np.ndarray,
     # --- Build result ---
     if accepted_coins is None:
         reason = result.get('reason', 'all_methods_failed') if result else 'resolve_returned_none'
+        failed_candidate = {
+            **candidate,
+            "debug_data": {
+                **candidate.get("debug_data", {}),
+                "two_coin_attempted": True,
+                "two_coin_failed_reason": reason,
+            }
+        }
+        _flag_single_coin_candidates([failed_candidate], shape)
         return {
             "layer": 1,
             "status": "success",
-            "objects": [{
-                **candidate,
-                "debug_data": {
-                    **candidate.get("debug_data", {}),
-                    "two_coin_attempted": True,
-                    "two_coin_failed_reason": reason,
-                }
-            }],
+            "objects": [failed_candidate],
             "two_coin_resolution": {
                 "triggered": True,
                 "status": "failed",

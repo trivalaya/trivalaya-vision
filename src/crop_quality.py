@@ -2,7 +2,7 @@
 Crop Quality Flag — evaluates crop quality for ML readiness.
 
 Returns (flag, primary_reason, details_dict) where flag is RED/YELLOW/GREEN.
-Used by _coins_to_candidates() in layer1_geometry.py for two-coin split crops.
+Used by layer1_geometry.py for all L1 detections (two-coin splits and single-coin candidates).
 """
 
 from typing import Dict, List, Optional, Tuple, Any
@@ -15,6 +15,7 @@ def get_detection_quality_flag(
     neighbor_midpoint: Optional[int] = None,
     side: Optional[str] = None,  # 'left' or 'right'
     *,
+    crop_margin_px: int = 0,
     min_abs_area: int = 2500,        # ~50x50px
     min_rel_area: float = 0.005,     # 0.5% of image
     min_aspect: float = 0.45,
@@ -29,6 +30,10 @@ def get_detection_quality_flag(
     Args:
         side: 'left' (checks x2 vs midpoint) or 'right' (checks x1 vs midpoint).
               If None, checks both edges against midpoint.
+        crop_margin_px: Padding (in px) added around the coin bbox to form the
+              crop box.  Used for margin-aware edge clamping — only flags an
+              edge when the *coin itself* (not just the margin) is near the
+              image boundary.
 
     Returns:
         (flag, primary_reason, details_dict)
@@ -65,6 +70,10 @@ def get_detection_quality_flag(
 
     # ---- 2. YELLOW: Warnings (Contextual Issues) ----
 
+    # Extract coin center early — needed by edge clamp and off-center checks
+    cx = candidate.get("cx")
+    cy = candidate.get("cy")
+
     # A. Neighbor Clamp (Directional)
     if neighbor_midpoint is not None:
         hit_clamp = False
@@ -82,12 +91,39 @@ def get_detection_quality_flag(
         if hit_clamp:
             reasons.append("neighbor_clamp")
 
-    # B. Edge Clamp (Image boundary)
+    # B. Edge Clamp (Image boundary) — margin-aware
+    #
+    # Size exemption: if crop covers ≥90% of the image, edge-to-edge is the
+    # intended photography style and edge clamping is expected, not a defect.
+    #
+    # Margin-aware: when crop_margin_px > 0, only count an edge as hit when
+    # the coin's own extent (crop minus margin) reaches the image boundary,
+    # not when only the padding is consumed.
     edge_hits = 0
-    if x1 <= 0: edge_hits += 1
-    if y1 <= 0: edge_hits += 1
-    if x2 >= img_w: edge_hits += 1
-    if y2 >= img_h: edge_hits += 1
+    if rel_area < 0.90:
+        coin_half_w = max(1.0, w / 2.0 - crop_margin_px)
+        coin_half_h = max(1.0, h / 2.0 - crop_margin_px)
+        edge_tol = 2  # px
+
+        # Approximate coin edges using center + half-extent
+        if cx is not None:
+            coin_left = cx - coin_half_w
+            coin_right = cx + coin_half_w
+        else:
+            coin_left = x1 + crop_margin_px
+            coin_right = x2 - crop_margin_px
+
+        if cy is not None:
+            coin_top = cy - coin_half_h
+            coin_bottom = cy + coin_half_h
+        else:
+            coin_top = y1 + crop_margin_px
+            coin_bottom = y2 - crop_margin_px
+
+        if coin_left <= edge_tol: edge_hits += 1
+        if coin_top <= edge_tol: edge_hits += 1
+        if coin_right >= img_w - edge_tol: edge_hits += 1
+        if coin_bottom >= img_h - edge_tol: edge_hits += 1
 
     if edge_hits > 0:
         reasons.append(f"edge_clamp_{edge_hits}")
@@ -101,9 +137,6 @@ def get_detection_quality_flag(
         reasons.append(f"low_solidity_{solidity:.2f}")
 
     # D. 2D Off-Center Check
-    cx = candidate.get("cx")
-    cy = candidate.get("cy")
-
     # Horizontal Offset
     if cx is None:
         reasons.append("cx_missing")
