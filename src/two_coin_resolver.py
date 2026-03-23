@@ -4,8 +4,12 @@ Status: MAX SPEED
 """
 import cv2
 import numpy as np
+import time
+import os
 from typing import Dict, List, Literal, Tuple, Optional
 from dataclasses import dataclass
+
+_PERF = os.environ.get("TRIVALAYA_PERF_LOG", "0") == "1"
 
 SourceType = Literal["auction", "unknown"]
 
@@ -44,6 +48,11 @@ class CoinPairConfig:
     def for_unknown(cls) -> "CoinPairConfig":
         """Strict config for unknown-source images (default thresholds)."""
         return cls()
+
+    @classmethod
+    def for_visual_search(cls) -> "CoinPairConfig":
+        """Speed-optimized for interactive search: coarser Hough accumulator."""
+        return cls(HOUGH_DP=2.0)
 
 class TwoCoinResolver:
     def __init__(self, config: Optional[CoinPairConfig] = None):
@@ -100,6 +109,7 @@ class TwoCoinResolver:
 
     def _resolve_inner(self, image: np.ndarray, binary_mask: np.ndarray, gray: np.ndarray, candidate_bbox: Tuple[int,int,int,int]) -> Dict:
         cfg = self.config
+        t0 = time.perf_counter() if _PERF else 0
 
         # --- OPTIMIZATION 1: CROP FIRST ---
         bx, by, bw, bh = candidate_bbox
@@ -123,24 +133,49 @@ class TwoCoinResolver:
         else:
             gray_working = gray_crop
 
+        if _PERF:
+            t1 = time.perf_counter()
+            print(f"  [resolver] crop+resize: {t1-t0:.3f}s  "
+                  f"input={w_img}x{h_img} crop={w_crop}x{h_crop} "
+                  f"working={gray_working.shape[1]}x{gray_working.shape[0]} scale={scale:.2f}")
+
         # Pre-compute edges once on small working image
         blurred = cv2.GaussianBlur(gray_working, (5, 5), 0)
         edges_working = cv2.Canny(blurred, 50, 150)
 
+        if _PERF:
+            t2 = time.perf_counter()
+            print(f"  [resolver] blur+canny: {t2-t1:.3f}s")
+
         # --- EXECUTE HOUGH ---
         result = self._vectorized_hough(gray_working, edges_working)
 
+        if _PERF:
+            t3 = time.perf_counter()
+            print(f"  [resolver] hough: {t3-t2:.3f}s  status={result.get('status')}")
+
         if result.get('status') == 'split':
             final_coins = self._remap_coins_to_original(result, image, scale, x1, y1)
+            if _PERF:
+                print(f"  [resolver] remap+crop: {time.perf_counter()-t3:.3f}s  total={time.perf_counter()-t0:.3f}s")
             return {'status': 'split', 'method': 'hough', 'coins': final_coins, 'debug': result.get('debug', {})}
 
         # --- FALLBACK: WATERSHED ---
+        t4 = time.perf_counter() if _PERF else 0
         ws_result = self._try_watershed_fallback(gray_working, edges_working)
+
+        if _PERF:
+            t5 = time.perf_counter()
+            print(f"  [resolver] watershed: {t5-t4:.3f}s  status={ws_result.get('status')}")
 
         if ws_result.get('status') == 'split':
             final_coins = self._remap_coins_to_original(ws_result, image, scale, x1, y1)
+            if _PERF:
+                print(f"  [resolver] remap+crop: {time.perf_counter()-t5:.3f}s  total={time.perf_counter()-t0:.3f}s")
             return {'status': 'split', 'method': 'watershed', 'coins': final_coins, 'debug': ws_result.get('debug', {})}
 
+        if _PERF:
+            print(f"  [resolver] FAILED  total={time.perf_counter()-t0:.3f}s")
         # --- TERMINAL FALLBACK ---
         return {'status': 'failed', 'reason': 'hough_and_watershed_failed',
                 'debug': result.get('debug', {})}
