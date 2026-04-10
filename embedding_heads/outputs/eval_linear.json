@@ -1,0 +1,8 @@
+{
+  "head": "linear",
+  "top1": 0.7774,
+  "top3": 0.9542,
+  "top5": 0.9902,
+  "worst_pair": "Diocletian -> Maximian",
+  "worst_pair_count": 16
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "head": "linear",
+    "top1": 0.7774,
+    "top3": 0.9542,
+    "top5": 0.9902,
+    "worst_pair": "Diocletian -> Maximian",
+    "worst_pair_count": 16
+  },
+  {
+    "head": "mlp",
+    "top1": 0.8101,
+    "top3": 0.9525,
+    "top5": 0.9836,
+    "worst_pair": "Maximian -> Diocletian",
+    "worst_pair_count": 12
+  },
+  {
+    "head": "arcface",
+    "top1": 0.7856,
+    "top3": 0.9394,
+    "top5": 0.9787,
+    "worst_pair": "Diocletian -> Maximian",
+    "worst_pair_count": 19,
+    "projected_knn1": 0.7676,
+    "raw_knn1": 0.6121,
+    "projected_knn10": 0.7921,
+    "raw_knn10": 0.6628
+  },
+  {
+    "head": "cosface",
+    "top1": 0.7709,
+    "top3": 0.9378,
+    "top5": 0.982,
+    "worst_pair": "Diocletian -> Maximian",
+    "worst_pair_count": 16,
+    "projected_knn1": 0.7872,
+    "raw_knn1": 0.6121,
+    "projected_knn10": 0.7987,
+    "raw_knn10": 0.6628
+  }
+]

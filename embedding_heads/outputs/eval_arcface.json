@@ -1,0 +1,12 @@
+{
+  "head": "arcface",
+  "top1": 0.7856,
+  "top3": 0.9394,
+  "top5": 0.9787,
+  "worst_pair": "Diocletian -> Maximian",
+  "worst_pair_count": 19,
+  "projected_knn1": 0.7676,
+  "raw_knn1": 0.6121,
+  "projected_knn10": 0.7921,
+  "raw_knn10": 0.6628
+}

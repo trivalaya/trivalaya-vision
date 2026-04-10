@@ -1,0 +1,93 @@
+{
+  "run_id": "run_20260410_010258_offset_225",
+  "config_id": "offset_225",
+  "n_total": 300,
+  "n_success": 300,
+  "n_failed": 0,
+  "n_good": 182,
+  "n_borderline": 118,
+  "n_bad_blank": 0,
+  "n_bad_low_signal": 0,
+  "fallback_rate": 0.3267,
+  "n_with_geometry_flags": 157,
+  "mean_quality_score": 0.5643,
+  "median_quality_score": 0.5725,
+  "wall_clock_seconds": 3.83,
+  "mean_seconds_per_coin": 0.013,
+  "cache_hit_rate": 1.0,
+  "per_authority_stats": {
+    "Antoninus Pius": {
+      "n": 30,
+      "mean_quality_score": 0.5749,
+      "good_rate": 0.6,
+      "fallback_rate": 0.3333,
+      "failure_rate": 0.0
+    },
+    "Caracalla": {
+      "n": 30,
+      "mean_quality_score": 0.6364,
+      "good_rate": 0.8667,
+      "fallback_rate": 0.2,
+      "failure_rate": 0.0
+    },
+    "Diocletian": {
+      "n": 30,
+      "mean_quality_score": 0.5235,
+      "good_rate": 0.4667,
+      "fallback_rate": 0.2667,
+      "failure_rate": 0.0
+    },
+    "Elagabalus": {
+      "n": 30,
+      "mean_quality_score": 0.5981,
+      "good_rate": 0.7667,
+      "fallback_rate": 0.4,
+      "failure_rate": 0.0
+    },
+    "Gordian III": {
+      "n": 30,
+      "mean_quality_score": 0.554,
+      "good_rate": 0.6,
+      "fallback_rate": 0.3333,
+      "failure_rate": 0.0
+    },
+    "Hadrian": {
+      "n": 30,
+      "mean_quality_score": 0.5499,
+      "good_rate": 0.5333,
+      "fallback_rate": 0.3667,
+      "failure_rate": 0.0
+    },
+    "Maximian": {
+      "n": 30,
+      "mean_quality_score": 0.5385,
+      "good_rate": 0.5,
+      "fallback_rate": 0.2,
+      "failure_rate": 0.0
+    },
+    "Septimius Severus": {
+      "n": 30,
+      "mean_quality_score": 0.5722,
+      "good_rate": 0.6333,
+      "fallback_rate": 0.4333,
+      "failure_rate": 0.0
+    },
+    "Severus Alexander": {
+      "n": 30,
+      "mean_quality_score": 0.5375,
+      "good_rate": 0.6,
+      "fallback_rate": 0.3333,
+      "failure_rate": 0.0
+    },
+    "Trajan": {
+      "n": 30,
+      "mean_quality_score": 0.5585,
+      "good_rate": 0.5,
+      "fallback_rate": 0.4,
+      "failure_rate": 0.0
+    }
+  },
+  "hard_case_stats": {
+    "n": 0
+  }
+}

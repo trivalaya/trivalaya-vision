@@ -1,0 +1,8 @@
+{
+  "head": "mlp",
+  "top1": 0.8101,
+  "top3": 0.9525,
+  "top5": 0.9836,
+  "worst_pair": "Maximian -> Diocletian",
+  "worst_pair_count": 12
+}

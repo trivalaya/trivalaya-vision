@@ -1,0 +1,93 @@
+{
+  "run_id": "run_20260410_005255_sweep_cen_bbox_inn068_out092",
+  "config_id": "sweep_cen_bbox_inn068_out092",
+  "n_total": 300,
+  "n_success": 300,
+  "n_failed": 0,
+  "n_good": 189,
+  "n_borderline": 111,
+  "n_bad_blank": 0,
+  "n_bad_low_signal": 0,
+  "fallback_rate": 0.4567,
+  "n_with_geometry_flags": 157,
+  "mean_quality_score": 0.5774,
+  "median_quality_score": 0.5737,
+  "wall_clock_seconds": 2.47,
+  "mean_seconds_per_coin": 0.008,
+  "cache_hit_rate": 1.0,
+  "per_authority_stats": {
+    "Antoninus Pius": {
+      "n": 30,
+      "mean_quality_score": 0.5611,
+      "good_rate": 0.5667,
+      "fallback_rate": 0.3333,
+      "failure_rate": 0.0
+    },
+    "Caracalla": {
+      "n": 30,
+      "mean_quality_score": 0.6233,
+      "good_rate": 0.8333,
+      "fallback_rate": 0.2667,
+      "failure_rate": 0.0
+    },
+    "Diocletian": {
+      "n": 30,
+      "mean_quality_score": 0.5361,
+      "good_rate": 0.4667,
+      "fallback_rate": 0.4,
+      "failure_rate": 0.0
+    },
+    "Elagabalus": {
+      "n": 30,
+      "mean_quality_score": 0.5968,
+      "good_rate": 0.7667,
+      "fallback_rate": 0.4667,
+      "failure_rate": 0.0
+    },
+    "Gordian III": {
+      "n": 30,
+      "mean_quality_score": 0.5906,
+      "good_rate": 0.7333,
+      "fallback_rate": 0.5333,
+      "failure_rate": 0.0
+    },
+    "Hadrian": {
+      "n": 30,
+      "mean_quality_score": 0.5848,
+      "good_rate": 0.6,
+      "fallback_rate": 0.5667,
+      "failure_rate": 0.0
+    },
+    "Maximian": {
+      "n": 30,
+      "mean_quality_score": 0.5414,
+      "good_rate": 0.4333,
+      "fallback_rate": 0.3,
+      "failure_rate": 0.0
+    },
+    "Septimius Severus": {
+      "n": 30,
+      "mean_quality_score": 0.6013,
+      "good_rate": 0.7333,
+      "fallback_rate": 0.6,
+      "failure_rate": 0.0
+    },
+    "Severus Alexander": {
+      "n": 30,
+      "mean_quality_score": 0.5741,
+      "good_rate": 0.6667,
+      "fallback_rate": 0.6,
+      "failure_rate": 0.0
+    },
+    "Trajan": {
+      "n": 30,
+      "mean_quality_score": 0.5648,
+      "good_rate": 0.5,
+      "fallback_rate": 0.5,
+      "failure_rate": 0.0
+    }
+  },
+  "hard_case_stats": {
+    "n": 0
+  }
+}

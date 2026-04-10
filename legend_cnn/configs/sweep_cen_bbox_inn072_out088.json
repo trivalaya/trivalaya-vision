@@ -1,0 +1,17 @@
+{
+  "config_id": "sweep_cen_bbox_inn072_out088",
+  "inner_r_ratio": 0.72,
+  "outer_r_ratio": 0.88,
+  "center_method": "bbox",
+  "max_center_offset": 150.0,
+  "min_radius": 100.0,
+  "fallback_enabled": true,
+  "fallback_cx": 256.0,
+  "fallback_cy": 256.0,
+  "fallback_radius": 220.0,
+  "mask_threshold": 127,
+  "warp_radius_bins": 256,
+  "warp_angle_bins": 1024,
+  "ribbon_width": 512,
+  "ribbon_height": 64
+}

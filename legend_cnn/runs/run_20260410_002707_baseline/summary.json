@@ -1,0 +1,93 @@
+{
+  "run_id": "run_20260410_002707_baseline",
+  "config_id": "baseline",
+  "n_total": 300,
+  "n_success": 300,
+  "n_failed": 0,
+  "n_good": 84,
+  "n_borderline": 59,
+  "n_bad_blank": 0,
+  "n_bad_geometry": 157,
+  "n_bad_low_signal": 0,
+  "fallback_rate": 0.4567,
+  "mean_quality_score": 0.5658,
+  "median_quality_score": 0.5614,
+  "wall_clock_seconds": 8.14,
+  "mean_seconds_per_coin": 0.027,
+  "cache_hit_rate": 0.1,
+  "per_authority_stats": {
+    "Antoninus Pius": {
+      "n": 30,
+      "mean_quality_score": 0.5474,
+      "good_rate": 0.2667,
+      "fallback_rate": 0.3333,
+      "failure_rate": 0.0
+    },
+    "Caracalla": {
+      "n": 30,
+      "mean_quality_score": 0.6127,
+      "good_rate": 0.5667,
+      "fallback_rate": 0.2667,
+      "failure_rate": 0.0
+    },
+    "Diocletian": {
+      "n": 30,
+      "mean_quality_score": 0.5246,
+      "good_rate": 0.2333,
+      "fallback_rate": 0.4,
+      "failure_rate": 0.0
+    },
+    "Elagabalus": {
+      "n": 30,
+      "mean_quality_score": 0.5865,
+      "good_rate": 0.4,
+      "fallback_rate": 0.4667,
+      "failure_rate": 0.0
+    },
+    "Gordian III": {
+      "n": 30,
+      "mean_quality_score": 0.582,
+      "good_rate": 0.3667,
+      "fallback_rate": 0.5333,
+      "failure_rate": 0.0
+    },
+    "Hadrian": {
+      "n": 30,
+      "mean_quality_score": 0.5719,
+      "good_rate": 0.1333,
+      "fallback_rate": 0.5667,
+      "failure_rate": 0.0
+    },
+    "Maximian": {
+      "n": 30,
+      "mean_quality_score": 0.5276,
+      "good_rate": 0.1667,
+      "fallback_rate": 0.3,
+      "failure_rate": 0.0
+    },
+    "Septimius Severus": {
+      "n": 30,
+      "mean_quality_score": 0.5894,
+      "good_rate": 0.2333,
+      "fallback_rate": 0.6,
+      "failure_rate": 0.0
+    },
+    "Severus Alexander": {
+      "n": 30,
+      "mean_quality_score": 0.5664,
+      "good_rate": 0.2333,
+      "fallback_rate": 0.6,
+      "failure_rate": 0.0
+    },
+    "Trajan": {
+      "n": 30,
+      "mean_quality_score": 0.55,
+      "good_rate": 0.2,
+      "fallback_rate": 0.5,
+      "failure_rate": 0.0
+    }
+  },
+  "hard_case_stats": {
+    "n": 0
+  }
+}

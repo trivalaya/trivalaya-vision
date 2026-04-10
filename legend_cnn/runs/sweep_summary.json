@@ -1,0 +1,866 @@
+[
+  {
+    "run_dir": "/root/trivalaya-vision/legend_cnn/runs/run_20260410_005255_sweep_cen_bbox_inn068_out092",
+    "summary": {
+      "run_id": "run_20260410_005255_sweep_cen_bbox_inn068_out092",
+      "config_id": "sweep_cen_bbox_inn068_out092",
+      "n_total": 300,
+      "n_success": 300,
+      "n_failed": 0,
+      "n_good": 189,
+      "n_borderline": 111,
+      "n_bad_blank": 0,
+      "n_bad_low_signal": 0,
+      "fallback_rate": 0.4567,
+      "n_with_geometry_flags": 157,
+      "mean_quality_score": 0.5774,
+      "median_quality_score": 0.5737,
+      "wall_clock_seconds": 2.47,
+      "mean_seconds_per_coin": 0.008,
+      "cache_hit_rate": 1.0,
+      "per_authority_stats": {
+        "Antoninus Pius": {
+          "n": 30,
+          "mean_quality_score": 0.5611,
+          "good_rate": 0.5667,
+          "fallback_rate": 0.3333,
+          "failure_rate": 0.0
+        },
+        "Caracalla": {
+          "n": 30,
+          "mean_quality_score": 0.6233,
+          "good_rate": 0.8333,
+          "fallback_rate": 0.2667,
+          "failure_rate": 0.0
+        },
+        "Diocletian": {
+          "n": 30,
+          "mean_quality_score": 0.5361,
+          "good_rate": 0.4667,
+          "fallback_rate": 0.4,
+          "failure_rate": 0.0
+        },
+        "Elagabalus": {
+          "n": 30,
+          "mean_quality_score": 0.5968,
+          "good_rate": 0.7667,
+          "fallback_rate": 0.4667,
+          "failure_rate": 0.0
+        },
+        "Gordian III": {
+          "n": 30,
+          "mean_quality_score": 0.5906,
+          "good_rate": 0.7333,
+          "fallback_rate": 0.5333,
+          "failure_rate": 0.0
+        },
+        "Hadrian": {
+          "n": 30,
+          "mean_quality_score": 0.5848,
+          "good_rate": 0.6,
+          "fallback_rate": 0.5667,
+          "failure_rate": 0.0
+        },
+        "Maximian": {
+          "n": 30,
+          "mean_quality_score": 0.5414,
+          "good_rate": 0.4333,
+          "fallback_rate": 0.3,
+          "failure_rate": 0.0
+        },
+        "Septimius Severus": {
+          "n": 30,
+          "mean_quality_score": 0.6013,
+          "good_rate": 0.7333,
+          "fallback_rate": 0.6,
+          "failure_rate": 0.0
+        },
+        "Severus Alexander": {
+          "n": 30,
+          "mean_quality_score": 0.5741,
+          "good_rate": 0.6667,
+          "fallback_rate": 0.6,
+          "failure_rate": 0.0
+        },
+        "Trajan": {
+          "n": 30,
+          "mean_quality_score": 0.5648,
+          "good_rate": 0.5,
+          "fallback_rate": 0.5,
+          "failure_rate": 0.0
+        }
+      },
+      "hard_case_stats": {
+        "n": 0
+      }
+    }
+  },
+  {
+    "run_dir": "/root/trivalaya-vision/legend_cnn/runs/run_20260410_005239_sweep_cen_bbox_inn068_out090",
+    "summary": {
+      "run_id": "run_20260410_005239_sweep_cen_bbox_inn068_out090",
+      "config_id": "sweep_cen_bbox_inn068_out090",
+      "n_total": 300,
+      "n_success": 300,
+      "n_failed": 0,
+      "n_good": 187,
+      "n_borderline": 113,
+      "n_bad_blank": 0,
+      "n_bad_low_signal": 0,
+      "fallback_rate": 0.4567,
+      "n_with_geometry_flags": 157,
+      "mean_quality_score": 0.5758,
+      "median_quality_score": 0.5698,
+      "wall_clock_seconds": 3.17,
+      "mean_seconds_per_coin": 0.011,
+      "cache_hit_rate": 1.0,
+      "per_authority_stats": {
+        "Antoninus Pius": {
+          "n": 30,
+          "mean_quality_score": 0.5613,
+          "good_rate": 0.5667,
+          "fallback_rate": 0.3333,
+          "failure_rate": 0.0
+        },
+        "Caracalla": {
+          "n": 30,
+          "mean_quality_score": 0.624,
+          "good_rate": 0.8333,
+          "fallback_rate": 0.2667,
+          "failure_rate": 0.0
+        },
+        "Diocletian": {
+          "n": 30,
+          "mean_quality_score": 0.5346,
+          "good_rate": 0.5,
+          "fallback_rate": 0.4,
+          "failure_rate": 0.0
+        },
+        "Elagabalus": {
+          "n": 30,
+          "mean_quality_score": 0.5947,
+          "good_rate": 0.7667,
+          "fallback_rate": 0.4667,
+          "failure_rate": 0.0
+        },
+        "Gordian III": {
+          "n": 30,
+          "mean_quality_score": 0.5901,
+          "good_rate": 0.7333,
+          "fallback_rate": 0.5333,
+          "failure_rate": 0.0
+        },
+        "Hadrian": {
+          "n": 30,
+          "mean_quality_score": 0.5843,
+          "good_rate": 0.6333,
+          "fallback_rate": 0.5667,
+          "failure_rate": 0.0
+        },
+        "Maximian": {
+          "n": 30,
+          "mean_quality_score": 0.5412,
+          "good_rate": 0.4,
+          "fallback_rate": 0.3,
+          "failure_rate": 0.0
+        },
+        "Septimius Severus": {
+          "n": 30,
+          "mean_quality_score": 0.5942,
+          "good_rate": 0.6333,
+          "fallback_rate": 0.6,
+          "failure_rate": 0.0
+        },
+        "Severus Alexander": {
+          "n": 30,
+          "mean_quality_score": 0.5706,
+          "good_rate": 0.6333,
+          "fallback_rate": 0.6,
+          "failure_rate": 0.0
+        },
+        "Trajan": {
+          "n": 30,
+          "mean_quality_score": 0.5633,
+          "good_rate": 0.5333,
+          "fallback_rate": 0.5,
+          "failure_rate": 0.0
+        }
+      },
+      "hard_case_stats": {
+        "n": 0
+      }
+    }
+  },
+  {
+    "run_dir": "/root/trivalaya-vision/legend_cnn/runs/run_20260410_005221_sweep_cen_bbox_inn068_out088",
+    "summary": {
+      "run_id": "run_20260410_005221_sweep_cen_bbox_inn068_out088",
+      "config_id": "sweep_cen_bbox_inn068_out088",
+      "n_total": 300,
+      "n_success": 300,
+      "n_failed": 0,
+      "n_good": 184,
+      "n_borderline": 116,
+      "n_bad_blank": 0,
+      "n_bad_low_signal": 0,
+      "fallback_rate": 0.4567,
+      "n_with_geometry_flags": 157,
+      "mean_quality_score": 0.5751,
+      "median_quality_score": 0.5687,
+      "wall_clock_seconds": 4.24,
+      "mean_seconds_per_coin": 0.014,
+      "cache_hit_rate": 1.0,
+      "per_authority_stats": {
+        "Antoninus Pius": {
+          "n": 30,
+          "mean_quality_score": 0.5623,
+          "good_rate": 0.5333,
+          "fallback_rate": 0.3333,
+          "failure_rate": 0.0
+        },
+        "Caracalla": {
+          "n": 30,
+          "mean_quality_score": 0.6245,
+          "good_rate": 0.8333,
+          "fallback_rate": 0.2667,
+          "failure_rate": 0.0
+        },
+        "Diocletian": {
+          "n": 30,
+          "mean_quality_score": 0.5346,
+          "good_rate": 0.5,
+          "fallback_rate": 0.4,
+          "failure_rate": 0.0
+        },
+        "Elagabalus": {
+          "n": 30,
+          "mean_quality_score": 0.5924,
+          "good_rate": 0.7667,
+          "fallback_rate": 0.4667,
+          "failure_rate": 0.0
+        },
+        "Gordian III": {
+          "n": 30,
+          "mean_quality_score": 0.5901,
+          "good_rate": 0.6667,
+          "fallback_rate": 0.5333,
+          "failure_rate": 0.0
+        },
+        "Hadrian": {
+          "n": 30,
+          "mean_quality_score": 0.5841,
+          "good_rate": 0.6333,
+          "fallback_rate": 0.5667,
+          "failure_rate": 0.0
+        },
+        "Maximian": {
+          "n": 30,
+          "mean_quality_score": 0.5408,
+          "good_rate": 0.4333,
+          "fallback_rate": 0.3,
+          "failure_rate": 0.0
+        },
+        "Septimius Severus": {
+          "n": 30,
+          "mean_quality_score": 0.5904,
+          "good_rate": 0.6333,
+          "fallback_rate": 0.6,
+          "failure_rate": 0.0
+        },
+        "Severus Alexander": {
+          "n": 30,
+          "mean_quality_score": 0.5688,
+          "good_rate": 0.6667,
+          "fallback_rate": 0.6,
+          "failure_rate": 0.0
+        },
+        "Trajan": {
+          "n": 30,
+          "mean_quality_score": 0.5631,
+          "good_rate": 0.4667,
+          "fallback_rate": 0.5,
+          "failure_rate": 0.0
+        }
+      },
+      "hard_case_stats": {
+        "n": 0
+      }
+    }
+  },
+  {
+    "run_dir": "/root/trivalaya-vision/legend_cnn/runs/run_20260410_005346_sweep_cen_bbox_inn072_out092",
+    "summary": {
+      "run_id": "run_20260410_005346_sweep_cen_bbox_inn072_out092",
+      "config_id": "sweep_cen_bbox_inn072_out092",
+      "n_total": 300,
+      "n_success": 300,
+      "n_failed": 0,
+      "n_good": 173,
+      "n_borderline": 127,
+      "n_bad_blank": 0,
+      "n_bad_low_signal": 0,
+      "fallback_rate": 0.4567,
+      "n_with_geometry_flags": 157,
+      "mean_quality_score": 0.5669,
+      "median_quality_score": 0.5626,
+      "wall_clock_seconds": 2.63,
+      "mean_seconds_per_coin": 0.009,
+      "cache_hit_rate": 1.0,
+      "per_authority_stats": {
+        "Antoninus Pius": {
+          "n": 30,
+          "mean_quality_score": 0.5467,
+          "good_rate": 0.4333,
+          "fallback_rate": 0.3333,
+          "failure_rate": 0.0
+        },
+        "Caracalla": {
+          "n": 30,
+          "mean_quality_score": 0.6109,
+          "good_rate": 0.8,
+          "fallback_rate": 0.2667,
+          "failure_rate": 0.0
+        },
+        "Diocletian": {
+          "n": 30,
+          "mean_quality_score": 0.5257,
+          "good_rate": 0.4,
+          "fallback_rate": 0.4,
+          "failure_rate": 0.0
+        },
+        "Elagabalus": {
+          "n": 30,
+          "mean_quality_score": 0.588,
+          "good_rate": 0.7333,
+          "fallback_rate": 0.4667,
+          "failure_rate": 0.0
+        },
+        "Gordian III": {
+          "n": 30,
+          "mean_quality_score": 0.5816,
+          "good_rate": 0.6667,
+          "fallback_rate": 0.5333,
+          "failure_rate": 0.0
+        },
+        "Hadrian": {
+          "n": 30,
+          "mean_quality_score": 0.5719,
+          "good_rate": 0.5333,
+          "fallback_rate": 0.5667,
+          "failure_rate": 0.0
+        },
+        "Maximian": {
+          "n": 30,
+          "mean_quality_score": 0.5271,
+          "good_rate": 0.4,
+          "fallback_rate": 0.3,
+          "failure_rate": 0.0
+        },
+        "Septimius Severus": {
+          "n": 30,
+          "mean_quality_score": 0.5962,
+          "good_rate": 0.7,
+          "fallback_rate": 0.6,
+          "failure_rate": 0.0
+        },
+        "Severus Alexander": {
+          "n": 30,
+          "mean_quality_score": 0.5693,
+          "good_rate": 0.6667,
+          "fallback_rate": 0.6,
+          "failure_rate": 0.0
+        },
+        "Trajan": {
+          "n": 30,
+          "mean_quality_score": 0.5514,
+          "good_rate": 0.4333,
+          "fallback_rate": 0.5,
+          "failure_rate": 0.0
+        }
+      },
+      "hard_case_stats": {
+        "n": 0
+      }
+    }
+  },
+  {
+    "run_dir": "/root/trivalaya-vision/legend_cnn/runs/run_20260410_005328_sweep_cen_bbox_inn072_out090",
+    "summary": {
+      "run_id": "run_20260410_005328_sweep_cen_bbox_inn072_out090",
+      "config_id": "sweep_cen_bbox_inn072_out090",
+      "n_total": 300,
+      "n_success": 300,
+      "n_failed": 0,
+      "n_good": 164,
+      "n_borderline": 136,
+      "n_bad_blank": 0,
+      "n_bad_low_signal": 0,
+      "fallback_rate": 0.4567,
+      "n_with_geometry_flags": 157,
+      "mean_quality_score": 0.5658,
+      "median_quality_score": 0.5614,
+      "wall_clock_seconds": 2.71,
+      "mean_seconds_per_coin": 0.009,
+      "cache_hit_rate": 1.0,
+      "per_authority_stats": {
+        "Antoninus Pius": {
+          "n": 30,
+          "mean_quality_score": 0.5474,
+          "good_rate": 0.4333,
+          "fallback_rate": 0.3333,
+          "failure_rate": 0.0
+        },
+        "Caracalla": {
+          "n": 30,
+          "mean_quality_score": 0.6127,
+          "good_rate": 0.8,
+          "fallback_rate": 0.2667,
+          "failure_rate": 0.0
+        },
+        "Diocletian": {
+          "n": 30,
+          "mean_quality_score": 0.5246,
+          "good_rate": 0.3667,
+          "fallback_rate": 0.4,
+          "failure_rate": 0.0
+        },
+        "Elagabalus": {
+          "n": 30,
+          "mean_quality_score": 0.5865,
+          "good_rate": 0.7333,
+          "fallback_rate": 0.4667,
+          "failure_rate": 0.0
+        },
+        "Gordian III": {
+          "n": 30,
+          "mean_quality_score": 0.582,
+          "good_rate": 0.6333,
+          "fallback_rate": 0.5333,
+          "failure_rate": 0.0
+        },
+        "Hadrian": {
+          "n": 30,
+          "mean_quality_score": 0.5719,
+          "good_rate": 0.5,
+          "fallback_rate": 0.5667,
+          "failure_rate": 0.0
+        },
+        "Maximian": {
+          "n": 30,
+          "mean_quality_score": 0.5276,
+          "good_rate": 0.3667,
+          "fallback_rate": 0.3,
+          "failure_rate": 0.0
+        },
+        "Septimius Severus": {
+          "n": 30,
+          "mean_quality_score": 0.5894,
+          "good_rate": 0.6,
+          "fallback_rate": 0.6,
+          "failure_rate": 0.0
+        },
+        "Severus Alexander": {
+          "n": 30,
+          "mean_quality_score": 0.5664,
+          "good_rate": 0.6333,
+          "fallback_rate": 0.6,
+          "failure_rate": 0.0
+        },
+        "Trajan": {
+          "n": 30,
+          "mean_quality_score": 0.55,
+          "good_rate": 0.4,
+          "fallback_rate": 0.5,
+          "failure_rate": 0.0
+        }
+      },
+      "hard_case_stats": {
+        "n": 0
+      }
+    }
+  },
+  {
+    "run_dir": "/root/trivalaya-vision/legend_cnn/runs/run_20260410_005311_sweep_cen_bbox_inn072_out088",
+    "summary": {
+      "run_id": "run_20260410_005311_sweep_cen_bbox_inn072_out088",
+      "config_id": "sweep_cen_bbox_inn072_out088",
+      "n_total": 300,
+      "n_success": 300,
+      "n_failed": 0,
+      "n_good": 160,
+      "n_borderline": 140,
+      "n_bad_blank": 0,
+      "n_bad_low_signal": 0,
+      "fallback_rate": 0.4567,
+      "n_with_geometry_flags": 157,
+      "mean_quality_score": 0.5655,
+      "median_quality_score": 0.5575,
+      "wall_clock_seconds": 2.59,
+      "mean_seconds_per_coin": 0.009,
+      "cache_hit_rate": 1.0,
+      "per_authority_stats": {
+        "Antoninus Pius": {
+          "n": 30,
+          "mean_quality_score": 0.5489,
+          "good_rate": 0.4333,
+          "fallback_rate": 0.3333,
+          "failure_rate": 0.0
+        },
+        "Caracalla": {
+          "n": 30,
+          "mean_quality_score": 0.6138,
+          "good_rate": 0.8333,
+          "fallback_rate": 0.2667,
+          "failure_rate": 0.0
+        },
+        "Diocletian": {
+          "n": 30,
+          "mean_quality_score": 0.5253,
+          "good_rate": 0.3667,
+          "fallback_rate": 0.4,
+          "failure_rate": 0.0
+        },
+        "Elagabalus": {
+          "n": 30,
+          "mean_quality_score": 0.5845,
+          "good_rate": 0.7,
+          "fallback_rate": 0.4667,
+          "failure_rate": 0.0
+        },
+        "Gordian III": {
+          "n": 30,
+          "mean_quality_score": 0.5828,
+          "good_rate": 0.5667,
+          "fallback_rate": 0.5333,
+          "failure_rate": 0.0
+        },
+        "Hadrian": {
+          "n": 30,
+          "mean_quality_score": 0.5724,
+          "good_rate": 0.4333,
+          "fallback_rate": 0.5667,
+          "failure_rate": 0.0
+        },
+        "Maximian": {
+          "n": 30,
+          "mean_quality_score": 0.5275,
+          "good_rate": 0.3667,
+          "fallback_rate": 0.3,
+          "failure_rate": 0.0
+        },
+        "Septimius Severus": {
+          "n": 30,
+          "mean_quality_score": 0.5856,
+          "good_rate": 0.6333,
+          "fallback_rate": 0.6,
+          "failure_rate": 0.0
+        },
+        "Severus Alexander": {
+          "n": 30,
+          "mean_quality_score": 0.5648,
+          "good_rate": 0.6333,
+          "fallback_rate": 0.6,
+          "failure_rate": 0.0
+        },
+        "Trajan": {
+          "n": 30,
+          "mean_quality_score": 0.5498,
+          "good_rate": 0.3667,
+          "fallback_rate": 0.5,
+          "failure_rate": 0.0
+        }
+      },
+      "hard_case_stats": {
+        "n": 0
+      }
+    }
+  },
+  {
+    "run_dir": "/root/trivalaya-vision/legend_cnn/runs/run_20260410_005431_sweep_cen_bbox_inn076_out092",
+    "summary": {
+      "run_id": "run_20260410_005431_sweep_cen_bbox_inn076_out092",
+      "config_id": "sweep_cen_bbox_inn076_out092",
+      "n_total": 300,
+      "n_success": 300,
+      "n_failed": 0,
+      "n_good": 151,
+      "n_borderline": 149,
+      "n_bad_blank": 0,
+      "n_bad_low_signal": 0,
+      "fallback_rate": 0.4567,
+      "n_with_geometry_flags": 157,
+      "mean_quality_score": 0.556,
+      "median_quality_score": 0.5506,
+      "wall_clock_seconds": 2.5,
+      "mean_seconds_per_coin": 0.008,
+      "cache_hit_rate": 1.0,
+      "per_authority_stats": {
+        "Antoninus Pius": {
+          "n": 30,
+          "mean_quality_score": 0.5342,
+          "good_rate": 0.3333,
+          "fallback_rate": 0.3333,
+          "failure_rate": 0.0
+        },
+        "Caracalla": {
+          "n": 30,
+          "mean_quality_score": 0.5987,
+          "good_rate": 0.7667,
+          "fallback_rate": 0.2667,
+          "failure_rate": 0.0
+        },
+        "Diocletian": {
+          "n": 30,
+          "mean_quality_score": 0.5152,
+          "good_rate": 0.3333,
+          "fallback_rate": 0.4,
+          "failure_rate": 0.0
+        },
+        "Elagabalus": {
+          "n": 30,
+          "mean_quality_score": 0.5802,
+          "good_rate": 0.6667,
+          "fallback_rate": 0.4667,
+          "failure_rate": 0.0
+        },
+        "Gordian III": {
+          "n": 30,
+          "mean_quality_score": 0.5704,
+          "good_rate": 0.5333,
+          "fallback_rate": 0.5333,
+          "failure_rate": 0.0
+        },
+        "Hadrian": {
+          "n": 30,
+          "mean_quality_score": 0.5591,
+          "good_rate": 0.4667,
+          "fallback_rate": 0.5667,
+          "failure_rate": 0.0
+        },
+        "Maximian": {
+          "n": 30,
+          "mean_quality_score": 0.5139,
+          "good_rate": 0.3333,
+          "fallback_rate": 0.3,
+          "failure_rate": 0.0
+        },
+        "Septimius Severus": {
+          "n": 30,
+          "mean_quality_score": 0.589,
+          "good_rate": 0.5667,
+          "fallback_rate": 0.6,
+          "failure_rate": 0.0
+        },
+        "Severus Alexander": {
+          "n": 30,
+          "mean_quality_score": 0.5616,
+          "good_rate": 0.6333,
+          "fallback_rate": 0.6,
+          "failure_rate": 0.0
+        },
+        "Trajan": {
+          "n": 30,
+          "mean_quality_score": 0.538,
+          "good_rate": 0.4,
+          "fallback_rate": 0.5,
+          "failure_rate": 0.0
+        }
+      },
+      "hard_case_stats": {
+        "n": 0
+      }
+    }
+  },
+  {
+    "run_dir": "/root/trivalaya-vision/legend_cnn/runs/run_20260410_005401_sweep_cen_bbox_inn076_out088",
+    "summary": {
+      "run_id": "run_20260410_005401_sweep_cen_bbox_inn076_out088",
+      "config_id": "sweep_cen_bbox_inn076_out088",
+      "n_total": 300,
+      "n_success": 300,
+      "n_failed": 0,
+      "n_good": 151,
+      "n_borderline": 149,
+      "n_bad_blank": 0,
+      "n_bad_low_signal": 0,
+      "fallback_rate": 0.4567,
+      "n_with_geometry_flags": 157,
+      "mean_quality_score": 0.5558,
+      "median_quality_score": 0.5514,
+      "wall_clock_seconds": 2.97,
+      "mean_seconds_per_coin": 0.01,
+      "cache_hit_rate": 1.0,
+      "per_authority_stats": {
+        "Antoninus Pius": {
+          "n": 30,
+          "mean_quality_score": 0.5375,
+          "good_rate": 0.3667,
+          "fallback_rate": 0.3333,
+          "failure_rate": 0.0
+        },
+        "Caracalla": {
+          "n": 30,
+          "mean_quality_score": 0.6039,
+          "good_rate": 0.7667,
+          "fallback_rate": 0.2667,
+          "failure_rate": 0.0
+        },
+        "Diocletian": {
+          "n": 30,
+          "mean_quality_score": 0.5163,
+          "good_rate": 0.3667,
+          "fallback_rate": 0.4,
+          "failure_rate": 0.0
+        },
+        "Elagabalus": {
+          "n": 30,
+          "mean_quality_score": 0.578,
+          "good_rate": 0.6333,
+          "fallback_rate": 0.4667,
+          "failure_rate": 0.0
+        },
+        "Gordian III": {
+          "n": 30,
+          "mean_quality_score": 0.5736,
+          "good_rate": 0.5333,
+          "fallback_rate": 0.5333,
+          "failure_rate": 0.0
+        },
+        "Hadrian": {
+          "n": 30,
+          "mean_quality_score": 0.5607,
+          "good_rate": 0.4333,
+          "fallback_rate": 0.5667,
+          "failure_rate": 0.0
+        },
+        "Maximian": {
+          "n": 30,
+          "mean_quality_score": 0.5157,
+          "good_rate": 0.3667,
+          "fallback_rate": 0.3,
+          "failure_rate": 0.0
+        },
+        "Septimius Severus": {
+          "n": 30,
+          "mean_quality_score": 0.5779,
+          "good_rate": 0.5667,
+          "fallback_rate": 0.6,
+          "failure_rate": 0.0
+        },
+        "Severus Alexander": {
+          "n": 30,
+          "mean_quality_score": 0.5574,
+          "good_rate": 0.6,
+          "fallback_rate": 0.6,
+          "failure_rate": 0.0
+        },
+        "Trajan": {
+          "n": 30,
+          "mean_quality_score": 0.5366,
+          "good_rate": 0.4,
+          "fallback_rate": 0.5,
+          "failure_rate": 0.0
+        }
+      },
+      "hard_case_stats": {
+        "n": 0
+      }
+    }
+  },
+  {
+    "run_dir": "/root/trivalaya-vision/legend_cnn/runs/run_20260410_005416_sweep_cen_bbox_inn076_out090",
+    "summary": {
+      "run_id": "run_20260410_005416_sweep_cen_bbox_inn076_out090",
+      "config_id": "sweep_cen_bbox_inn076_out090",
+      "n_total": 300,
+      "n_success": 300,
+      "n_failed": 0,
+      "n_good": 150,
+      "n_borderline": 150,
+      "n_bad_blank": 0,
+      "n_bad_low_signal": 0,
+      "fallback_rate": 0.4567,
+      "n_with_geometry_flags": 157,
+      "mean_quality_score": 0.5555,
+      "median_quality_score": 0.5515,
+      "wall_clock_seconds": 2.6,
+      "mean_seconds_per_coin": 0.009,
+      "cache_hit_rate": 1.0,
+      "per_authority_stats": {
+        "Antoninus Pius": {
+          "n": 30,
+          "mean_quality_score": 0.5354,
+          "good_rate": 0.3667,
+          "fallback_rate": 0.3333,
+          "failure_rate": 0.0
+        },
+        "Caracalla": {
+          "n": 30,
+          "mean_quality_score": 0.6016,
+          "good_rate": 0.7667,
+          "fallback_rate": 0.2667,
+          "failure_rate": 0.0
+        },
+        "Diocletian": {
+          "n": 30,
+          "mean_quality_score": 0.5147,
+          "good_rate": 0.3667,
+          "fallback_rate": 0.4,
+          "failure_rate": 0.0
+        },
+        "Elagabalus": {
+          "n": 30,
+          "mean_quality_score": 0.5794,
+          "good_rate": 0.6333,
+          "fallback_rate": 0.4667,
+          "failure_rate": 0.0
+        },
+        "Gordian III": {
+          "n": 30,
+          "mean_quality_score": 0.5717,
+          "good_rate": 0.5667,
+          "fallback_rate": 0.5333,
+          "failure_rate": 0.0
+        },
+        "Hadrian": {
+          "n": 30,
+          "mean_quality_score": 0.5595,
+          "good_rate": 0.4333,
+          "fallback_rate": 0.5667,
+          "failure_rate": 0.0
+        },
+        "Maximian": {
+          "n": 30,
+          "mean_quality_score": 0.5151,
+          "good_rate": 0.3333,
+          "fallback_rate": 0.3,
+          "failure_rate": 0.0
+        },
+        "Septimius Severus": {
+          "n": 30,
+          "mean_quality_score": 0.5818,
+          "good_rate": 0.5333,
+          "fallback_rate": 0.6,
+          "failure_rate": 0.0
+        },
+        "Severus Alexander": {
+          "n": 30,
+          "mean_quality_score": 0.5589,
+          "good_rate": 0.6,
+          "fallback_rate": 0.6,
+          "failure_rate": 0.0
+        },
+        "Trajan": {
+          "n": 30,
+          "mean_quality_score": 0.5367,
+          "good_rate": 0.4,
+          "fallback_rate": 0.5,
+          "failure_rate": 0.0
+        }
+      },
+      "hard_case_stats": {
+        "n": 0
+      }
+    }
+  }
+]

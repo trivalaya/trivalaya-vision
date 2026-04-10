@@ -1,0 +1,12 @@
+{
+  "head": "cosface",
+  "top1": 0.7709,
+  "top3": 0.9378,
+  "top5": 0.982,
+  "worst_pair": "Diocletian -> Maximian",
+  "worst_pair_count": 16,
+  "projected_knn1": 0.7872,
+  "raw_knn1": 0.6121,
+  "projected_knn10": 0.7987,
+  "raw_knn10": 0.6628
+}

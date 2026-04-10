@@ -1,0 +1,700 @@
+{
+  "baseline": {
+    "dir": "/root/trivalaya-vision/legend_cnn/runs/run_20260410_004248_baseline",
+    "summary": {
+      "run_id": "run_20260410_004248_baseline",
+      "config_id": "baseline",
+      "n_total": 300,
+      "n_success": 300,
+      "n_failed": 0,
+      "n_good": 164,
+      "n_borderline": 136,
+      "n_bad_blank": 0,
+      "n_bad_low_signal": 0,
+      "fallback_rate": 0.4567,
+      "n_with_geometry_flags": 157,
+      "mean_quality_score": 0.5658,
+      "median_quality_score": 0.5614,
+      "wall_clock_seconds": 3.48,
+      "mean_seconds_per_coin": 0.012,
+      "cache_hit_rate": 1.0,
+      "per_authority_stats": {
+        "Antoninus Pius": {
+          "n": 30,
+          "mean_quality_score": 0.5474,
+          "good_rate": 0.4333,
+          "fallback_rate": 0.3333,
+          "failure_rate": 0.0
+        },
+        "Caracalla": {
+          "n": 30,
+          "mean_quality_score": 0.6127,
+          "good_rate": 0.8,
+          "fallback_rate": 0.2667,
+          "failure_rate": 0.0
+        },
+        "Diocletian": {
+          "n": 30,
+          "mean_quality_score": 0.5246,
+          "good_rate": 0.3667,
+          "fallback_rate": 0.4,
+          "failure_rate": 0.0
+        },
+        "Elagabalus": {
+          "n": 30,
+          "mean_quality_score": 0.5865,
+          "good_rate": 0.7333,
+          "fallback_rate": 0.4667,
+          "failure_rate": 0.0
+        },
+        "Gordian III": {
+          "n": 30,
+          "mean_quality_score": 0.582,
+          "good_rate": 0.6333,
+          "fallback_rate": 0.5333,
+          "failure_rate": 0.0
+        },
+        "Hadrian": {
+          "n": 30,
+          "mean_quality_score": 0.5719,
+          "good_rate": 0.5,
+          "fallback_rate": 0.5667,
+          "failure_rate": 0.0
+        },
+        "Maximian": {
+          "n": 30,
+          "mean_quality_score": 0.5276,
+          "good_rate": 0.3667,
+          "fallback_rate": 0.3,
+          "failure_rate": 0.0
+        },
+        "Septimius Severus": {
+          "n": 30,
+          "mean_quality_score": 0.5894,
+          "good_rate": 0.6,
+          "fallback_rate": 0.6,
+          "failure_rate": 0.0
+        },
+        "Severus Alexander": {
+          "n": 30,
+          "mean_quality_score": 0.5664,
+          "good_rate": 0.6333,
+          "fallback_rate": 0.6,
+          "failure_rate": 0.0
+        },
+        "Trajan": {
+          "n": 30,
+          "mean_quality_score": 0.55,
+          "good_rate": 0.4,
+          "fallback_rate": 0.5,
+          "failure_rate": 0.0
+        }
+      },
+      "hard_case_stats": {
+        "n": 0
+      }
+    }
+  },
+  "comparisons": [
+    {
+      "run_dir": "legend_cnn/runs/run_20260410_010318_offset_200_moments",
+      "config_id": "offset_200_moments",
+      "summary": {
+        "run_id": "run_20260410_010318_offset_200_moments",
+        "config_id": "offset_200_moments",
+        "n_total": 300,
+        "n_success": 300,
+        "n_failed": 0,
+        "n_good": 192,
+        "n_borderline": 108,
+        "n_bad_blank": 0,
+        "n_bad_low_signal": 0,
+        "fallback_rate": 0.3733,
+        "n_with_geometry_flags": 156,
+        "mean_quality_score": 0.5777,
+        "median_quality_score": 0.5819,
+        "wall_clock_seconds": 3.82,
+        "mean_seconds_per_coin": 0.013,
+        "cache_hit_rate": 1.0,
+        "per_authority_stats": {
+          "Antoninus Pius": {
+            "n": 30,
+            "mean_quality_score": 0.5818,
+            "good_rate": 0.6,
+            "fallback_rate": 0.3333,
+            "failure_rate": 0.0
+          },
+          "Caracalla": {
+            "n": 30,
+            "mean_quality_score": 0.6423,
+            "good_rate": 0.9,
+            "fallback_rate": 0.2,
+            "failure_rate": 0.0
+          },
+          "Diocletian": {
+            "n": 30,
+            "mean_quality_score": 0.5355,
+            "good_rate": 0.5333,
+            "fallback_rate": 0.3,
+            "failure_rate": 0.0
+          },
+          "Elagabalus": {
+            "n": 30,
+            "mean_quality_score": 0.5975,
+            "good_rate": 0.7667,
+            "fallback_rate": 0.4,
+            "failure_rate": 0.0
+          },
+          "Gordian III": {
+            "n": 30,
+            "mean_quality_score": 0.5641,
+            "good_rate": 0.6,
+            "fallback_rate": 0.3667,
+            "failure_rate": 0.0
+          },
+          "Hadrian": {
+            "n": 30,
+            "mean_quality_score": 0.5826,
+            "good_rate": 0.6,
+            "fallback_rate": 0.5,
+            "failure_rate": 0.0
+          },
+          "Maximian": {
+            "n": 30,
+            "mean_quality_score": 0.5528,
+            "good_rate": 0.5,
+            "fallback_rate": 0.2333,
+            "failure_rate": 0.0
+          },
+          "Septimius Severus": {
+            "n": 30,
+            "mean_quality_score": 0.5985,
+            "good_rate": 0.7333,
+            "fallback_rate": 0.5333,
+            "failure_rate": 0.0
+          },
+          "Severus Alexander": {
+            "n": 30,
+            "mean_quality_score": 0.5619,
+            "good_rate": 0.6667,
+            "fallback_rate": 0.4667,
+            "failure_rate": 0.0
+          },
+          "Trajan": {
+            "n": 30,
+            "mean_quality_score": 0.5602,
+            "good_rate": 0.5,
+            "fallback_rate": 0.4,
+            "failure_rate": 0.0
+          }
+        },
+        "hard_case_stats": {
+          "n": 0
+        }
+      },
+      "deltas": {
+        "good_rate_baseline": 0.5467,
+        "good_rate_candidate": 0.64,
+        "good_rate_delta": 0.0933,
+        "good_rate_relative": 0.1707,
+        "blank_rate_baseline": 0.0,
+        "blank_rate_candidate": 0.0,
+        "blank_rate_delta": 0.0,
+        "blank_rate_relative": 0.0,
+        "fallback_rate_baseline": 0.4567,
+        "fallback_rate_candidate": 0.3733,
+        "fallback_rate_delta": -0.0834,
+        "mean_score_baseline": 0.5658,
+        "mean_score_candidate": 0.5777,
+        "mean_score_delta": 0.0119
+      },
+      "checks": {
+        "good_rate_improved_10pct": true,
+        "blank_rate_reduced_20pct": false,
+        "fallback_rate_not_worse": true,
+        "all_passed": false
+      },
+      "authority_regressions": []
+    },
+    {
+      "run_dir": "legend_cnn/runs/run_20260410_010218_offset_175",
+      "config_id": "offset_175",
+      "summary": {
+        "run_id": "run_20260410_010218_offset_175",
+        "config_id": "offset_175",
+        "n_total": 300,
+        "n_success": 300,
+        "n_failed": 0,
+        "n_good": 191,
+        "n_borderline": 109,
+        "n_bad_blank": 0,
+        "n_bad_low_signal": 0,
+        "fallback_rate": 0.43,
+        "n_with_geometry_flags": 157,
+        "mean_quality_score": 0.5781,
+        "median_quality_score": 0.5736,
+        "wall_clock_seconds": 4.07,
+        "mean_seconds_per_coin": 0.014,
+        "cache_hit_rate": 1.0,
+        "per_authority_stats": {
+          "Antoninus Pius": {
+            "n": 30,
+            "mean_quality_score": 0.567,
+            "good_rate": 0.5667,
+            "fallback_rate": 0.3333,
+            "failure_rate": 0.0
+          },
+          "Caracalla": {
+            "n": 30,
+            "mean_quality_score": 0.6321,
+            "good_rate": 0.9,
+            "fallback_rate": 0.2333,
+            "failure_rate": 0.0
+          },
+          "Diocletian": {
+            "n": 30,
+            "mean_quality_score": 0.5347,
+            "good_rate": 0.5,
+            "fallback_rate": 0.3667,
+            "failure_rate": 0.0
+          },
+          "Elagabalus": {
+            "n": 30,
+            "mean_quality_score": 0.6012,
+            "good_rate": 0.7667,
+            "fallback_rate": 0.4667,
+            "failure_rate": 0.0
+          },
+          "Gordian III": {
+            "n": 30,
+            "mean_quality_score": 0.5862,
+            "good_rate": 0.7,
+            "fallback_rate": 0.5,
+            "failure_rate": 0.0
+          },
+          "Hadrian": {
+            "n": 30,
+            "mean_quality_score": 0.5795,
+            "good_rate": 0.6,
+            "fallback_rate": 0.5333,
+            "failure_rate": 0.0
+          },
+          "Maximian": {
+            "n": 30,
+            "mean_quality_score": 0.5454,
+            "good_rate": 0.4667,
+            "fallback_rate": 0.2667,
+            "failure_rate": 0.0
+          },
+          "Septimius Severus": {
+            "n": 30,
+            "mean_quality_score": 0.5981,
+            "good_rate": 0.7,
+            "fallback_rate": 0.5667,
+            "failure_rate": 0.0
+          },
+          "Severus Alexander": {
+            "n": 30,
+            "mean_quality_score": 0.5774,
+            "good_rate": 0.7,
+            "fallback_rate": 0.6,
+            "failure_rate": 0.0
+          },
+          "Trajan": {
+            "n": 30,
+            "mean_quality_score": 0.5591,
+            "good_rate": 0.4667,
+            "fallback_rate": 0.4333,
+            "failure_rate": 0.0
+          }
+        },
+        "hard_case_stats": {
+          "n": 0
+        }
+      },
+      "deltas": {
+        "good_rate_baseline": 0.5467,
+        "good_rate_candidate": 0.6367,
+        "good_rate_delta": 0.09,
+        "good_rate_relative": 0.1646,
+        "blank_rate_baseline": 0.0,
+        "blank_rate_candidate": 0.0,
+        "blank_rate_delta": 0.0,
+        "blank_rate_relative": 0.0,
+        "fallback_rate_baseline": 0.4567,
+        "fallback_rate_candidate": 0.43,
+        "fallback_rate_delta": -0.0267,
+        "mean_score_baseline": 0.5658,
+        "mean_score_candidate": 0.5781,
+        "mean_score_delta": 0.0123
+      },
+      "checks": {
+        "good_rate_improved_10pct": true,
+        "blank_rate_reduced_20pct": false,
+        "fallback_rate_not_worse": true,
+        "all_passed": false
+      },
+      "authority_regressions": []
+    },
+    {
+      "run_dir": "legend_cnn/runs/run_20260410_010158_offset_150",
+      "config_id": "offset_150",
+      "summary": {
+        "run_id": "run_20260410_010158_offset_150",
+        "config_id": "offset_150",
+        "n_total": 300,
+        "n_success": 300,
+        "n_failed": 0,
+        "n_good": 189,
+        "n_borderline": 111,
+        "n_bad_blank": 0,
+        "n_bad_low_signal": 0,
+        "fallback_rate": 0.4567,
+        "n_with_geometry_flags": 157,
+        "mean_quality_score": 0.5774,
+        "median_quality_score": 0.5737,
+        "wall_clock_seconds": 3.25,
+        "mean_seconds_per_coin": 0.011,
+        "cache_hit_rate": 1.0,
+        "per_authority_stats": {
+          "Antoninus Pius": {
+            "n": 30,
+            "mean_quality_score": 0.5611,
+            "good_rate": 0.5667,
+            "fallback_rate": 0.3333,
+            "failure_rate": 0.0
+          },
+          "Caracalla": {
+            "n": 30,
+            "mean_quality_score": 0.6233,
+            "good_rate": 0.8333,
+            "fallback_rate": 0.2667,
+            "failure_rate": 0.0
+          },
+          "Diocletian": {
+            "n": 30,
+            "mean_quality_score": 0.5361,
+            "good_rate": 0.4667,
+            "fallback_rate": 0.4,
+            "failure_rate": 0.0
+          },
+          "Elagabalus": {
+            "n": 30,
+            "mean_quality_score": 0.5968,
+            "good_rate": 0.7667,
+            "fallback_rate": 0.4667,
+            "failure_rate": 0.0
+          },
+          "Gordian III": {
+            "n": 30,
+            "mean_quality_score": 0.5906,
+            "good_rate": 0.7333,
+            "fallback_rate": 0.5333,
+            "failure_rate": 0.0
+          },
+          "Hadrian": {
+            "n": 30,
+            "mean_quality_score": 0.5848,
+            "good_rate": 0.6,
+            "fallback_rate": 0.5667,
+            "failure_rate": 0.0
+          },
+          "Maximian": {
+            "n": 30,
+            "mean_quality_score": 0.5414,
+            "good_rate": 0.4333,
+            "fallback_rate": 0.3,
+            "failure_rate": 0.0
+          },
+          "Septimius Severus": {
+            "n": 30,
+            "mean_quality_score": 0.6013,
+            "good_rate": 0.7333,
+            "fallback_rate": 0.6,
+            "failure_rate": 0.0
+          },
+          "Severus Alexander": {
+            "n": 30,
+            "mean_quality_score": 0.5741,
+            "good_rate": 0.6667,
+            "fallback_rate": 0.6,
+            "failure_rate": 0.0
+          },
+          "Trajan": {
+            "n": 30,
+            "mean_quality_score": 0.5648,
+            "good_rate": 0.5,
+            "fallback_rate": 0.5,
+            "failure_rate": 0.0
+          }
+        },
+        "hard_case_stats": {
+          "n": 0
+        }
+      },
+      "deltas": {
+        "good_rate_baseline": 0.5467,
+        "good_rate_candidate": 0.63,
+        "good_rate_delta": 0.0833,
+        "good_rate_relative": 0.1524,
+        "blank_rate_baseline": 0.0,
+        "blank_rate_candidate": 0.0,
+        "blank_rate_delta": 0.0,
+        "blank_rate_relative": 0.0,
+        "fallback_rate_baseline": 0.4567,
+        "fallback_rate_candidate": 0.4567,
+        "fallback_rate_delta": 0.0,
+        "mean_score_baseline": 0.5658,
+        "mean_score_candidate": 0.5774,
+        "mean_score_delta": 0.0116
+      },
+      "checks": {
+        "good_rate_improved_10pct": true,
+        "blank_rate_reduced_20pct": false,
+        "fallback_rate_not_worse": true,
+        "all_passed": false
+      },
+      "authority_regressions": []
+    },
+    {
+      "run_dir": "legend_cnn/runs/run_20260410_010238_offset_200",
+      "config_id": "offset_200",
+      "summary": {
+        "run_id": "run_20260410_010238_offset_200",
+        "config_id": "offset_200",
+        "n_total": 300,
+        "n_success": 300,
+        "n_failed": 0,
+        "n_good": 183,
+        "n_borderline": 117,
+        "n_bad_blank": 0,
+        "n_bad_low_signal": 0,
+        "fallback_rate": 0.3667,
+        "n_with_geometry_flags": 157,
+        "mean_quality_score": 0.5697,
+        "median_quality_score": 0.5726,
+        "wall_clock_seconds": 4.02,
+        "mean_seconds_per_coin": 0.013,
+        "cache_hit_rate": 1.0,
+        "per_authority_stats": {
+          "Antoninus Pius": {
+            "n": 30,
+            "mean_quality_score": 0.5714,
+            "good_rate": 0.5667,
+            "fallback_rate": 0.3333,
+            "failure_rate": 0.0
+          },
+          "Caracalla": {
+            "n": 30,
+            "mean_quality_score": 0.6325,
+            "good_rate": 0.8667,
+            "fallback_rate": 0.2,
+            "failure_rate": 0.0
+          },
+          "Diocletian": {
+            "n": 30,
+            "mean_quality_score": 0.5249,
+            "good_rate": 0.4667,
+            "fallback_rate": 0.3,
+            "failure_rate": 0.0
+          },
+          "Elagabalus": {
+            "n": 30,
+            "mean_quality_score": 0.5948,
+            "good_rate": 0.7667,
+            "fallback_rate": 0.4,
+            "failure_rate": 0.0
+          },
+          "Gordian III": {
+            "n": 30,
+            "mean_quality_score": 0.558,
+            "good_rate": 0.6,
+            "fallback_rate": 0.3667,
+            "failure_rate": 0.0
+          },
+          "Hadrian": {
+            "n": 30,
+            "mean_quality_score": 0.5762,
+            "good_rate": 0.5667,
+            "fallback_rate": 0.5,
+            "failure_rate": 0.0
+          },
+          "Maximian": {
+            "n": 30,
+            "mean_quality_score": 0.5443,
+            "good_rate": 0.5,
+            "fallback_rate": 0.2333,
+            "failure_rate": 0.0
+          },
+          "Septimius Severus": {
+            "n": 30,
+            "mean_quality_score": 0.5859,
+            "good_rate": 0.6667,
+            "fallback_rate": 0.5,
+            "failure_rate": 0.0
+          },
+          "Severus Alexander": {
+            "n": 30,
+            "mean_quality_score": 0.5543,
+            "good_rate": 0.6333,
+            "fallback_rate": 0.4333,
+            "failure_rate": 0.0
+          },
+          "Trajan": {
+            "n": 30,
+            "mean_quality_score": 0.555,
+            "good_rate": 0.4667,
+            "fallback_rate": 0.4,
+            "failure_rate": 0.0
+          }
+        },
+        "hard_case_stats": {
+          "n": 0
+        }
+      },
+      "deltas": {
+        "good_rate_baseline": 0.5467,
+        "good_rate_candidate": 0.61,
+        "good_rate_delta": 0.0633,
+        "good_rate_relative": 0.1159,
+        "blank_rate_baseline": 0.0,
+        "blank_rate_candidate": 0.0,
+        "blank_rate_delta": 0.0,
+        "blank_rate_relative": 0.0,
+        "fallback_rate_baseline": 0.4567,
+        "fallback_rate_candidate": 0.3667,
+        "fallback_rate_delta": -0.09,
+        "mean_score_baseline": 0.5658,
+        "mean_score_candidate": 0.5697,
+        "mean_score_delta": 0.0039
+      },
+      "checks": {
+        "good_rate_improved_10pct": true,
+        "blank_rate_reduced_20pct": false,
+        "fallback_rate_not_worse": true,
+        "all_passed": false
+      },
+      "authority_regressions": []
+    },
+    {
+      "run_dir": "legend_cnn/runs/run_20260410_010258_offset_225",
+      "config_id": "offset_225",
+      "summary": {
+        "run_id": "run_20260410_010258_offset_225",
+        "config_id": "offset_225",
+        "n_total": 300,
+        "n_success": 300,
+        "n_failed": 0,
+        "n_good": 182,
+        "n_borderline": 118,
+        "n_bad_blank": 0,
+        "n_bad_low_signal": 0,
+        "fallback_rate": 0.3267,
+        "n_with_geometry_flags": 157,
+        "mean_quality_score": 0.5643,
+        "median_quality_score": 0.5725,
+        "wall_clock_seconds": 3.83,
+        "mean_seconds_per_coin": 0.013,
+        "cache_hit_rate": 1.0,
+        "per_authority_stats": {
+          "Antoninus Pius": {
+            "n": 30,
+            "mean_quality_score": 0.5749,
+            "good_rate": 0.6,
+            "fallback_rate": 0.3333,
+            "failure_rate": 0.0
+          },
+          "Caracalla": {
+            "n": 30,
+            "mean_quality_score": 0.6364,
+            "good_rate": 0.8667,
+            "fallback_rate": 0.2,
+            "failure_rate": 0.0
+          },
+          "Diocletian": {
+            "n": 30,
+            "mean_quality_score": 0.5235,
+            "good_rate": 0.4667,
+            "fallback_rate": 0.2667,
+            "failure_rate": 0.0
+          },
+          "Elagabalus": {
+            "n": 30,
+            "mean_quality_score": 0.5981,
+            "good_rate": 0.7667,
+            "fallback_rate": 0.4,
+            "failure_rate": 0.0
+          },
+          "Gordian III": {
+            "n": 30,
+            "mean_quality_score": 0.554,
+            "good_rate": 0.6,
+            "fallback_rate": 0.3333,
+            "failure_rate": 0.0
+          },
+          "Hadrian": {
+            "n": 30,
+            "mean_quality_score": 0.5499,
+            "good_rate": 0.5333,
+            "fallback_rate": 0.3667,
+            "failure_rate": 0.0
+          },
+          "Maximian": {
+            "n": 30,
+            "mean_quality_score": 0.5385,
+            "good_rate": 0.5,
+            "fallback_rate": 0.2,
+            "failure_rate": 0.0
+          },
+          "Septimius Severus": {
+            "n": 30,
+            "mean_quality_score": 0.5722,
+            "good_rate": 0.6333,
+            "fallback_rate": 0.4333,
+            "failure_rate": 0.0
+          },
+          "Severus Alexander": {
+            "n": 30,
+            "mean_quality_score": 0.5375,
+            "good_rate": 0.6,
+            "fallback_rate": 0.3333,
+            "failure_rate": 0.0
+          },
+          "Trajan": {
+            "n": 30,
+            "mean_quality_score": 0.5585,
+            "good_rate": 0.5,
+            "fallback_rate": 0.4,
+            "failure_rate": 0.0
+          }
+        },
+        "hard_case_stats": {
+          "n": 0
+        }
+      },
+      "deltas": {
+        "good_rate_baseline": 0.5467,
+        "good_rate_candidate": 0.6067,
+        "good_rate_delta": 0.06,
+        "good_rate_relative": 0.1098,
+        "blank_rate_baseline": 0.0,
+        "blank_rate_candidate": 0.0,
+        "blank_rate_delta": 0.0,
+        "blank_rate_relative": 0.0,
+        "fallback_rate_baseline": 0.4567,
+        "fallback_rate_candidate": 0.3267,
+        "fallback_rate_delta": -0.13,
+        "mean_score_baseline": 0.5658,
+        "mean_score_candidate": 0.5643,
+        "mean_score_delta": -0.0015
+      },
+      "checks": {
+        "good_rate_improved_10pct": true,
+        "blank_rate_reduced_20pct": false,
+        "fallback_rate_not_worse": true,
+        "all_passed": false
+      },
+      "authority_regressions": []
+    }
+  ]
+}

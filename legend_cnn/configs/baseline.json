@@ -1,0 +1,17 @@
+{
+  "config_id": "baseline",
+  "inner_r_ratio": 0.72,
+  "outer_r_ratio": 0.90,
+  "center_method": "bbox",
+  "max_center_offset": 150,
+  "min_radius": 100,
+  "fallback_enabled": true,
+  "fallback_cx": 256,
+  "fallback_cy": 256,
+  "fallback_radius": 220,
+  "mask_threshold": 127,
+  "warp_radius_bins": 256,
+  "warp_angle_bins": 1024,
+  "ribbon_width": 512,
+  "ribbon_height": 64
+}

@@ -15,6 +15,16 @@ diagnostic_*.jpg
 
 # Archives
 *.zip
+*.tar.gz
+
+# Large binary data
+legend_cnn/data/image_cache/
+legend_cnn/data/ribbons/
+legend_cnn/runs/*/ribbons/
+legend_cnn/runs/*/galleries/
+legend_cnn/runs/*/previews/
+legend_cnn/checkpoints/*.pt
+embedding_heads/checkpoints/*.pt
 
 # Editor / OS
 .vscode/
