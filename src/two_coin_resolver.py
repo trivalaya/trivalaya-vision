@@ -187,11 +187,16 @@ class TwoCoinResolver:
         h, w = gray.shape
         cfg = self.config
         
+        # For a 2-coin side-by-side blob, each coin's diameter is bounded by
+        # the shorter side of the bbox (height), not the width. Bounding by w
+        # alone lets Hough return giant phantom circles when AR ≈ 2, and the
+        # pair-scoring then prefers them over the real (smaller) coins.
+        ref = min(h, w / 2.0)
         circles = cv2.HoughCircles(
             gray, cv2.HOUGH_GRADIENT, dp=cfg.HOUGH_DP,
-            minDist=int(w * 0.2), # Coins must be distinct
+            minDist=int(ref * 0.9),
             param1=cfg.HOUGH_PARAM1, param2=cfg.HOUGH_PARAM2,
-            minRadius=int(w * 0.1), maxRadius=int(w * 0.45)
+            minRadius=int(ref * 0.25), maxRadius=int(ref * 0.55)
         )
         
         if circles is None or circles.shape[1] < 2:
