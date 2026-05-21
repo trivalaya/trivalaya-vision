@@ -17,7 +17,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import confusion_matrix
 
 from embedding_heads.config import (
-    CHECKPOINT_DIR, CONFUSION_SUBSET_PATH, OUTPUT_DIR, SPLITS_PATH,
+    CHECKPOINT_DIR, CONFUSION_SUBSET_PATH, DATA_DIR, OUTPUT_DIR,
+    OBV_FEATURES_PATH, PROD_META_PATH, SCOPE_DATA_DIR, SPLITS_PATH,
 )
 from embedding_heads.dataset import extract_subset_embeddings
 from embedding_heads.heads import build_head
@@ -366,13 +367,243 @@ def topk_calibration(model, test_data, class_map):
     print(f"\nCalibration plot: {OUTPUT_DIR / 'calibration_cosface.png'}")
 
 
-def main():
-    model, class_map = load_cosface()
-    train_data, test_data = collect_splits(model)
+# ── 4. Scope-Based Deep Eval ───────────────────────────────────────
 
-    per_authority_knn_recall(train_data, test_data, class_map)
-    hard_pair_analysis(train_data, test_data, class_map)
-    topk_calibration(model, test_data, class_map)
+
+def load_scope_model(scope):
+    ck = torch.load(CHECKPOINT_DIR / f"{scope}_cosface_best.pt", map_location="cpu", weights_only=False)
+    model = build_head("cosface", ck["num_classes"])
+    model.load_state_dict(ck["model_state_dict"])
+    model.eval()
+    class_map = {int(k): v for k, v in ck["class_map"].items()}
+    return model, class_map, ck
+
+
+def collect_scope_splits(model, scope):
+    """Collect projected embeddings and labels for a scope's train/test splits."""
+    subset = pd.read_csv(SCOPE_DATA_DIR / f"{scope}_subset.csv")
+    coin_to_label = dict(zip(subset["coin_id"], subset["label_int"]))
+
+    with open(SCOPE_DATA_DIR / f"{scope}_splits.json") as f:
+        splits = json.load(f)
+
+    meta = pd.read_csv(PROD_META_PATH)
+    meta_idx = {cid: i for i, cid in enumerate(meta["id"])}
+    obv = np.load(OBV_FEATURES_PATH, mmap_mode="r")
+
+    def collect(ids):
+        embs, proj, labels, cids = [], [], [], []
+        with torch.no_grad():
+            for cid in ids:
+                if cid in meta_idx and cid in coin_to_label:
+                    raw = obv[meta_idx[cid]].copy()
+                    t = torch.from_numpy(raw).float().unsqueeze(0)
+                    projected = model.embed(t).squeeze(0).numpy()
+                    embs.append(raw)
+                    proj.append(projected)
+                    labels.append(coin_to_label[cid])
+                    cids.append(cid)
+        return np.array(embs), np.array(proj), np.array(labels), cids
+
+    train_data = collect(splits["train"])
+    test_data = collect(splits["test"])
+    return train_data, test_data
+
+
+def scope_knn_recall(train_data, test_data, class_map):
+    """Per-class KNN recall on projected embeddings for a scope."""
+    train_raw, train_proj, train_labels, _ = train_data
+    test_raw, test_proj, test_labels, _ = test_data
+
+    print("=" * 70)
+    print("1. PER-CLASS COSINE KNN RECALL (CosFace 128-d)")
+    print("=" * 70)
+
+    header = f"{'Class':<26} {'N':>4} {'KNN-1':>7} {'KNN-10':>7} {'Raw-1':>7} {'Raw-10':>7}"
+    print(header)
+    print("-" * len(header))
+
+    knn_proj_1 = KNeighborsClassifier(n_neighbors=1, metric="cosine")
+    knn_proj_1.fit(train_proj, train_labels)
+    pred_proj_1 = knn_proj_1.predict(test_proj)
+
+    k10 = min(10, len(train_labels) - 1)
+    knn_proj_10 = KNeighborsClassifier(n_neighbors=k10, metric="cosine")
+    knn_proj_10.fit(train_proj, train_labels)
+    pred_proj_10 = knn_proj_10.predict(test_proj)
+
+    knn_raw_1 = KNeighborsClassifier(n_neighbors=1, metric="cosine")
+    knn_raw_1.fit(train_raw, train_labels)
+    pred_raw_1 = knn_raw_1.predict(test_raw)
+
+    knn_raw_10 = KNeighborsClassifier(n_neighbors=k10, metric="cosine")
+    knn_raw_10.fit(train_raw, train_labels)
+    pred_raw_10 = knn_raw_10.predict(test_raw)
+
+    results = []
+    for label_int in sorted(class_map.keys()):
+        name = class_map[label_int]
+        mask = test_labels == label_int
+        n = mask.sum()
+        if n == 0:
+            continue
+
+        knn1_acc = (pred_proj_1[mask] == test_labels[mask]).mean()
+        knn10_acc = (pred_proj_10[mask] == test_labels[mask]).mean()
+        raw1_acc = (pred_raw_1[mask] == test_labels[mask]).mean()
+        raw10_acc = (pred_raw_10[mask] == test_labels[mask]).mean()
+
+        results.append({
+            "class": name, "n": int(n),
+            "knn1": knn1_acc, "knn10": knn10_acc,
+            "raw1": raw1_acc, "raw10": raw10_acc,
+        })
+
+    results.sort(key=lambda r: r["knn10"])
+    for r in results:
+        print(f"{r['class']:<26} {r['n']:>4} {r['knn1']:>7.1%} {r['knn10']:>7.1%} "
+              f"{r['raw1']:>7.1%} {r['raw10']:>7.1%}")
+
+    print(f"\n{'TOTAL':<26} {len(test_labels):>4} "
+          f"{(pred_proj_1 == test_labels).mean():>7.1%} "
+          f"{(pred_proj_10 == test_labels).mean():>7.1%} "
+          f"{(pred_raw_1 == test_labels).mean():>7.1%} "
+          f"{(pred_raw_10 == test_labels).mean():>7.1%}")
+
+    return results
+
+
+def scope_hard_pairs(train_data, test_data, class_map):
+    """Top confused pairs via KNN on projected space."""
+    _, train_proj, train_labels, _ = train_data
+    _, test_proj, test_labels, test_cids = test_data
+
+    print("\n" + "=" * 70)
+    print("2. HARD-PAIR ANALYSIS")
+    print("=" * 70)
+
+    k = min(10, len(train_labels) - 1)
+    knn = KNeighborsClassifier(n_neighbors=k, metric="cosine")
+    knn.fit(train_proj, train_labels)
+    preds = knn.predict(test_proj)
+
+    class_names = [class_map[i] for i in sorted(class_map.keys())]
+    cm = confusion_matrix(test_labels, preds, labels=sorted(class_map.keys()))
+
+    pairs = []
+    for i in range(cm.shape[0]):
+        for j in range(cm.shape[1]):
+            if i != j and cm[i, j] > 0:
+                pairs.append((class_names[i], class_names[j], cm[i, j]))
+    pairs.sort(key=lambda x: -x[2])
+
+    print("\nKNN confusion pairs (top 10):")
+    for true_cls, pred_cls, count in pairs[:10]:
+        print(f"  {true_cls:>26} -> {pred_cls:<26} {count:>3}")
+
+    return cm
+
+
+def scope_calibration(model, test_data, class_map, scope):
+    """Calibration analysis for a scope-trained model."""
+    test_raw, _, test_labels, _ = test_data
+
+    print("\n" + "=" * 70)
+    print("3. CONFIDENCE CALIBRATION")
+    print("=" * 70)
+
+    with torch.no_grad():
+        logits = model(torch.from_numpy(test_raw).float())
+        probs = F.softmax(logits, dim=1).numpy()
+
+    top1_confs = probs.max(axis=1)
+    top1_preds = probs.argmax(axis=1)
+    top1_correct = (top1_preds == test_labels)
+
+    bins = np.linspace(0, 1, 11)
+    bin_centers, bin_accs, bin_counts = [], [], []
+
+    print(f"\n{'Conf Bin':<12} {'Count':>6} {'Accuracy':>9} {'Avg Conf':>9} {'Gap':>7}")
+    print("-" * 47)
+
+    for i in range(len(bins) - 1):
+        mask = (top1_confs >= bins[i]) & (top1_confs < bins[i + 1])
+        if mask.sum() == 0:
+            continue
+        acc = top1_correct[mask].mean()
+        avg_conf = top1_confs[mask].mean()
+        count = mask.sum()
+        bin_centers.append(avg_conf)
+        bin_accs.append(acc)
+        bin_counts.append(count)
+        print(f"[{bins[i]:.1f}-{bins[i+1]:.1f})  {count:>6}  {acc:>9.1%}  {avg_conf:>9.3f}  {avg_conf - acc:>+7.1%}")
+
+    total = len(test_labels)
+    ece = sum(c * abs(conf - acc) for c, conf, acc in zip(bin_counts, bin_centers, bin_accs)) / total
+    print(f"\nExpected Calibration Error (ECE): {ece:.4f}")
+
+    print(f"\nTop-K accuracy:")
+    for k in [1, 2, 3, 5, 10]:
+        if k > probs.shape[1]:
+            continue
+        topk_idx = np.argsort(-probs, axis=1)[:, :k]
+        topk_hit = np.array([test_labels[i] in topk_idx[i] for i in range(len(test_labels))])
+        print(f"  Top-{k}: {topk_hit.mean():.1%}")
+
+    correct_conf = top1_confs[top1_correct]
+    wrong_conf = top1_confs[~top1_correct]
+    print(f"\nConfidence: correct mean={correct_conf.mean():.3f}  wrong mean={wrong_conf.mean():.3f}")
+
+    # Calibration plot
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+    ax1.plot([0, 1], [0, 1], "k--", label="Perfect")
+    ax1.bar(bin_centers, bin_accs, width=0.08, alpha=0.6, label="Observed")
+    ax1.set_xlabel("Predicted Confidence")
+    ax1.set_ylabel("Fraction Correct")
+    ax1.set_title(f"Calibration (ECE={ece:.3f})")
+    ax1.legend()
+    ax1.grid(True, alpha=0.3)
+
+    ax2.hist(correct_conf, bins=30, alpha=0.6, label=f"Correct (n={len(correct_conf)})", density=True)
+    if len(wrong_conf) > 0:
+        ax2.hist(wrong_conf, bins=30, alpha=0.6, label=f"Wrong (n={len(wrong_conf)})", density=True)
+    ax2.set_xlabel("Top-1 Confidence")
+    ax2.set_ylabel("Density")
+    ax2.set_title("Confidence Distribution")
+    ax2.legend()
+    ax2.grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    fig.savefig(OUTPUT_DIR / f"calibration_{scope}.png", dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    print(f"\nCalibration plot: {OUTPUT_DIR / f'calibration_{scope}.png'}")
+
+
+def deep_eval_scope(scope):
+    """Full deep evaluation for a scope-trained head."""
+    model, class_map, ck = load_scope_model(scope)
+    train_data, test_data = collect_scope_splits(model, scope)
+
+    scope_knn_recall(train_data, test_data, class_map)
+    scope_hard_pairs(train_data, test_data, class_map)
+    scope_calibration(model, test_data, class_map, scope)
+
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Deep evaluation")
+    parser.add_argument("--scope", default=None,
+                        help="Scope name for cluster-driven heads")
+    args = parser.parse_args()
+
+    if args.scope:
+        deep_eval_scope(args.scope)
+    else:
+        model, class_map = load_cosface()
+        train_data, test_data = collect_splits(model)
+        per_authority_knn_recall(train_data, test_data, class_map)
+        hard_pair_analysis(train_data, test_data, class_map)
+        topk_calibration(model, test_data, class_map)
 
 
 if __name__ == "__main__":

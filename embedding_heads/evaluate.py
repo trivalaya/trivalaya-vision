@@ -17,8 +17,8 @@ import torch.nn.functional as F
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.neighbors import KNeighborsClassifier
 
-from embedding_heads.config import CHECKPOINT_DIR, OUTPUT_DIR, SPLITS_PATH, CONFUSION_SUBSET_PATH
-from embedding_heads.dataset import build_dataloaders, extract_subset_embeddings
+from embedding_heads.config import CHECKPOINT_DIR, DATA_DIR, OUTPUT_DIR, SCOPE_DATA_DIR, SPLITS_PATH, CONFUSION_SUBSET_PATH
+from embedding_heads.dataset import build_dataloaders, build_dataloaders_from_scope, extract_subset_embeddings
 from embedding_heads.heads import build_head
 
 
@@ -203,11 +203,123 @@ def evaluate(head_name):
     return results
 
 
+def evaluate_scope(scope, head_name="cosface"):
+    """Evaluate a scope-trained CosFace head on its test set with KNN lift."""
+    print(f"\n=== Evaluating: {scope} ({head_name}) ===\n")
+
+    # Load model from scope checkpoint
+    ck_path = CHECKPOINT_DIR / f"{scope}_{head_name}_best.pt"
+    ck = torch.load(ck_path, map_location="cpu", weights_only=False)
+    model = build_head(head_name, ck["num_classes"])
+    model.load_state_dict(ck["model_state_dict"])
+    model.eval()
+
+    class_map = {int(k): v for k, v in ck["class_map"].items()}
+    class_names = [class_map[i] for i in sorted(class_map.keys())]
+
+    # Build scope dataloaders
+    train_loader, val_loader, test_loader, num_classes, _ = build_dataloaders_from_scope(scope)
+
+    # Get test predictions
+    preds, probs, labels = get_predictions(model, test_loader, head_name)
+
+    top1 = topk_accuracy(probs, labels, 1)
+    top3 = topk_accuracy(probs, labels, 3)
+    top5 = topk_accuracy(probs, labels, 5)
+    top2 = topk_accuracy(probs, labels, 2)
+
+    print(f"Top-1: {top1:.4f}  Top-2: {top2:.4f}  Top-3: {top3:.4f}  Top-5: {top5:.4f}")
+
+    all_labels = list(range(num_classes))
+    report = classification_report(labels, preds, labels=all_labels, target_names=class_names, digits=4, zero_division=0)
+    print(f"\n{report}")
+
+    cm = confusion_matrix(labels, preds, labels=all_labels)
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    plot_confusion(cm, class_names, OUTPUT_DIR / f"confusion_{scope}.png",
+                   f"Confusion Matrix — {scope} (top-1={top1:.1%})")
+
+    pairs = hardest_pairs(cm, class_names)
+    print("Hardest pairs:")
+    for true_cls, pred_cls, count in pairs:
+        print(f"  {true_cls} -> {pred_cls}: {count}")
+
+    # KNN baseline on projected vs raw 768-d
+    knn_results = {}
+    if head_name in ("arcface", "cosface"):
+        print("\nKNN lift (projected 128-d vs raw 768-d):")
+
+        # Collect embeddings from train and test loaders
+        import pandas as pd
+        subset = pd.read_csv(SCOPE_DATA_DIR / f"{scope}_subset.csv")
+        coin_to_label = dict(zip(subset["coin_id"], subset["label_int"]))
+
+        with open(SCOPE_DATA_DIR / f"{scope}_splits.json") as f:
+            splits = json.load(f)
+
+        from embedding_heads.config import OBV_FEATURES_PATH, PROD_META_PATH
+        meta = pd.read_csv(PROD_META_PATH)
+        meta_idx = {cid: i for i, cid in enumerate(meta["id"])}
+        obv = np.load(OBV_FEATURES_PATH, mmap_mode="r")
+
+        def collect_knn(ids):
+            raw_list, proj_list, label_list = [], [], []
+            with torch.no_grad():
+                for cid in ids:
+                    if cid in meta_idx and cid in coin_to_label:
+                        raw = obv[meta_idx[cid]].copy()
+                        t = torch.from_numpy(raw).float().unsqueeze(0)
+                        proj = model.embed(t).squeeze(0).numpy()
+                        raw_list.append(raw)
+                        proj_list.append(proj)
+                        label_list.append(coin_to_label[cid])
+            return np.array(raw_list), np.array(proj_list), np.array(label_list)
+
+        train_raw, train_proj, train_labels = collect_knn(splits["train"])
+        test_raw, test_proj, test_labels_knn = collect_knn(splits["test"])
+
+        for k in [1, 10]:
+            knn_proj = KNeighborsClassifier(n_neighbors=k, metric="cosine")
+            knn_proj.fit(train_proj, train_labels)
+            proj_acc = float(knn_proj.score(test_proj, test_labels_knn))
+
+            knn_raw = KNeighborsClassifier(n_neighbors=k, metric="cosine")
+            knn_raw.fit(train_raw, train_labels)
+            raw_acc = float(knn_raw.score(test_raw, test_labels_knn))
+
+            knn_results[f"projected_knn{k}"] = round(proj_acc, 4)
+            knn_results[f"raw_knn{k}"] = round(raw_acc, 4)
+            print(f"  KNN-{k}: projected={proj_acc:.4f}  raw={raw_acc:.4f}  lift={proj_acc - raw_acc:+.4f}")
+
+    results = {
+        "scope": scope,
+        "head": head_name,
+        "top1": round(top1, 4),
+        "top2": round(top2, 4),
+        "top3": round(top3, 4),
+        "top5": round(top5, 4),
+        "worst_pair": f"{pairs[0][0]} -> {pairs[0][1]}" if pairs else "",
+        "worst_pair_count": int(pairs[0][2]) if pairs else 0,
+        **knn_results,
+    }
+
+    with open(OUTPUT_DIR / f"eval_{scope}.json", "w") as f:
+        json.dump(results, f, indent=2)
+
+    return results
+
+
 def main():
     parser = argparse.ArgumentParser(description="Evaluate embedding head")
     parser.add_argument("--head", required=True, choices=["linear", "mlp", "arcface", "cosface"])
+    parser.add_argument("--scope", default=None,
+                        help="Scope name for cluster-driven heads")
     args = parser.parse_args()
-    evaluate(args.head)
+
+    if args.scope:
+        evaluate_scope(args.scope, args.head)
+    else:
+        evaluate(args.head)
 
 
 if __name__ == "__main__":

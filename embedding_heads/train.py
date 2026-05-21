@@ -17,7 +17,7 @@ from torch.optim import AdamW
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 from embedding_heads.config import CHECKPOINT_DIR, OUTPUT_DIR
-from embedding_heads.dataset import build_dataloaders
+from embedding_heads.dataset import build_dataloaders, build_dataloaders_from_scope
 from embedding_heads.heads import build_head
 
 
@@ -84,16 +84,26 @@ def validate(model, loader, criterion, head_name):
     return total_loss / total, correct / total
 
 
-def train(head_name, lr=None, epochs=None, patience=None, batch_size=1024):
+def train(head_name, lr=None, epochs=None, patience=None, batch_size=1024, version="v1", scope=None):
     defaults = DEFAULTS[head_name]
     lr = lr or defaults["lr"]
     epochs = epochs or defaults["epochs"]
     patience = patience or defaults["patience"]
 
-    print(f"=== Training: {head_name} ===")
-    print(f"  lr={lr}  epochs={epochs}  patience={patience}  batch_size={batch_size}")
+    if scope:
+        print(f"=== Training: {head_name} (scope={scope}) ===")
+        print(f"  lr={lr}  epochs={epochs}  patience={patience}  batch_size={batch_size}")
+        train_loader, val_loader, test_loader, num_classes, class_map = build_dataloaders_from_scope(scope, batch_size)
+        ck_name = f"{scope}_cosface_best.pt"
+        log_path = OUTPUT_DIR / f"train_log_{scope}.csv"
+    else:
+        print(f"=== Training: {head_name} ({version}) ===")
+        print(f"  lr={lr}  epochs={epochs}  patience={patience}  batch_size={batch_size}")
+        train_loader, val_loader, test_loader, num_classes, class_map = build_dataloaders(batch_size, version=version)
+        suffix = f"_{version}" if version != "v1" else ""
+        ck_name = f"{head_name}{suffix}_best.pt"
+        log_path = OUTPUT_DIR / f"train_log_{head_name}{suffix}.csv"
 
-    train_loader, val_loader, test_loader, num_classes, class_map = build_dataloaders(batch_size)
     model = build_head(head_name, num_classes)
     params = sum(p.numel() for p in model.parameters())
     print(f"  Model parameters: {params:,}")
@@ -109,8 +119,6 @@ def train(head_name, lr=None, epochs=None, patience=None, batch_size=1024):
     best_val_acc = 0.0
     best_epoch = 0
     epochs_no_improve = 0
-
-    log_path = OUTPUT_DIR / f"train_log_{head_name}.csv"
     with open(log_path, "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(["epoch", "train_loss", "train_acc", "val_loss", "val_acc", "lr", "time"])
@@ -152,7 +160,7 @@ def train(head_name, lr=None, epochs=None, patience=None, batch_size=1024):
                 "num_classes": num_classes,
                 "class_map": class_map,
             }
-            torch.save(checkpoint, CHECKPOINT_DIR / f"{head_name}_best.pt")
+            torch.save(checkpoint, CHECKPOINT_DIR / ck_name)
         else:
             epochs_no_improve += 1
 
@@ -161,7 +169,7 @@ def train(head_name, lr=None, epochs=None, patience=None, batch_size=1024):
             break
 
     print(f"\nBest: epoch {best_epoch}  val_loss={best_val_loss:.4f}  val_acc={best_val_acc:.4f}")
-    print(f"Checkpoint: {CHECKPOINT_DIR / f'{head_name}_best.pt'}")
+    print(f"Checkpoint: {CHECKPOINT_DIR / ck_name}")
 
     return best_epoch, best_val_loss, best_val_acc
 
@@ -173,10 +181,15 @@ def main():
     parser.add_argument("--epochs", type=int, default=None)
     parser.add_argument("--patience", type=int, default=None)
     parser.add_argument("--batch-size", type=int, default=1024)
+    parser.add_argument("--version", default="v1", choices=["v1", "v2"],
+                        help="v1=10-class, v2=36-class expanded")
+    parser.add_argument("--scope", default=None,
+                        help="Scope name for cluster-driven heads (e.g. auth_ri_severan_13way)")
     args = parser.parse_args()
 
     train(args.head, lr=args.lr, epochs=args.epochs,
-          patience=args.patience, batch_size=args.batch_size)
+          patience=args.patience, batch_size=args.batch_size,
+          version=args.version, scope=args.scope)
 
 
 if __name__ == "__main__":

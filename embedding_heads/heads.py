@@ -53,13 +53,13 @@ class ArcFaceHead(nn.Module):
 
 
 class CosFaceHead(nn.Module):
-    """Projection to 128-d + CosFace margin layer."""
+    """Projection to embed_dim-d + CosFace margin layer."""
 
-    def __init__(self, num_classes, s=30.0, m=0.35):
+    def __init__(self, num_classes, s=30.0, m=0.35, embed_dim_out=128):
         super().__init__()
         self.s = s
-        self.proj = nn.Linear(EMBED_DIM, 128)
-        self.margin = CosFaceMargin(128, num_classes, s=s, m=m)
+        self.proj = nn.Linear(EMBED_DIM, embed_dim_out)
+        self.margin = CosFaceMargin(embed_dim_out, num_classes, s=s, m=m)
 
     def forward(self, x, labels=None):
         feat = F.normalize(self.proj(x), dim=1)
@@ -72,7 +72,7 @@ class CosFaceHead(nn.Module):
         return F.normalize(self.proj(x), dim=1)
 
 
-def build_head(name, num_classes):
+def build_head(name, num_classes, **kwargs):
     heads = {
         "linear": LinearHead,
         "mlp": MLPHead,
@@ -81,4 +81,4 @@ def build_head(name, num_classes):
     }
     if name not in heads:
         raise ValueError(f"Unknown head: {name!r}. Choose from {list(heads.keys())}")
-    return heads[name](num_classes)
+    return heads[name](num_classes, **kwargs)

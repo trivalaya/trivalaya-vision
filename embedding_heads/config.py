@@ -6,6 +6,7 @@ EMBED_DIR = Path(__file__).resolve().parent
 CHECKPOINT_DIR = EMBED_DIR / "checkpoints"
 OUTPUT_DIR = EMBED_DIR / "outputs"
 DATA_DIR = EMBED_DIR / "data"
+SCOPE_DATA_DIR = EMBED_DIR.parent / "head_training_data"
 
 # Source data (pipeline prod)
 PROD_DIR = Path("/root/trivalaya-pipeline/cluster_output_prod")
