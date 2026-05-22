@@ -110,34 +110,38 @@ def hough_rim_recovery(image_bgr, seed_contour):
     if circles is None:
         return None, 0
 
-    # Score each candidate by edge support along its circumference
-    edges = cv2.Canny(cv2.GaussianBlur(gray, (5, 5), 0), 50, 150)
+    # Score each candidate by edge support along its circumference.
+    # Run Canny on the ROI only (cheap) — circles are entirely within ROI,
+    # so full-image Canny would be wasted work on large source images.
+    edges_roi = cv2.Canny(cv2.GaussianBlur(roi, (5, 5), 0), 50, 150)
+    roi_h, roi_w = edges_roi.shape
     best = (None, 0.0)
     for ccx, ccy, ccr in circles[0]:
-        gcx, gcy, gcr = ccx + rx1, ccy + ry1, ccr
-        if gcr < 10 or gcr > min(w, h) / 2:
+        if ccr < 10 or ccr > min(roi_h, roi_w) / 2:
             continue
-        if not (0 <= gcx < w and 0 <= gcy < h):
+        if not (0 <= ccx < roi_w and 0 <= ccy < roi_h):
             continue
-        ann = np.zeros((h, w), dtype=np.uint8)
-        cv2.circle(ann, (int(gcx), int(gcy)), int(gcr), 255, 3)
+        ann = np.zeros((roi_h, roi_w), dtype=np.uint8)
+        cv2.circle(ann, (int(ccx), int(ccy)), int(ccr), 255, 3)
         ann_total = cv2.countNonZero(ann)
         if ann_total == 0:
             continue
-        es = cv2.countNonZero(cv2.bitwise_and(ann, edges)) / ann_total
+        es = cv2.countNonZero(cv2.bitwise_and(ann, edges_roi)) / ann_total
         if es > best[1]:
-            best = ((gcx, gcy, gcr), es)
+            # Store ROI coords; remap to image coords after scoring
+            best = ((ccx, ccy, ccr), es)
 
     if best[0] is None or best[1] < 0.12:
         logger.debug(f"Hough rim recovery: best edge_support={best[1]:.3f} (need >= 0.12)")
         return None, 0
 
-    gcx, gcy, gcr = best[0]
+    ccx, ccy, ccr = best[0]
+    gcx, gcy = ccx + rx1, ccy + ry1  # ROI -> image coords
     theta = np.linspace(0, 2 * np.pi, 360)
-    x_pts = gcx + gcr * np.cos(theta)
-    y_pts = gcy + gcr * np.sin(theta)
+    x_pts = gcx + ccr * np.cos(theta)
+    y_pts = gcy + ccr * np.sin(theta)
     contour = np.column_stack((x_pts, y_pts)).astype(np.int32).reshape((-1, 1, 2))
-    logger.info(f"Hough rim recovery SUCCESS: r={gcr:.0f}px edge_support={best[1]:.3f}")
+    logger.info(f"Hough rim recovery SUCCESS: r={ccr:.0f}px edge_support={best[1]:.3f}")
     return contour, best[1]
 
 
