@@ -106,7 +106,8 @@ def _lot_dir_from_path(path: str) -> Optional[str]:
 def fetch_jobs(coin_ids: Optional[List[int]] = None,
                limit: Optional[int] = None,
                sample: bool = False,
-               non_green_only: bool = False) -> List[CoinJob]:
+               non_green_only: bool = False,
+               require_hough: bool = True) -> List[CoinJob]:
     conn = get_db()
     cur = conn.cursor(dictionary=True)
     params: tuple = ()
@@ -132,15 +133,18 @@ def fetch_jobs(coin_ids: Optional[List[int]] = None,
         coin_ids = hit_ids
         params = ()  # rebuilt below
 
-    where = "WHERE cd.vision_metadata LIKE '%\"split_method\": \"hough\"%'"
+    where_parts = []
+    if require_hough:
+        where_parts.append("cd.vision_metadata LIKE '%\"split_method\": \"hough\"%'")
     if coin_ids:
         place = ",".join(["%s"] * len(coin_ids))
-        where += f" AND cd.coin_id IN ({place})"
+        where_parts.append(f"cd.coin_id IN ({place})")
         params = tuple(coin_ids)
+    where = "WHERE " + " AND ".join(where_parts) if where_parts else ""
     order = " ORDER BY RAND() " if sample else " ORDER BY cd.coin_id "
     sql = f"""
         SELECT cd.id, cd.coin_id, cd.auction_record_id, cd.side, cd.detection_index,
-               cd.crop_path, cd.normalized_path,
+               cd.crop_path, cd.normalized_path, cd.transparent_path,
                a.auction_house, a.sale_id, a.lot_number
         FROM coin_detections cd
         JOIN auction_data a ON a.id = cd.auction_record_id
@@ -246,8 +250,8 @@ def reprocess_one(job: CoinJob, s3, dry_run: bool = False) -> Dict:
         return int(M["m10"] / M["m00"]) if M["m00"] else 0
     dets.sort(key=cx)
 
-    # Build extracted crops
-    crops_by_side: Dict[str, Tuple[bytes, bytes]] = {}
+    # Build extracted crops + transparents
+    crops_by_side: Dict[str, Tuple[bytes, bytes, bytes]] = {}
     for i, d in enumerate(dets):
         side = "obverse" if i == 0 else "reverse"
         c_small = np.asarray(d["layer_1"]["contour"]).astype(np.int32)
@@ -260,7 +264,16 @@ def reprocess_one(job: CoinJob, s3, dry_run: bool = False) -> Dict:
         if crop.size == 0:
             out["status"] = "fail"; out["stage"] = f"crop_{side}"; out["error"] = "empty"; return out
         resized = cv2.resize(crop, (224, 224), interpolation=cv2.INTER_AREA)
-        crops_by_side[side] = (encode_jpg(crop), encode_jpg(resized))
+        # Transparent PNG (RGBA) — alpha from contour mask
+        mask_full = np.zeros((H, W), dtype=np.uint8)
+        cv2.drawContours(mask_full, [c_orig], -1, 255, -1)
+        mask_crop = mask_full[y1:y2, x1:x2]
+        b_ch, g_ch, r_ch = cv2.split(crop)
+        rgba = cv2.merge([b_ch, g_ch, r_ch, mask_crop])
+        ok, png_buf = cv2.imencode(".png", rgba, [int(cv2.IMWRITE_PNG_COMPRESSION), 6])
+        if not ok:
+            out["status"] = "fail"; out["stage"] = f"png_{side}"; return out
+        crops_by_side[side] = (encode_jpg(crop), encode_jpg(resized), png_buf.tobytes())
 
     # Upload to existing keys
     uploaded: List[str] = []
@@ -268,9 +281,11 @@ def reprocess_one(job: CoinJob, s3, dry_run: bool = False) -> Dict:
         side = row["side"]
         if side not in crops_by_side:
             out["status"] = "skip"; out["reason"] = f"no_side_{side}"; return out
-        crop_bytes, sq_bytes = crops_by_side[side]
+        crop_bytes, sq_bytes, png_bytes = crops_by_side[side]
         if dry_run:
-            uploaded.append(f"DRY {row['crop_path']}"); uploaded.append(f"DRY {row['normalized_path']}")
+            uploaded.append(f"DRY {row['crop_path']}")
+            uploaded.append(f"DRY {row['normalized_path']}")
+            uploaded.append(f"DRY {row.get('transparent_path','')}")
             continue
         if row.get("crop_path"):
             s3.put_object(Bucket=BUCKET, Key=row["crop_path"], Body=crop_bytes,
@@ -280,6 +295,10 @@ def reprocess_one(job: CoinJob, s3, dry_run: bool = False) -> Dict:
             s3.put_object(Bucket=BUCKET, Key=row["normalized_path"], Body=sq_bytes,
                           ContentType="image/jpeg", ACL="public-read")
             uploaded.append(row["normalized_path"])
+        if row.get("transparent_path"):
+            s3.put_object(Bucket=BUCKET, Key=row["transparent_path"], Body=png_bytes,
+                          ContentType="image/png", ACL="public-read")
+            uploaded.append(row["transparent_path"])
 
     out["status"] = "ok"; out["uploaded"] = uploaded
     return out
@@ -302,6 +321,8 @@ def main():
     ap.add_argument("--all", action="store_true")
     ap.add_argument("--non-green", action="store_true",
                     help="Restrict to coins with at least one non-GREEN hough-split detection row")
+    ap.add_argument("--no-hough-filter", action="store_true",
+                    help="Don't require split_method=hough — useful for explicit coin_ids that need the rim-recovery fix even though they weren't Hough-split")
     args = ap.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -332,9 +353,12 @@ def main():
     if args.all:
         limit = None
 
-    log.info("Fetching job list (limit=%s sample=%s non_green=%s)...", limit, args.sample, args.non_green)
+    log.info("Fetching job list (limit=%s sample=%s non_green=%s no_hough=%s)...",
+             limit, args.sample, args.non_green, args.no_hough_filter)
     t0 = time.time()
-    jobs = fetch_jobs(coin_ids=coin_ids, limit=limit, sample=args.sample, non_green_only=args.non_green)
+    jobs = fetch_jobs(coin_ids=coin_ids, limit=limit, sample=args.sample,
+                      non_green_only=args.non_green,
+                      require_hough=not args.no_hough_filter)
     log.info("Got %d coin jobs in %.1fs", len(jobs), time.time() - t0)
 
     Path(args.log).parent.mkdir(parents=True, exist_ok=True)
