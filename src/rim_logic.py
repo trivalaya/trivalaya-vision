@@ -162,7 +162,6 @@ def recover_rim(image_bgr, seed_contour):
     background pixels around the rim.
     """
     geo_c, geo_conf = geometric_fit_recovery(image_bgr, seed_contour)
-    hou_c, hou_conf = hough_rim_recovery(image_bgr, seed_contour)
 
     def _radius(contour):
         if contour is None:
@@ -170,6 +169,15 @@ def recover_rim(image_bgr, seed_contour):
         (_, _), r = cv2.minEnclosingCircle(contour)
         return float(r)
 
+    # Skip the slow Hough fallback when the geometric fit is highly confident.
+    # An "eaten-arc" failure (the 109704 case) shows up as geo_conf <= ~0.55:
+    # the seed contour's missing arc pulls the least-squares fit small and
+    # combined_conf stays moderate. A clean coin gives geo_conf > 0.65 and
+    # we trust it without paying for Hough.
+    if geo_c is not None and geo_conf > 0.65:
+        return geo_c, geo_conf
+
+    hou_c, hou_conf = hough_rim_recovery(image_bgr, seed_contour)
     geo_r, hou_r = _radius(geo_c), _radius(hou_c)
 
     # Only one available
