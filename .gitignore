@@ -8,7 +8,7 @@ __pycache__/
 extracted_data/
 data/
 experiments/
-
+embedding_heads/outputs/
 # Debug / diagnostics
 debug_*.jpg
 diagnostic_*.jpg
