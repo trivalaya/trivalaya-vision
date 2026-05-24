@@ -1,7 +1,12 @@
 import cv2
 import numpy as np
 import logging
+import os
+import time
 from typing import Optional, Tuple
+
+# Same gate as src/two_coin_resolver.py — set TRIVALAYA_PERF_LOG=1 to enable.
+_PERF = os.environ.get("TRIVALAYA_PERF_LOG", "0") == "1"
 
 try:
     from src.config import RimRecoveryConfig
@@ -161,7 +166,9 @@ def recover_rim(image_bgr, seed_contour):
     109704-style failure), while an over-sized fit just admits a few
     background pixels around the rim.
     """
+    t0 = time.perf_counter() if _PERF else 0
     geo_c, geo_conf = geometric_fit_recovery(image_bgr, seed_contour)
+    t_geo = time.perf_counter() - t0 if _PERF else 0
 
     def _radius(contour):
         if contour is None:
@@ -175,9 +182,18 @@ def recover_rim(image_bgr, seed_contour):
     # combined_conf stays moderate. A clean coin gives geo_conf > 0.65 and
     # we trust it without paying for Hough.
     if geo_c is not None and geo_conf > 0.65:
+        if _PERF:
+            print(f"  [rim] geo={t_geo*1000:.0f}ms conf={geo_conf:.2f} "
+                  f"hough=SKIPPED total={t_geo*1000:.0f}ms")
         return geo_c, geo_conf
 
+    t1 = time.perf_counter() if _PERF else 0
     hou_c, hou_conf = hough_rim_recovery(image_bgr, seed_contour)
+    t_hou = time.perf_counter() - t1 if _PERF else 0
+    if _PERF:
+        total = (time.perf_counter() - t0) * 1000
+        print(f"  [rim] geo={t_geo*1000:.0f}ms conf={geo_conf:.2f} "
+              f"hough={t_hou*1000:.0f}ms hou_conf={hou_conf:.2f} total={total:.0f}ms")
     geo_r, hou_r = _radius(geo_c), _radius(hou_c)
 
     # Only one available
