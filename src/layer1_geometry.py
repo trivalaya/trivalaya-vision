@@ -192,7 +192,19 @@ def _segment_and_extract_candidates(
         final_c = c
         recovered = False
 
+        # Two-stage gate (perf): only run rim recovery when the seed contour
+        # is BOTH non-circular AND under-filling its enclosing circle.
+        # The eaten-mask failure (Pattern B) shows circularity ~0.04 and
+        # area_ratio ~0.65; a slightly-bumpy-but-clean coin has circularity
+        # ~0.7 but area_ratio >0.85, which we now skip.
+        need_recovery = False
         if CoinConfig.ENABLE_RIM_RECOVERY and circularity < Layer1Config.CIRCULARITY_RELAXED:
+            (_, _), enc_r = cv2.minEnclosingCircle(c)
+            enc_area = np.pi * enc_r * enc_r
+            area_ratio = area / enc_area if enc_area > 0 else 1.0
+            need_recovery = area_ratio < 0.85
+
+        if need_recovery:
             new_c, conf = recover_rim(img, c)
             if new_c is not None and validate_rim_recovery(new_c, c, (h, w)):
                 final_c = new_c

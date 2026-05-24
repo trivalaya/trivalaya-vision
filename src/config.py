@@ -42,7 +42,10 @@ class Layer1Config:
     
     # === RIM RECOVERY TRIGGERS (Layer 1.5) ===
     CIRCULARITY_STRICT = 0.90     # OLD threshold - too strict for ancient coins
-    CIRCULARITY_RELAXED = 0.75    # NEW threshold - triggers recovery earlier
+    CIRCULARITY_RELAXED = 0.65    # Triggers recovery; paired with area_ratio gate
+                                  # (mask area / minEnclosingCircle area) < 0.85
+                                  # to skip clean coins whose contour is slightly
+                                  # bumpy but still fills its circle.
     MIN_AREA_RATIO = 0.20         # Trigger if object is small (was 0.40)
     RIM_GAP_THRESHOLD = 0.85      # Expected area completeness ratio
     MIN_SOLIDITY_FOR_RECOVERY = 0.85
