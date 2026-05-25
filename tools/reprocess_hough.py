@@ -37,7 +37,7 @@ from botocore.client import Config
 
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
-from src.pipeline_manager import analyze_image  # noqa: E402
+from src.pipeline_manager import analyze_image, crop_with_alpha  # noqa: E402
 
 log = logging.getLogger("reprocess")
 
@@ -265,11 +265,7 @@ def reprocess_one(job: CoinJob, s3, dry_run: bool = False) -> Dict:
             out["status"] = "fail"; out["stage"] = f"crop_{side}"; out["error"] = "empty"; return out
         resized = cv2.resize(crop, (224, 224), interpolation=cv2.INTER_AREA)
         # Transparent PNG (RGBA) — alpha from contour mask
-        mask_full = np.zeros((H, W), dtype=np.uint8)
-        cv2.drawContours(mask_full, [c_orig], -1, 255, -1)
-        mask_crop = mask_full[y1:y2, x1:x2]
-        b_ch, g_ch, r_ch = cv2.split(crop)
-        rgba = cv2.merge([b_ch, g_ch, r_ch, mask_crop])
+        rgba = crop_with_alpha(img, c_orig, (x1, y1, x2, y2))
         ok, png_buf = cv2.imencode(".png", rgba, [int(cv2.IMWRITE_PNG_COMPRESSION), 6])
         if not ok:
             out["status"] = "fail"; out["stage"] = f"png_{side}"; return out

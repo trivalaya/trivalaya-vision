@@ -6,7 +6,7 @@ import json
 import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from src.pipeline_manager import analyze_image
+from src.pipeline_manager import analyze_image, crop_with_alpha
 
 # --- CONFIG ---
 INPUT_FOLDER = "data/test_images"
@@ -103,11 +103,7 @@ def extract_and_save(original_path, detection_list):
         cv2.imwrite(crop_path, crop_img)
 
         # Transparent
-        mask = np.zeros((h_orig, w_orig), dtype=np.uint8)
-        cv2.drawContours(mask, [contour_orig], -1, 255, -1)
-        mask_crop = mask[y1:y2, x1:x2]
-        b, g, r = cv2.split(crop_img)
-        transparent_img = cv2.merge([b, g, r, mask_crop])
+        transparent_img = crop_with_alpha(full_img, contour_orig, (x1, y1, x2, y2))
         trans_path = os.path.join(output_dir, f"{name_base}{suffix}_transparent.png")
         cv2.imwrite(trans_path, transparent_img)
 

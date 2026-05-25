@@ -9,6 +9,27 @@ SourceType = Literal["auction", "unknown"]
 
 MAX_DIMENSION = 3200 
 
+def crop_with_alpha(img_bgr, contour, bbox):
+    """Cut a bbox crop from img_bgr and bake the contour into its alpha channel.
+
+    img_bgr  : full source BGR ndarray (H, W, 3).
+    contour  : cv2 contour in full-image coords.
+    bbox     : (x1, y1, x2, y2) crop window in full-image coords.
+
+    Returns RGBA (h, w, 4) uint8 ready for cv2.imwrite(".png", ...).
+    Used by tools/extract_coins.py, tools/reprocess_hough.py, and the
+    production vision_adapter.py so all three produce identical
+    transparent_path artifacts.
+    """
+    x1, y1, x2, y2 = bbox
+    h_img, w_img = img_bgr.shape[:2]
+    mask = np.zeros((h_img, w_img), dtype=np.uint8)
+    cv2.drawContours(mask, [contour], -1, 255, -1)
+    crop = img_bgr[y1:y2, x1:x2]
+    b, g, r = cv2.split(crop)
+    return cv2.merge([b, g, r, mask[y1:y2, x1:x2]])
+
+
 def _load_and_resize(image_path):
     img = cv2.imread(image_path)
     if img is None: return None, 1.0
