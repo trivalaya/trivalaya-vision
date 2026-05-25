@@ -33,6 +33,14 @@ import boto3
 import cv2
 import mysql.connector
 import numpy as np
+
+# Critical for high-worker batches: each Python worker thread should drive
+# cv2 single-threaded so internal openmp doesn't oversubscribe and race.
+# A 32-worker batch on a 32-vCPU box segfaulted in cv2.abi3.so without this.
+cv2.setNumThreads(1)
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
+os.environ.setdefault("MKL_NUM_THREADS", "1")
 from botocore.client import Config
 
 REPO = Path(__file__).resolve().parent.parent
