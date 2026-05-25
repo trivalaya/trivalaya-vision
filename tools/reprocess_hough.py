@@ -95,6 +95,28 @@ class CoinJob:
     rows: List[Dict]  # coin_detections rows (each has side, normalized_path, crop_path)
 
 
+def load_jobs_from_file(path: str) -> List[CoinJob]:
+    """Load a pre-baked job list (built on the DB host). Skips fetch_jobs entirely
+    so a burst worker needs no MySQL connection — only Spaces creds + this file.
+
+    Expected JSON: list of {coin_id, auction_house, sale_id, lot_number, rows:[{side,
+    detection_index, crop_path, normalized_path, transparent_path}, ...]}.
+    """
+    with open(path) as f:
+        data = json.load(f)
+    jobs: List[CoinJob] = []
+    for d in data:
+        jobs.append(CoinJob(
+            coin_id=int(d["coin_id"]),
+            auction_record_id=int(d.get("auction_record_id", 0)),
+            auction_house=str(d["auction_house"]),
+            sale_id=str(d["sale_id"]),
+            lot_number=str(d["lot_number"]),
+            rows=d["rows"],
+        ))
+    return jobs
+
+
 _LOT_RE = re.compile(r"/(Lot_\d+)/[^/]+$")
 
 
@@ -315,6 +337,8 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--log", type=str, default="/tmp/v1v2/reprocess_log.jsonl")
     ap.add_argument("--all", action="store_true")
+    ap.add_argument("--jobs-file", type=str, default=None,
+                    help="Pre-baked JSON job list (skip DB; for burst workers without MySQL access)")
     ap.add_argument("--non-green", action="store_true",
                     help="Restrict to coins with at least one non-GREEN hough-split detection row")
     ap.add_argument("--no-hough-filter", action="store_true",
@@ -331,6 +355,22 @@ def main():
         file_ids = [int(x) for x in raw.split(",") if x.strip()]
         coin_ids = (coin_ids or []) + file_ids
 
+    limit = args.limit
+    if args.all:
+        limit = None
+
+    t0 = time.time()
+    if args.jobs_file:
+        log.info("Loading jobs from %s (no DB)", args.jobs_file)
+        jobs = load_jobs_from_file(args.jobs_file)
+    else:
+        log.info("Fetching job list (limit=%s sample=%s non_green=%s no_hough=%s)...",
+                 limit, args.sample, args.non_green, args.no_hough_filter)
+        jobs = fetch_jobs(coin_ids=coin_ids, limit=limit, sample=args.sample,
+                          non_green_only=args.non_green,
+                          require_hough=not args.no_hough_filter)
+
+    # --resume filtering applies to both paths
     if args.resume and Path(args.log).exists():
         done = set()
         for line in open(args.log):
@@ -340,21 +380,12 @@ def main():
                     done.add(r["coin_id"])
             except json.JSONDecodeError:
                 continue
-        if coin_ids:
-            before = len(coin_ids)
-            coin_ids = [c for c in coin_ids if c not in done]
-            log.info("--resume: %d already-ok coins skipped, %d remaining in coin_ids", before - len(coin_ids), len(coin_ids))
+        if done:
+            before = len(jobs)
+            jobs = [j for j in jobs if j.coin_id not in done]
+            log.info("--resume: %d already-ok jobs skipped, %d remaining",
+                     before - len(jobs), len(jobs))
 
-    limit = args.limit
-    if args.all:
-        limit = None
-
-    log.info("Fetching job list (limit=%s sample=%s non_green=%s no_hough=%s)...",
-             limit, args.sample, args.non_green, args.no_hough_filter)
-    t0 = time.time()
-    jobs = fetch_jobs(coin_ids=coin_ids, limit=limit, sample=args.sample,
-                      non_green_only=args.non_green,
-                      require_hough=not args.no_hough_filter)
     log.info("Got %d coin jobs in %.1fs", len(jobs), time.time() - t0)
 
     Path(args.log).parent.mkdir(parents=True, exist_ok=True)
