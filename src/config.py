@@ -68,7 +68,14 @@ class RimRecoveryConfig:
     HOUGH_MIN_DIST = 1000         # Minimum distance between circle centers
     HOUGH_PARAM1 = 100            # Canny edge threshold for Hough
     HOUGH_PARAM2 = 30             # Accumulator threshold (lower = more circles)
-    
+
+    # Perf: rim-recovery HoughCircles runs on a copy of the ROI downscaled to
+    # this longest side; the winning circle is scaled back to image coords.
+    # Cost grows ~dim^4 x edge density, so the cap is the difference between
+    # seconds and CPU-minutes on large inputs. 0 = uncapped (legacy full-res).
+    # Runtime override: TRIVALAYA_RIM_HOUGH_CAP.
+    HOUGH_ROI_CAP = 1280
+
     # Validation
     CENTER_ALIGNMENT_TOLERANCE = 0.8  # Max distance from seed center (as ratio of radius)
     EDGE_SUPPORT_MIN = 0.15       # Minimum edge confirmation (was 0.08 - too low!)

@@ -20,6 +20,7 @@ except ImportError:
     class RimRecoveryConfig:
         EDGE_SUPPORT_MIN = 0.15
         EDGE_SUPPORT_FALLBACK = 0.12
+        HOUGH_ROI_CAP = 1280
     
     def validate_rim_recovery(rec, seed, shape): 
         return True
@@ -104,44 +105,76 @@ def hough_rim_recovery(image_bgr, seed_contour):
     if expected_r < 20:
         return None, 0
 
+    # Perf cap: HoughCircles cost grows ~dim^4 x edge density. Run it on a
+    # bounded-resolution copy of the ROI and scale the winner back — the
+    # annulus band (max(5, 0.02r)) dwarfs the <=1/s px remap error.
+    try:
+        cap = int(os.environ.get(
+            "TRIVALAYA_RIM_HOUGH_CAP",
+            str(getattr(RimRecoveryConfig, "HOUGH_ROI_CAP", 1024))))
+    except ValueError:
+        cap = 1024
+    roi_full = roi
+    s = 1.0
+    if cap > 0 and max(roi.shape) > cap:
+        s = cap / max(roi.shape)
+        if expected_r * s < 20:
+            s = min(1.0, 20.0 / expected_r)
+        roi = cv2.resize(
+            roi,
+            (max(1, int(roi.shape[1] * s)), max(1, int(roi.shape[0] * s))),
+            interpolation=cv2.INTER_AREA)
+    expected_r_w = expected_r * s
+
+    # param2 is an absolute accumulator-vote bar; votes scale with the
+    # circumference in pixels, so hold the bar constant RELATIVE to
+    # resolution when the ROI is downscaled. Over-admission is safe — the
+    # full-res edge-support gate below is the acceptance judge.
+    p2 = 25 if s == 1.0 else max(12, int(round(25 * s)))
     circles = cv2.HoughCircles(
         cv2.GaussianBlur(roi, (5, 5), 0),
         cv2.HOUGH_GRADIENT, dp=1.2,
-        minDist=int(expected_r * 1.5),
-        param1=100, param2=25,
-        minRadius=int(expected_r * 0.7),
-        maxRadius=int(expected_r * 1.3),
+        minDist=int(expected_r_w * 1.5),
+        param1=100, param2=p2,
+        minRadius=int(expected_r_w * 0.7),
+        maxRadius=int(expected_r_w * 1.3),
     )
     if circles is None:
         return None, 0
 
-    # Score each candidate by edge support along its circumference.
-    # Run Canny on the ROI only (cheap) — circles are entirely within ROI,
-    # so full-image Canny would be wasted work on large source images.
-    edges_roi = cv2.Canny(cv2.GaussianBlur(roi, (5, 5), 0), 50, 150)
+    # Score candidates on the FULL-RES ROI edges: the cap only bounds where
+    # the accumulator looks for candidates; acceptance (the 0.12 edge-support
+    # gate) is judged at native resolution, same as the uncapped path. When
+    # downscaled, each candidate's radius is micro-refined (+/-2px) to absorb
+    # the 1/s quantization of the low-res accumulator.
+    edges_roi = cv2.Canny(cv2.GaussianBlur(roi_full, (5, 5), 0), 50, 150)
     roi_h, roi_w = edges_roi.shape
+    cand = circles[0] if s == 1.0 else circles[0][:8]
     best = (None, 0.0)
-    for ccx, ccy, ccr in circles[0]:
-        if ccr < 10 or ccr > min(roi_h, roi_w) / 2:
+    for ccx, ccy, ccr in cand:
+        fx, fy, fr0 = ccx / s, ccy / s, ccr / s
+        if not (0 <= fx < roi_w and 0 <= fy < roi_h):
             continue
-        if not (0 <= ccx < roi_w and 0 <= ccy < roi_h):
-            continue
-        ann = np.zeros((roi_h, roi_w), dtype=np.uint8)
-        cv2.circle(ann, (int(ccx), int(ccy)), int(ccr), 255, 3)
-        ann_total = cv2.countNonZero(ann)
-        if ann_total == 0:
-            continue
-        es = cv2.countNonZero(cv2.bitwise_and(ann, edges_roi)) / ann_total
-        if es > best[1]:
-            # Store ROI coords; remap to image coords after scoring
-            best = ((ccx, ccy, ccr), es)
+        radii = (fr0,) if s == 1.0 else (fr0 - 2.0, fr0, fr0 + 2.0)
+        for fr in radii:
+            if fr < 10 or fr > min(roi_h, roi_w) / 2:
+                continue
+            ann = np.zeros((roi_h, roi_w), dtype=np.uint8)
+            cv2.circle(ann, (int(fx), int(fy)), int(fr), 255, 3)
+            ann_total = cv2.countNonZero(ann)
+            if ann_total == 0:
+                continue
+            es = cv2.countNonZero(cv2.bitwise_and(ann, edges_roi)) / ann_total
+            if es > best[1]:
+                # Store full-res ROI coords; remap to image coords after
+                best = ((fx, fy, fr), es)
 
     if best[0] is None or best[1] < 0.12:
         logger.debug(f"Hough rim recovery: best edge_support={best[1]:.3f} (need >= 0.12)")
         return None, 0
 
     ccx, ccy, ccr = best[0]
-    gcx, gcy = ccx + rx1, ccy + ry1  # ROI -> image coords
+    gcx, gcy = ccx + rx1, ccy + ry1  # full-res ROI -> image coords
     theta = np.linspace(0, 2 * np.pi, 360)
     x_pts = gcx + ccr * np.cos(theta)
     y_pts = gcy + ccr * np.sin(theta)

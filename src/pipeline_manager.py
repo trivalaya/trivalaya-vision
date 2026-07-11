@@ -103,6 +103,10 @@ def analyze_image(image_path, source_type: SourceType = "unknown"):
     out = {
         "status": "success",
         "detections": final_results,
+        # Detection ran on an image downscaled by this factor (1.0 = no
+        # resize). Contours/bboxes are in the DOWNSCALED space — consumers
+        # cutting from the original file must divide coords by this.
+        "scale": scale,
     }
     # Propagate two-coin resolver metadata for upstream logging
     if "two_coin_resolution" in l1_result:
