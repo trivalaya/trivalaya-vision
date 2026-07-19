@@ -133,6 +133,49 @@ def _suppress_background_noise(candidates: List[Dict]) -> List[Dict]:
     return kept
 
 
+def _close_kernel_size(h: int, w: int, frac: Optional[float] = None,
+                       house: Optional[str] = None) -> int:
+    """
+    Scale-relative MORPH_CLOSE kernel size.  Odd, clamped, deterministic.
+
+    A fixed kernel has a fixed bridging distance in absolute pixels
+    (2 * iterations * (k // 2)), which is 1.4% of a 500px frame but 0.23% of a
+    3000px one -- so the same kernel repairs fragmented masks on large images
+    and welds two distinct coins into one blob on small ones.  Sizing off
+    max(h, w) makes the bridging proportional to the input instead.
+
+    Pure function of its arguments: no env reads, no globals beyond config, so
+    it is unit-testable in isolation.  The env gate lives at the call site.
+
+    Uses int() (floor), never round(): round(3000/400) == 8 -> k=9, which would
+    silently give the 3000x1440 `cng` format MORE bridging than today's fixed 7.
+    Truncation yields k=7 across the whole 2400-3199 band.
+
+    `house` selects a per-house override from CLOSE_KERNEL_BY_HOUSE, for houses
+    the SS4.2 sweep shows the global formula mis-serves.  That table is empty by
+    default, so passing a house changes nothing until it is populated from
+    measured data -- houses differ mostly by image size, which the formula
+    already handles without branching.  Precedence, widest to narrowest:
+    explicit `frac` (the env A/B knob) > per-house > global config.
+    """
+    override = {}
+    if house:
+        override = Layer1Config.CLOSE_KERNEL_BY_HOUSE.get(
+            house.strip().lower(), {}
+        )
+
+    if frac is not None:
+        f = frac
+    else:
+        f = override.get("frac", Layer1Config.CLOSE_KERNEL_FRAC)
+    lo = override.get("min", Layer1Config.CLOSE_KERNEL_MIN)
+    hi = override.get("max", Layer1Config.CLOSE_KERNEL_MAX)
+
+    k = int(max(h, w) * f)  # floor, NOT round
+    k = max(lo, min(k, hi))
+    return k | 1  # ellipse kernels must be odd
+
+
 def _flip_thresh_type(thresh_type: int) -> int:
     """Flip Otsu threshold polarity (binary <-> binary_inv)."""
     if thresh_type == cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU:
@@ -147,6 +190,7 @@ def _segment_and_extract_candidates(
     thresh_type: int,
     h: int, w: int,
     total_area: int,
+    house: Optional[str] = None,
 ) -> tuple:
     """
     Run binary segmentation with given threshold polarity and extract
@@ -156,11 +200,28 @@ def _segment_and_extract_candidates(
     """
     blurred = cv2.GaussianBlur(gray_enhanced, (7, 7), 0)
     _, binary = cv2.threshold(blurred, 0, 255, thresh_type)
+    # Kernel sizing is env-gated: unset means literally today's fixed 7x7, so
+    # this lands without changing production behavior.  When the default flips,
+    # the unset branch becomes _close_kernel_size(h, w, house=house).
+    #
+    #   unset    -> fixed 7x7 (today's production behavior)
+    #   "auto"   -> scale-relative using configured values (per-house, then
+    #               global) -- this is what the flipped default will do
+    #   <float>  -> scale-relative forcing that frac for every house; the
+    #               SS4.2 A/B knob, and it deliberately outranks per-house so a
+    #               sweep arm means one thing corpus-wide
+    _frac_env = _os.environ.get("TRIVALAYA_CLOSE_KERNEL_FRAC")
+    if not _frac_env:
+        k = 7
+    elif _frac_env.strip().lower() == "auto":
+        k = _close_kernel_size(h, w, house=house)
+    else:
+        k = _close_kernel_size(h, w, frac=float(_frac_env), house=house)
     binary = cv2.morphologyEx(
         binary,
         cv2.MORPH_CLOSE,
-        cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7)),
-        iterations=2
+        cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (k, k)),
+        iterations=Layer1Config.CLOSE_ITERATIONS
     )
 
     contours, _ = cv2.findContours(
@@ -363,7 +424,8 @@ def _validate_split(
 
 
 def layer_1_structural_salience(image_or_path, sensitivity: str = "standard",
-                                source_type: "SourceType" = "unknown") -> Dict:
+                                source_type: "SourceType" = "unknown",
+                                house: Optional[str] = None) -> Dict:
     """
     Main entry point for Layer 1 structural analysis.
 
@@ -371,6 +433,12 @@ def layer_1_structural_salience(image_or_path, sensitivity: str = "standard",
         image_or_path: file path (str) or BGR ndarray
         source_type: "auction" for known auction images (relaxed two-coin
                      gates) or "unknown" for strict validation (default).
+        house: auction_house for this image, used only to select a per-house
+               MORPH_CLOSE override (Layer1Config.CLOSE_KERNEL_BY_HOUSE).
+               Optional and empty-by-default -- callers that do not know the
+               house get the scale-relative global, which is the intended
+               path for almost everything.  Batches can be house-mixed, so
+               this is a per-image argument rather than process-level config.
 
     Now includes two-coin detection: if a single merged blob is detected
     with low circularity and wide aspect ratio, attempts to split it into
@@ -414,7 +482,8 @@ def layer_1_structural_salience(image_or_path, sensitivity: str = "standard",
 
     # --- Segmentation + candidate extraction ---
     candidates, binary = _segment_and_extract_candidates(
-        img, gray_enhanced, edge_zone, thresh_type, h, w, total_area
+        img, gray_enhanced, edge_zone, thresh_type, h, w, total_area,
+        house=house
     )
 
     # --- Polarity-flip fallback ---
@@ -424,7 +493,8 @@ def layer_1_structural_salience(image_or_path, sensitivity: str = "standard",
     if not candidates:
         flipped_type = _flip_thresh_type(thresh_type)
         candidates_alt, binary_alt = _segment_and_extract_candidates(
-            img, gray_enhanced, edge_zone, flipped_type, h, w, total_area
+            img, gray_enhanced, edge_zone, flipped_type, h, w, total_area,
+            house=house
         )
         if candidates_alt:
             candidates = candidates_alt

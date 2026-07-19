@@ -22,10 +22,36 @@ class Layer1Config:
         MIN_AREA_PX = 200
     
     # Morphological Operations
-    CLOSE_KERNEL_SIZE_STANDARD = 7  # Kernel for closing gaps (standard mode)
-    CLOSE_KERNEL_SIZE_HIGH = 9      # Kernel for closing gaps (high sensitivity)
-    CLOSE_ITERATIONS = 2            # Number of closing operations
-    
+    # MORPH_CLOSE kernel is scale-relative: k = int(max(h, w) * FRAC), clamped
+    # to [MIN, MAX], then bumped odd.  A fixed 7x7 has ~12px of bridging power
+    # regardless of input size, which welds correctly-separated coins on small
+    # auction formats (500px) while doing real mask repair on 3000px plates.
+    # See specs/two_coin_weld_morph_close.md.
+    CLOSE_KERNEL_FRAC = 1 / 400  # 7px across the 2400-3199px band (cng: 3000)
+    CLOSE_KERNEL_MIN = 3         # below 3 the close is a no-op
+    CLOSE_KERNEL_MAX = 21        # bounds cost / over-welding on 4000px+ plates
+    CLOSE_ITERATIONS = 2         # Number of closing operations
+
+    # Per-house kernel overrides.  EMPTY BY DESIGN -- see below.
+    #
+    # Keys are auction_house as stored in auction_data.auction_house
+    # (matched case-insensitively).  Values may override any of
+    # frac / min / max; unspecified keys fall back to the globals above.
+    # Precedence: TRIVALAYA_CLOSE_KERNEL_FRAC > per-house > global.
+    #
+    # This table is deliberately empty at landing.  The scale-relative
+    # formula already absorbs the axis houses most obviously differ on --
+    # image dimensions -- so an override is only justified where a house
+    # differs on something else (gap distribution, toning, glare) AND the
+    # SS4.2 sweep measured it.  Populating it from guesses would repeat the
+    # exact failure this spec spent three revisions correcting: v1's
+    # round() gave the 42,080-coin cng house more bridging than it had
+    # today, silently, because a constant was reasoned about rather than
+    # computed.  Add entries from sweep data, with the measurement cited.
+    #
+    #   "cng_feature": {"frac": 1 / 250},   # example shape only
+    CLOSE_KERNEL_BY_HOUSE: dict = {}
+
     # Background Detection
     BRIGHT_BACKGROUND_THRESHOLD = 110   # Gray value to classify as light background
     VERY_BRIGHT_THRESHOLD = 200         # For aggressive foreground filtering
@@ -54,6 +80,43 @@ class Layer1Config:
     NMS_IOU_THRESHOLD = 0.50      # IoU overlap threshold for duplicate detection
     NMS_CENTER_DISTANCE_RATIO = 0.10  # Max center distance as fraction of bbox
     MAX_DETECTIONS = 5            # Maximum objects to return per image
+
+
+# Module-level (import-time) guards: _close_kernel_size applies `k |= 1` AFTER
+# clamping, so an even MAX would let k exceed it by one.  Deliberately not in
+# validate_config() -- that function is only called from this file's __main__
+# block, so an assert there never runs in production.
+assert Layer1Config.CLOSE_KERNEL_MAX % 2 == 1, \
+    "CLOSE_KERNEL_MAX must be odd (k |= 1 runs after the clamp)"
+
+def validate_close_kernel_overrides():
+    """
+    The MAX-is-odd invariant has to hold for every per-house override too, and
+    a bad entry there is far easier to introduce than a bad global.  Called at
+    import (below), so a malformed table fails fast rather than silently
+    producing an out-of-range kernel on one house's images.
+
+    A no-op while the table is empty -- which is exactly when it is cheapest
+    to add, and it fires the moment someone populates it wrongly.
+    """
+    allowed = {"frac", "min", "max"}
+    for house, ovr in Layer1Config.CLOSE_KERNEL_BY_HOUSE.items():
+        assert house == house.strip().lower(), \
+            f"CLOSE_KERNEL_BY_HOUSE keys must be lowercase/stripped: {house!r}"
+        assert set(ovr) <= allowed, \
+            f"CLOSE_KERNEL_BY_HOUSE[{house!r}]: unknown key(s) " \
+            f"{sorted(set(ovr) - allowed)}"
+        lo = ovr.get("min", Layer1Config.CLOSE_KERNEL_MIN)
+        hi = ovr.get("max", Layer1Config.CLOSE_KERNEL_MAX)
+        assert hi % 2 == 1, \
+            f"CLOSE_KERNEL_BY_HOUSE[{house!r}]['max'] must be odd"
+        assert lo >= 1, f"CLOSE_KERNEL_BY_HOUSE[{house!r}]['min'] must be >= 1"
+        assert lo <= hi, f"CLOSE_KERNEL_BY_HOUSE[{house!r}]: min ({lo}) > max ({hi})"
+        assert ovr.get("frac", Layer1Config.CLOSE_KERNEL_FRAC) > 0, \
+            f"CLOSE_KERNEL_BY_HOUSE[{house!r}]['frac'] must be > 0"
+
+
+validate_close_kernel_overrides()
 
 
 # === LAYER 1.5: RIM RECOVERY ===

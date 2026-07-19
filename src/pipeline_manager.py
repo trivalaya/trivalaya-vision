@@ -46,7 +46,15 @@ def _load_and_resize(image_path):
         img = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_AREA)
     return img, scale
 
-def analyze_image(image_path, source_type: SourceType = "unknown"):
+def analyze_image(image_path, source_type: SourceType = "unknown",
+                  house: str = None):
+    """
+    house: optional auction_house, forwarded to L1 purely to select a
+    per-house MORPH_CLOSE override. Optional everywhere; unset means the
+    scale-relative global. Note the resize below happens BEFORE L1, so the
+    kernel is sized off post-resize dimensions -- which is correct, since
+    that is the image L1 actually segments.
+    """
     img, scale = _load_and_resize(image_path)
     if img is None: return {"status": "error", "error": "Load failed"}
 
@@ -55,10 +63,10 @@ def analyze_image(image_path, source_type: SourceType = "unknown"):
     # and the full pipeline path.
 
     # 1. Run Layer 1
-    l1_result = layer_1_structural_salience(img, sensitivity="standard", source_type=source_type)
+    l1_result = layer_1_structural_salience(img, sensitivity="standard", source_type=source_type, house=house)
 
     if "objects" not in l1_result:
-         l1_result = layer_1_structural_salience(img, sensitivity="high", source_type=source_type)
+         l1_result = layer_1_structural_salience(img, sensitivity="high", source_type=source_type, house=house)
 
     if "objects" not in l1_result:
          return {"status": "failed", "last_error": "No objects found"}
