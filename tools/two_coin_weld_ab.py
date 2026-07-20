@@ -13,14 +13,19 @@ Spaces keys (§3), so for an already-processed lot the pre-change output no
 longer exists. Running both arms here, in one process, against one decoded
 image is the only way to get a true paired comparison.
 
-STRICTLY READ-ONLY. Reads the frozen CSV and raw JPEGs from disk. Touches
-no database, uploads nothing, and writes only the report files you name.
+STRICTLY READ-ONLY. Reads the frozen CSV and raw JPEGs from disk or Spaces.
+Touches no database, uploads nothing, and writes only the report files you
+name plus a raw cache under --cache-dir.
 
 Usage:
     python tools/two_coin_weld_ab.py --limit 5            # smoke test
     python tools/two_coin_weld_ab.py                      # full frozen sample
     python tools/two_coin_weld_ab.py --arms control,auto,0.0025
     python tools/two_coin_weld_ab.py --out /tmp/ab        # -> /tmp/ab.csv + .json
+
+    # leu -- raws exist only in Spaces (specs/two_coin_weld_handoff.md)
+    python tools/two_coin_weld_ab.py --purpose leu_ab --source spaces \
+        --out specs/results/two_coin_weld_ab_leu_20260720
 
 Arms are TRIVALAYA_CLOSE_KERNEL_FRAC values:
     control  -- var unset: today's fixed 7x7 (the baseline arm)
@@ -40,6 +45,7 @@ import csv
 import json
 import os
 import sys
+import tempfile
 import time
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -69,6 +75,7 @@ from src.pipeline_manager import _load_and_resize                    # noqa: E40
 ENV_FRAC = "TRIVALAYA_CLOSE_KERNEL_FRAC"
 DEFAULT_SAMPLE = Path(__file__).resolve().parent.parent / "specs/two_coin_weld_sample_ids.csv"
 DEFAULT_RAW_ROOT = Path.home() / "trivalaya-pipeline/trivalaya_data/01_raw/auctions"
+DEFAULT_CACHE = Path(tempfile.gettempdir()) / "two_coin_weld_raw_cache"
 
 
 # --------------------------------------------------------------------------
@@ -205,10 +212,56 @@ def _run_arm(img, arm, house) -> Dict:
     }
 
 
-def _load(row, raw_root: Path) -> Optional[np.ndarray]:
-    p = raw_root / row["house"] / row["sale_id"] / f"Lot_{row['lot_number']}.jpg"
-    if not p.exists():
+_S3 = None
+
+
+def _s3_client():
+    """Lazy Spaces client, reusing the freezer's so there is one auth path."""
+    global _S3
+    if _S3 is None:
+        from tools.freeze_weld_sample import _s3
+        _S3 = _s3()          # also loads ~/spaces.env into os.environ
+    return _S3
+
+
+def _fetch_spaces(row, cache_dir: Path) -> Optional[Path]:
+    """
+    Pull a raw from Spaces into a local cache; return its path, or None.
+
+    Keys ZERO-PAD the lot number to 5 digits (Lot_00001.jpg), matching
+    freeze_weld_sample::dims_spaces. The local branch in _load does not pad --
+    that asymmetry is real, not an oversight, so the two are kept separate.
+
+    Cached by (house, sale, lot), so a re-run of the A/B re-downloads nothing.
+    Writes via a .part temp then renames, so an interrupted download can never
+    be picked up as a valid cache hit on the next run.
+    """
+    lot = int(row["lot_number"])
+    key = f"raw/auctions/{row['house']}/{row['sale_id']}/Lot_{lot:05d}.jpg"
+    dest = cache_dir / f"{row['house']}_{row['sale_id']}_{lot:05d}.jpg"
+    if dest.exists() and dest.stat().st_size > 0:
+        return dest
+    try:
+        body = _s3_client().get_object(
+            Bucket=os.environ["SPACES_BUCKET"], Key=key)["Body"].read()
+    except Exception:
         return None
+    tmp = dest.with_suffix(".part")
+    tmp.write_bytes(body)
+    tmp.rename(dest)
+    return dest
+
+
+def _load(row, raw_root: Path, source: str = "local",
+          cache_dir: Optional[Path] = None) -> Optional[np.ndarray]:
+    if source == "spaces":
+        p = _fetch_spaces(row, cache_dir)
+        if p is None:
+            return None
+    else:
+        p = raw_root / row["house"] / row["sale_id"] / f"Lot_{row['lot_number']}.jpg"
+        if not p.exists():
+            return None
     img, _ = _load_and_resize(str(p))   # same resize production applies
     return img
 
@@ -230,6 +283,11 @@ def main():
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--sample", type=Path, default=DEFAULT_SAMPLE)
     ap.add_argument("--raw-root", type=Path, default=DEFAULT_RAW_ROOT)
+    ap.add_argument("--source", choices=["local", "spaces"], default="local",
+                    help="where raws come from; matches freeze_weld_sample "
+                         "(leu raws exist only in Spaces)")
+    ap.add_argument("--cache-dir", type=Path, default=DEFAULT_CACHE,
+                    help="local cache for --source spaces; a re-run reuses it")
     ap.add_argument("--arms", default="control,auto",
                     help="comma-separated: control | auto | <float>")
     ap.add_argument("--purpose", default="weld_ab", help="filter CSV by purpose column")
@@ -252,6 +310,9 @@ def main():
     if not rows:
         sys.exit("no rows selected from the frozen sample")
 
+    if args.source == "spaces":
+        args.cache_dir.mkdir(parents=True, exist_ok=True)
+
     for w in _busy():
         print(f"  !! {w} -- per-arm timings are contaminated, read structural "
               f"columns only (§5.5 wants an idle box)")
@@ -260,7 +321,7 @@ def main():
 
     out_rows, missing = [], 0
     for i, r in enumerate(rows, 1):
-        img = _load(r, args.raw_root)
+        img = _load(r, args.raw_root, args.source, args.cache_dir)
         if img is None:
             missing += 1
             continue
@@ -290,7 +351,8 @@ def main():
     _set_arm("control")   # never leave the env dirty
 
     if not out_rows:
-        sys.exit(f"no lots could be loaded (missing={missing}); check --raw-root")
+        sys.exit(f"no lots could be loaded (missing={missing}); "
+                 f"check --raw-root / --source")
 
     csv_path = args.out.with_suffix(".csv")
     with csv_path.open("w", newline="") as f:
