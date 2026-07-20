@@ -24,7 +24,9 @@ Date: 2026-07-20 (v1–v4 — see §10)
 | §9.2 tier 2 — synthetic weld fixtures | **done** (95 tests) |
 | §4.1 frozen sample (cng_feature/Auction 91, n=200) | **done** 2026-07-20 — `specs/two_coin_weld_sample_ids.csv` |
 | §4.3 frozen sample (2400–3199px band) | **not started** — draw from Spaces, not time-pressured |
-| §4 / §5 / §9.3 — the sweep itself | **not started** |
+| §9.3d A/B, cng_feature n=200 | **done** 2026-07-20 — see §4.5, results in `specs/results/` |
+| §9.3e leu distributional check | **not started** — the house that matters most |
+| §9.3c option 2b contour-level sliver check | **not started** — the definitive quality gate |
 | Re-baseline of hough rates + GREEN against production (v4) | **done** 2026-07-20 |
 | Re-baseline of wall-clock per coin | **done** 2026-07-20 — recovered from `created_at` spans |
 
@@ -561,7 +563,101 @@ Record the chosen 100 in the same frozen CSV as §4.1.
 
 ---
 
-## 5. Exit criteria
+## 4.5 First A/B results — 2026-07-20, n=200 cng_feature
+
+Run with `tools/two_coin_weld_ab.py` over the frozen `Auction 91` sample,
+both arms against identical decoded images in one process.
+Arms: `control` (env unset ⇒ fixed 7×7) and `auto` (scale-relative ⇒ k=3
+at 500px).
+
+| metric | control (k=7) | auto (k=3) |
+|---|---|---|
+| hough rate | **97.5%** | **1.0%** |
+| weld signature (`pre==2 → post==1`) | 90.5% | 1.0% |
+| fragment rate (`post > 2`) | 0.0% | 0.5% (1 lot) |
+| ndets | **2 on all 200** | **2 on all 200** |
+| median s/lot | 6.71 | 0.013 |
+
+**The mechanism is confirmed, decisively.** §5.1 wanted the weld signature
+in >70% of cng_feature lots (90.5% ✓); §5.4 wanted hough 85% → <20%
+(97.5% → 1.0% ✓).
+
+**Otsu had already separated the coins in 200 of 200 lots.** Blob counts
+before the close: 187 lots at exactly 2, 13 at 3–8, and **zero at 1**. The
+close is not repairing anything here — it is destroying a correct
+segmentation in every single lot. v1 claimed this from n=14; it holds at
+n=200.
+
+Gap distribution (min edge-to-edge, all contour points): min 5.0, p10 6.0,
+**median 7.0**, p90 11.0, max 65. 183/200 fall under the 12px k=7 bridging
+distance; **0/200** fall under the 4px k=3 distance. v1's "5–8 px (median
+7)" from 14 lots was exactly right.
+
+The 7pp gap between hough rate and weld rate is 14 lots where the close
+merged *3–8* pre-existing blobs into 1 rather than exactly 2 — still the
+close destroying a valid segmentation, just not matching the narrow
+signature. Counting those, the real rate is ~97%.
+
+### §4.1's blur-attribution question: answered — the blur owns nothing
+
+`gap_pre_blur − gap_pre_close` across 200 real lots: **median 0.00 px**,
+mean −0.28. The Gaussian blur contributes no measurable bridging on real
+images, confirming on real data what §9.2 could only establish on
+synthetics. **The close owns all of it**, so k=3 alone recovers the
+separation and no blur change is needed. §1's "if the blur turns out to be
+the dominant term" branch is closed.
+
+(An interim smoke test on n=8 suggested ~2px of blur bridging. That was an
+artifact of a subsampled gap metric, since fixed — see
+`tools/two_coin_weld_ab.py::_min_gap`. Recorded because the wrong number
+briefly looked like a real finding.)
+
+### §9.3c sliver check: the new path is *cleaner* than Hough
+
+Tight-rect IoU between the two detections in a lot — §9.3c's bar is
+< 0.02:
+
+| arm | median IoU | exactly 0 | under 0.02 |
+|---|---|---|---|
+| control (Hough) | 0.0079 | 43.5% | 67.0% |
+| **auto (threshold-only)** | **0.0000** | **98.5%** | **99.0%** |
+
+The threshold path produces near-disjoint detections in 99% of lots; the
+Hough path manages 67%. §7.1 feared that removing the weld would regress
+to slivers *with none of Hough's correction* — the geometry says the
+opposite. Hough is the arm placing coins with overlap.
+
+§9.3c option 1 (Hough-vs-threshold agreement) reads amber in isolation:
+390 coin pairs, centre displacement median 5.70px / p90 12.4px, radii
+agreeing to 2.2% median and within 5% on 88.7%. Radii match well; centres
+do not. But the IoU table above locates the disagreement in the *Hough*
+arm, so this should not be read as the new path being imprecise. Two
+caveats on that comparison: it uses bbox centres as a proxy for fitted
+circle centres, and the arms are structurally different quantities —
+resolver crops pad radius ×1.15 (`two_coin_resolver.py:304`) while
+threshold output is a tight contour rect.
+
+**Still outstanding: §9.3c option 2b**, the contour-level check (each
+coin's fitted circle, dilated, must not intersect the neighbour's alpha
+mask). Tight-rect disjointness is necessary, not sufficient — extraction
+adds a 5% margin on top. That check is the definitive one and has not been
+run.
+
+### What this does and does not license
+
+Does **not** license flipping the default. Three gaps remain:
+
+1. **leu is untested**, and it owns 47% of all Hough splits against
+   cng_feature's 12% (§"Rate is not cost"). The change is riskiest there
+   (k moves 7→3 across 256k coins) and worth the most. A cng_feature-only
+   result says nothing about it.
+2. **§4.3 equivalence is unrun** — no cng lots sampled yet.
+3. **Wall-clock is unmeasured** in the §5.5 sense. The 6.71 → 0.013 s/lot
+   figures were taken at load average 7.6 with the production runner and
+   another job active; the ratio is too large to be explained by
+   contention, but the absolute numbers are not usable.
+
+
 
 All required before bulk rollout:
 
