@@ -9,8 +9,8 @@ bridging distance is proportional to image size rather than absolute.
 Owner: vision / L1 geometry
 Status: **code landed behind `TRIVALAYA_CLOSE_KERNEL_FRAC` (§6.1); default
 still fixed-7. §4 corpus validation NOT started — do not flip the default.**
-Version: 3
-Date: 2026-07-19 (v1, v2, v3 — see §10)
+Version: 4
+Date: 2026-07-20 (v1–v4 — see §10)
 
 ### Implementation status
 
@@ -23,6 +23,8 @@ Date: 2026-07-19 (v1, v2, v3 — see §10)
 | §9.1 tier 1 — kernel sizing | **done** (47 tests) |
 | §9.2 tier 2 — synthetic weld fixtures | **done** (95 tests) |
 | §4 / §5 / §9.3 — corpus sweep, exit criteria, real lots | **not started** — needs Spaces + DB |
+| Re-baseline of hough rates + GREEN against production (v4) | **done** 2026-07-20 |
+| Re-baseline of wall-clock per coin | **blocked** — no surviving run logs, see §"Observed cost" |
 
 Verified at landing: with the env var unset, L1 output is byte-identical to
 the pre-change code on real lots (bboxes + areas, `data/test_images`), and
@@ -146,21 +148,53 @@ before the close destroyed the separation.
 The mechanism predicts observed Hough rates, which track image width
 across the whole corpus:
 
-| house | raw width | hough-split coins | rate |
-|---|---|---|---|
-| cng_feature | 500 | 5,196 / 6,085 | **85.4%** |
-| davissons | 370 | 185 / 365 | 50.7% |
-| naumann | — | 11,293 / 24,076 | 46.9% |
-| leu | 1200 | 52,337 / 125,039 | 41.9% |
-| nomos | — | 4,553 / 12,544 | 36.3% |
-| mashops | 1700 | 18,703 / 82,821 | 22.6% |
-| gorny | 1200 | 2,416 / 11,997 | 20.1% |
-| obolos | ~1989 | 4,576 / 38,631 | 11.8% |
-| cng | 3000 | 3,545 / 42,080 | 8.4% |
-| kuenker | 800–3000 | 16 / 1,911 | **0.8%** |
+Re-measured against production 2026-07-20 (corpus roughly doubled since
+v1; rates held within ~2pp everywhere, confirming the mechanism is stable
+and not an artifact of the earlier snapshot):
+
+| house | raw width | hough-split coins | rate | v1 rate |
+|---|---|---|---|---|
+| cng_feature | 500 | 26,632 / 31,113 | **85.6%** | 85.4% |
+| davissons | 370 | 370 / 729 | 50.8% | 50.7% |
+| naumann | — | 22,586 / 48,476 | 46.6% | 46.9% |
+| leu | 1200 | 106,850 / 256,170 | 41.7% | 41.9% |
+| nomos | — | 10,024 / 27,592 | 36.3% | 36.3% |
+| mashops | 1700 | 37,432 / 169,471 | 22.1% | 22.6% |
+| gorny | 1200 | 4,832 / 23,969 | 20.2% | 20.1% |
+| obolos | ~1989 | 9,674 / 83,714 | 11.6% | 11.8% |
+| cng | 3000 | 7,092 / 111,572 | 6.4% | 8.4% |
+| kuenker | 800–3000 | 32 / 4,781 | **0.7%** | 0.8% |
 
 Note `cng` and `cng_feature` share a name and nothing else — 3000×1440
-vs 500×234, 8.4% vs 85.4%. Do not reason about "CNG" as one thing.
+vs 500×234, 6.4% vs 85.6%. Do not reason about "CNG" as one thing.
+
+### Rate is not cost: leu owns the Hough bill, not cng_feature
+
+v1 ranked houses by hough *rate*, which put cng_feature at the top and
+framed the whole spec around it. Ranked by *absolute* Hough splits — the
+thing that actually costs CPU — the picture inverts:
+
+| house | hough splits | share of all splits |
+|---|---|---|
+| **leu** | **106,850** | **47%** |
+| mashops | 37,432 | 17% |
+| cng_feature | 26,632 | 12% |
+| naumann | 22,586 | 10% |
+| everything else | ~32,000 | 14% |
+
+leu does **4× more Hough splits than cng_feature** despite half its rate,
+because it is 8× the corpus. cng_feature is only ~3.6% of all coins.
+
+This matters for prioritisation and for risk. The largest available win
+is on leu, which is exactly the house §7.3 flags as the riskiest: 1200px,
+so k moves 7 → 3, and 256k coins means a subtle crop shift is a
+corpus-wide embedding event. Confirmed empirically during implementation
+— enabling the scale-relative path on real 1200px lots left `ndets`
+unchanged but shifted bboxes on 4 of 5 sampled lots.
+
+So the honest framing is not "fix cng_feature, leu is a bystander." It is
+that the prize and the hazard are the *same house*, and §4.1 must treat
+leu as the primary subject, not a control.
 
 **Sample size caveat:** the gap measurements are 14 lots per house. That
 is enough to establish the mechanism and rule out coincidence, not enough
@@ -170,7 +204,14 @@ to tune a threshold. §4 widens it before any code change lands.
 
 ## Observed cost
 
-Measured from production logs, same 4-vCPU box:
+> **STALE — do not use as an acceptance reference.** These were measured
+> before `05ed5f7` ("Rim recovery: bound Hough ROI to 1280px, ~dim^4 win")
+> was deployed. That commit cuts rim-recovery Hough cost on images above
+> 1280px, which is a large share of kuenker's 800–3000px range — so the
+> 0.52 s/coin figure below is now too high, and any bar expressed as a
+> multiple of it has silently tightened. cng_feature is unaffected: at
+> 500px the ROI is already under the cap, `s=1`, and that commit is
+> explicitly byte-identical there. Re-measure both before gating on §5.5.
 
 | | per lot | per coin | hough rate |
 |---|---|---|---|
@@ -181,6 +222,20 @@ Hough is not the whole 3.3× per-coin gap — CPU contention and
 `validate_split` contribute — so treat elimination of the weld as
 *necessary but not sufficient* for closing it. §5 sets the acceptance bar
 on measured wall-clock, not on the hough-rate drop alone.
+
+**Re-measurement attempted 2026-07-20, blocked.** Wall-clock per coin is
+not recoverable from the DB (`coin_detections` has `created_at` but no
+duration), and no vision-run logs since 2026-05 survive on the box. The
+numbers above can only be refreshed by instrumenting a fresh run of each
+house. Until that happens §5.5 has no valid reference — treat it as
+unmeasured rather than assuming the old figure still holds.
+
+Throughput from `created_at` is *not* a substitute: daily volume is
+dominated by batch scheduling, not per-coin speed. cng_feature processed
+2,449 coins on Jul 8, 2,281 on Jul 11, then 18,807 on Jul 19 — an 8×
+swing across days whose hough rate barely moved (89.2% → 92.3% → 86.7%).
+Reading that spike as "cng_feature got faster" would be a scheduling
+artifact, not a performance change.
 
 ---
 
@@ -452,7 +507,10 @@ All required before bulk rollout:
    including the mandatory ≥20 lots at 3000×1440.
 4. **Hough rate drops** on a 200-lot cng_feature re-run: 85% → <20%.
 5. **Wall-clock improves**: per-coin time on cng_feature within 1.5× of
-   kuenker's 0.52 s/coin on an otherwise-idle box.
+   kuenker's per-coin time on an otherwise-idle box. **Both terms must be
+   re-measured first** — the 0.52 s/coin reference predates `05ed5f7` and
+   is stale (see §"Observed cost"). Measure kuenker and cng_feature in the
+   same session, on the same box, or this criterion is meaningless.
 6. **Crop quality holds**: zero lots where a crop gains a sliver of the
    neighboring coin (detected mechanically per §9.3c — this is the
    important one, see §7.1), and GREEN rate does not regress.
@@ -470,10 +528,42 @@ measurable at n=100: at a base rate of 83.5% the 95% CI is roughly
   "GREEN ≥ 70%", which n=100 *can* resolve, and treat the sliver check
   (§9.3c) as the real quality gate.
 
-Prefer the second unless the queue makes 750 lots cheap. Also state
-where 83.5% comes from — it is currently an unsourced number. If it
-is corpus-wide, it is not the right comparison for a cng_feature-only
-sample; recompute the baseline on the frozen §4.1 cng_feature lots.
+Prefer the second unless the queue makes 750 lots cheap.
+
+**Measured 2026-07-20 — the corpus-wide GREEN number is worse than
+unsourced, it is unusable.** Daily GREEN rate across all houses swings
+between **55.9% and 87.9%** over the last twelve days, driven entirely by
+which house and sale the batch happened to be working:
+
+| day | coins | GREEN |
+|---|---|---|
+| 2026-07-20 | 4,092 | 87.9% |
+| 2026-07-19 | 27,325 | 85.2% |
+| 2026-07-16 | 5,386 | 74.3% |
+| 2026-07-12 | 6,830 | 63.7% |
+| 2026-07-10 | 5,913 | **55.9%** |
+
+A 32pp day-to-day range makes any corpus-wide GREEN baseline — 83.5% or
+otherwise — meaningless as an acceptance reference. Per-house it is
+stable enough to use, but only *within* a house and ideally within a sale:
+
+| house | GREEN |
+|---|---|
+| leu | 90.8% |
+| cng_feature | 84–88% (84.4 / 87.1 / 85.6 / 87.9 across four batch days) |
+| cng | 80–82% |
+
+So: **drop the corpus-wide GREEN bar entirely.** Use per-house GREEN on
+the frozen §4.1 lots, compare like-for-like, and let §9.3c's sliver check
+be the real quality gate as this section already recommends.
+
+A worked example of the trap: kuenker looks like it fell from 97.0% GREEN
+to 78.0% in the last 7 days — a 19pp collapse that reads as a serious
+regression. It is not. kuenker has been processed in exactly two epochs:
+sales 72/89/232 in February (1,778 coins, 95.8–98.3%) and sale **428** on
+2026-07-19 (3,003 coins, 78.0%). It is a different sale five months
+later, not a code change. Any before/after GREEN comparison that does not
+hold the sale fixed will manufacture regressions like this one.
 
 ---
 
@@ -786,6 +876,42 @@ conflates.
 ---
 
 ## 10. Revision history
+
+### v4 — 2026-07-20
+
+Re-baseline against production after `05ed5f7` (rim-recovery Hough ROI
+cap) reached origin. Read-only DB measurement; no writes.
+
+1. **Hough rates re-measured** on a corpus that has roughly doubled since
+   v1. Every house held within ~2pp — the mechanism is stable, not a
+   snapshot artifact. cng_feature is **85.6%**, essentially identical to
+   v1's 85.4%: **the weld problem is entirely intact and nothing shipped
+   so far has touched it.**
+2. **Rate ≠ cost — the spec was aimed at the wrong house.** Ranked by
+   absolute Hough splits, **leu owns 47%** (106,850) against
+   cng_feature's 12% (26,632). leu does 4× the Hough work at half the
+   rate, because it is 8× the corpus; cng_feature is only ~3.6% of all
+   coins. The biggest win and the biggest risk (§7.3, k 7→3 on 256k
+   coins) are the same house.
+3. **§"Observed cost" marked STALE.** The 0.52 s/coin kuenker reference
+   predates `05ed5f7`, which cuts Hough cost above 1280px — a large part
+   of kuenker's 800–3000px range — so §5.5's "within 1.5×" bar has
+   silently tightened. cng_feature is unaffected (500px ⇒ `s=1` ⇒
+   byte-identical). Re-measurement is **blocked**: no duration column in
+   the DB and no vision-run logs since 2026-05.
+4. **Throughput is not a proxy for speed.** cng_feature ran 2,449 /
+   2,281 / 18,807 coins on Jul 8 / 11 / 19 with hough rate flat at
+   89.2 / 92.3 / 86.7%. The 8× volume swing is batch scheduling. Recorded
+   because that spike is exactly the kind of thing that gets misread as a
+   performance win.
+5. **Corpus-wide GREEN bar dropped as unusable.** Daily GREEN ranges
+   55.9–87.9% across twelve days depending on which house is running — a
+   32pp swing that swamps any effect being tested. Replaced with
+   per-house comparison on frozen lots.
+6. **Documented the sale-confounding trap.** kuenker appears to fall
+   97.0% → 78.0% GREEN in 7 days; it is actually February sales
+   72/89/232 versus July sale 428. Not a regression. Any before/after
+   that does not hold the sale fixed will invent one.
 
 ### v3 — 2026-07-19
 
