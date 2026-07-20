@@ -24,7 +24,7 @@ Date: 2026-07-20 (v1–v4 — see §10)
 | §9.2 tier 2 — synthetic weld fixtures | **done** (95 tests) |
 | §4 / §5 / §9.3 — corpus sweep, exit criteria, real lots | **not started** — needs Spaces + DB |
 | Re-baseline of hough rates + GREEN against production (v4) | **done** 2026-07-20 |
-| Re-baseline of wall-clock per coin | **blocked** — no surviving run logs, see §"Observed cost" |
+| Re-baseline of wall-clock per coin | **done** 2026-07-20 — recovered from `created_at` spans |
 
 Verified at landing: with the env var unset, L1 output is byte-identical to
 the pre-change code on real lots (bboxes + areas, `data/test_images`), and
@@ -204,14 +204,16 @@ to tune a threshold. §4 widens it before any code change lands.
 
 ## Observed cost
 
-> **STALE — do not use as an acceptance reference.** These were measured
-> before `05ed5f7` ("Rim recovery: bound Hough ROI to 1280px, ~dim^4 win")
-> was deployed. That commit cuts rim-recovery Hough cost on images above
-> 1280px, which is a large share of kuenker's 800–3000px range — so the
-> 0.52 s/coin figure below is now too high, and any bar expressed as a
-> multiple of it has silently tightened. cng_feature is unaffected: at
-> 500px the ROI is already under the cap, `s=1`, and that commit is
-> explicitly byte-identical there. Re-measure both before gating on §5.5.
+> **RE-MEASURED 2026-07-20 AND CONFIRMED CURRENT.** An earlier v4 draft
+> marked these stale on the theory that `05ed5f7` (rim Hough ROI cap)
+> would have lowered kuenker's per-coin time, since much of kuenker's
+> 800–3000px range sits above the 1280px cap. **That theory was wrong and
+> is retracted.** kuenker sale 428 ran at **0.522 s/coin** on 2026-07-19
+> post-deploy, against 0.503–0.552 across its February pre-deploy sales.
+> No movement. The reason is that kuenker's hough rate is 0.7% and rim
+> recovery rarely fires on it, so the commit has almost nothing to bite
+> on there. The 0.52 s/coin reference stands and §5.5 needs no
+> re-derivation.
 
 | | per lot | per coin | hough rate |
 |---|---|---|---|
@@ -223,12 +225,45 @@ Hough is not the whole 3.3× per-coin gap — CPU contention and
 *necessary but not sufficient* for closing it. §5 sets the acceptance bar
 on measured wall-clock, not on the hough-rate drop alone.
 
-**Re-measurement attempted 2026-07-20, blocked.** Wall-clock per coin is
-not recoverable from the DB (`coin_detections` has `created_at` but no
-duration), and no vision-run logs since 2026-05 survive on the box. The
-numbers above can only be refreshed by instrumenting a fresh run of each
-house. Until that happens §5.5 has no valid reference — treat it as
-unmeasured rather than assuming the old figure still holds.
+### Wall-clock, measured 2026-07-20
+
+Recovered from `coin_detections.created_at` spans per sale — first coin to
+last coin, divided by coins-1. No duration column exists, but a sale's
+detection timestamps bracket its vision work closely enough to be useful:
+
+| house | sale | coins | s/coin |
+|---|---|---|---|
+| kuenker | 428 (nightly, dedicated 05:00 window) | 3,003 | **0.522** |
+| cng_feature | EA 455 | 1,454 | 1.231 |
+| cng_feature | EA 342 | 2,106 | 1.271 |
+| cng_feature | EA 145 | 868 | 1.364 |
+| cng_feature | Triton XX | 3,391 | 1.358 |
+| cng_feature | EA 286 | 1,128 | 1.657 |
+| cng_feature | EA 453 | 1,743 | 1.757 |
+| cng | EA-482 | 1,898 | **3.927** |
+| cng | EA-484 | 2,477 | **4.099** |
+| cng | EA-512 | 767 | **16.664** |
+
+**cng_feature sits at ~1.23–1.76 s/coin (median ~1.35) against kuenker's
+0.522 — a 2.6× gap.** §5.5's bar of "within 1.5×" means ~0.78 s/coin, so
+the gap the spec set out to close is real, intact, and roughly as
+described (v1 estimated ~1.75; the truth is a little better).
+
+**But cng, not cng_feature, is the slowest house in the corpus** — 3.9 to
+16.7 s/coin, 3–12× cng_feature — on a 6.4% hough rate. Whatever is
+expensive there, it is *not* the weld. That is worth its own
+investigation and is out of scope here; flagged so nobody reads
+"cng_feature is the expensive house" out of this spec. It is the expensive
+house *for Hough*, not in absolute per-coin cost.
+
+**Caveat — these are not isolated measurements.** The runner interleaves
+sales: `Adolph E. Cahn` ran 19:46–02:52 concurrently with the entire
+cng_feature drain, and cng sales overlapped others. Spans therefore
+include contention and overstate isolated cost, unevenly. kuenker's 0.522
+is the cleanest number here (dedicated 05:00 cron window, `flock`-guarded,
+scoped to one house). A true §5.5 comparison still wants both arms on an
+otherwise-idle box — at time of writing the box was running a 280%-CPU
+`append_search_annex` job alongside the runner.
 
 Throughput from `created_at` is *not* a substitute: daily volume is
 dominated by batch scheduling, not per-coin speed. cng_feature processed
@@ -893,22 +928,28 @@ cap) reached origin. Read-only DB measurement; no writes.
    rate, because it is 8× the corpus; cng_feature is only ~3.6% of all
    coins. The biggest win and the biggest risk (§7.3, k 7→3 on 256k
    coins) are the same house.
-3. **§"Observed cost" marked STALE.** The 0.52 s/coin kuenker reference
-   predates `05ed5f7`, which cuts Hough cost above 1280px — a large part
-   of kuenker's 800–3000px range — so §5.5's "within 1.5×" bar has
-   silently tightened. cng_feature is unaffected (500px ⇒ `s=1` ⇒
-   byte-identical). Re-measurement is **blocked**: no duration column in
-   the DB and no vision-run logs since 2026-05.
-4. **Throughput is not a proxy for speed.** cng_feature ran 2,449 /
+3. **Wall-clock recovered from `created_at` spans — and an intermediate
+   v4 claim retracted.** This section first marked §"Observed cost" STALE,
+   predicting `05ed5f7` had lowered kuenker's per-coin time. It has not:
+   kuenker ran **0.522 s/coin** post-deploy against 0.503–0.552
+   pre-deploy. The commit has little to bite on there (0.7% hough rate,
+   rim recovery rarely fires). The 0.52 reference stands. cng_feature
+   measures ~1.23–1.76 s/coin, a **2.6× gap** — the problem is real and
+   close to v1's estimate.
+4. **cng is the slowest house in the corpus, and it is not the weld.**
+   3.9–16.7 s/coin at a 6.4% hough rate, 3–12× cng_feature. Recorded so
+   this spec is not misread as identifying cng_feature as the expensive
+   house in absolute terms. Separate investigation.
+5. **Throughput is not a proxy for speed.** cng_feature ran 2,449 /
    2,281 / 18,807 coins on Jul 8 / 11 / 19 with hough rate flat at
    89.2 / 92.3 / 86.7%. The 8× volume swing is batch scheduling. Recorded
    because that spike is exactly the kind of thing that gets misread as a
    performance win.
-5. **Corpus-wide GREEN bar dropped as unusable.** Daily GREEN ranges
+6. **Corpus-wide GREEN bar dropped as unusable.** Daily GREEN ranges
    55.9–87.9% across twelve days depending on which house is running — a
    32pp swing that swamps any effect being tested. Replaced with
    per-house comparison on frozen lots.
-6. **Documented the sale-confounding trap.** kuenker appears to fall
+7. **Documented the sale-confounding trap.** kuenker appears to fall
    97.0% → 78.0% GREEN in 7 days; it is actually February sales
    72/89/232 versus July sale 428. Not a regression. Any before/after
    that does not hold the sale fixed will invent one.
