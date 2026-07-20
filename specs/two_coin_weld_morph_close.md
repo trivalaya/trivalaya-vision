@@ -22,7 +22,9 @@ Date: 2026-07-20 (v1–v4 — see §10)
 | §9 harness prerequisite (venv rebuild, `tests/` + pytest) | **done** |
 | §9.1 tier 1 — kernel sizing | **done** (47 tests) |
 | §9.2 tier 2 — synthetic weld fixtures | **done** (95 tests) |
-| §4 / §5 / §9.3 — corpus sweep, exit criteria, real lots | **not started** — needs Spaces + DB |
+| §4.1 frozen sample (cng_feature/Auction 91, n=200) | **done** 2026-07-20 — `specs/two_coin_weld_sample_ids.csv` |
+| §4.3 frozen sample (2400–3199px band) | **not started** — draw from Spaces, not time-pressured |
+| §4 / §5 / §9.3 — the sweep itself | **not started** |
 | Re-baseline of hough rates + GREEN against production (v4) | **done** 2026-07-20 |
 | Re-baseline of wall-clock per coin | **done** 2026-07-20 — recovered from `created_at` spans |
 
@@ -482,6 +484,37 @@ attribute bridging between the blur and the close).
 raw_width, raw_height`) so re-runs after a kernel tweak are
 comparable. Same discipline as the PCO pilot slate. A resampled
 population between iterations makes the sweep in §4.2 uninterpretable.
+
+**Frozen 2026-07-20 — first 200 lots committed.** `cng_feature` /
+`Auction 91`, `purpose=weld_ab`: 200 of the 1,233 lots that were pending
+vision at freeze time, selected at evenly spaced indices over
+lot_number-sorted order. **Deterministic with no seed** — re-running the
+selection reproduces the file byte-identically. Real dimensions read from
+the raw JPEGs: all 500 wide, heights 203–290 (median ~241), confirming
+the "500 × ~240" figure in §"Measured evidence" now on n=200 rather
+than n=14.
+
+Columns are a superset of the schema above — `sale_id`, `lot_number` and
+`purpose` were added because `lot_id` alone (the `auction_data` PK) is
+opaque, and the file is intended to carry the §4.3 set too.
+
+**Why these lots specifically.** They were *unprocessed*, and §9.3d's
+paired A/B is only possible on unprocessed lots: production overwrites
+crops in place at the same Spaces keys (§3), so for any already-processed
+lot the pre-change output no longer exists. The runner was actively
+draining the cng_feature backlog at freeze time (a sale every 15–145
+minutes), so this list was captured before those lots were consumed.
+Once the runner processes them the *raws* remain, but the paired-arm
+opportunity is gone — re-freezing later gives a §4.1 mechanism sample,
+not a §9.3d A/B sample.
+
+**§4.3's equivalence set is not yet frozen, and is not urgent.** It needs
+lots in the 2400–3199px band with ≥20 at exactly 3000×1440, and unlike
+the above it does *not* require unprocessed lots — the test runs L1 twice
+locally on the same input, so any cng raw works. `cng`/`EA-614` (1,007
+lots pending) has not been downloaded yet, but cng raws for ~30 prior
+sales are in Spaces under `raw/auctions/cng/<sale>/`. Draw it from there
+whenever §4.3 runs.
 
 Deliverable: gap distribution per house, and the fraction of lots where
 `pre == 2 and post == 1` (the weld signature).
