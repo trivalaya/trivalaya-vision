@@ -1044,6 +1044,32 @@ formula working as designed on 4000px+ input, not a bug, but it is an
 unmeasured change in the *welding* direction on houses that were never the
 problem.
 
+### cng: §4.3's equivalence test covers only 72% of the house
+
+The kernel arithmetic is clean — every width in 2400–3199 yields k=7, with
+transitions at exactly 2400, 3200 and 4000 — so within that band the mask
+is bit-identical and §4.3's bbox-identity bar holds *by construction*. The
+question is how much of cng actually sits in the band. Sampling cng across
+all 50 of its sales (n=72) gives 500–3910px:
+
+| `auto` k | share of cng | bridging reach | vs today's 12px |
+|---|---:|---|---|
+| 3 | 15.3% | 4px | less |
+| 5 | 5.6% | 8px | less |
+| **7** | **72.2%** | 12px | **unchanged — §4.3's band** |
+| 9 | 6.9% | 16px | **MORE** |
+
+So §4.3, even once run, would certify roughly 72% of cng. The remaining
+28% changes, and **6.9% changes in the welding direction** on the
+42,080-coin house — the same direction as the v1 `round()` bug this spec
+spent three revisions correcting, arrived at by a different route. cng has
+no A/B and no override entry.
+
+(Note also that an earlier pass in this session sampled cng by ordering
+lots and taking every Nth, which concentrated in alphabetically-early sales
+and returned "cng is uniformly 500px". That was wrong and is retracted;
+these figures come from sampling within each sale. Sample across sales.)
+
 Enabling `auto` corpus-wide is therefore a materially bigger change than
 "populate three measured houses" implies. Two ways to bound it, both cheap
 relative to the blast radius: gate the scale-relative path on
