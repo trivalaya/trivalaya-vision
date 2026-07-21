@@ -74,14 +74,22 @@ class Layer1Config:
     #   kuenker -- k=7.  **STATUS-QUO PIN, NOT A SWEEP RESULT.**  No A/B or
     #     kernel sweep has been run on kuenker; its evidence is §"Measured
     #     evidence"'s n=10 gap sample (~25px gaps, 0/10 welded at k=7) plus a
-    #     0.7% corpus Hough rate -- enough to say the 7x7 close is not
-    #     hurting kuenker, not enough to say k=7 is optimal.  It is pinned
-    #     because enabling `auto` would otherwise move kuenker off today's
-    #     behaviour unmeasured: the raws are 417-2000px (median 2000), so the
-    #     global formula yields k=5 on 87% of lots and k=3 on the 330-lot
-    #     small tail -- it never yields 7.  (§1's "kuenker spans 800-3000px,
-    #     so it straddles k=3 through k=7" does not match the raws on disk;
-    #     max observed is 2000.)  Remove this entry when kuenker is measured.
+    #     ~1% corpus Hough rate (76 of 7,149 detections) -- enough to say the
+    #     7x7 close is not hurting kuenker, not enough to say k=7 is optimal.
+    #     It is pinned because enabling `auto` would otherwise scatter kuenker
+    #     across four kernels unmeasured: sampling all six kuenker sales
+    #     (428, eLive-92, eLive-93, 72, 232, 89) gives 408-3381px, median
+    #     ~1295, and the global formula yields k=3 on ~50% of lots, k=5 on
+    #     ~12%, k=7 on ~33% and **k=9 on ~4%** -- that last bucket being MORE
+    #     bridging than kuenker gets today, which is precisely the direction
+    #     of the v1 round() bug.  Remove this entry when kuenker is measured.
+    #
+    #     (An earlier revision of this comment claimed kuenker was 417-2000px
+    #     and that `auto` "never yields 7".  That came from the 2,496 raws
+    #     cached on local disk, which are not a representative draw across
+    #     kuenker's sales -- the same subsampling trap as the retracted
+    #     `_min_gap` finding in §4.5.  The Spaces figures above supersede it,
+    #     and §1's "kuenker spans 800-3000px" is substantially right.)
     CLOSE_KERNEL_BY_HOUSE: dict = {
         "cng_feature": {"min": 3, "max": 3},
         "leu": {"min": 5, "max": 5},
