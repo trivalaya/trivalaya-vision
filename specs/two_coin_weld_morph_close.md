@@ -29,7 +29,7 @@ Date: 2026-07-20 (v1–v4 — see §10)
 | §9.3c option 2b contour-level sliver check | **done** 2026-07-21 — see §4.7; cause is rim recovery, not the close |
 | Re-baseline of hough rates + GREEN against production (v4) | **done** 2026-07-20 |
 | Re-baseline of wall-clock per coin | **done** 2026-07-20 — recovered from `created_at` spans |
-| Mask-IoU gate + alpha-drift check | **done** 2026-07-21 (cng_feature); leu in flight — see §4.7 |
+| Mask-IoU gate + alpha-drift check | **done** 2026-07-21, both houses — see §4.7 |
 | **Enable in production** | **BLOCKED** — `house` never reaches L1, see §6.6 |
 
 Verified at landing: with the env var unset, L1 output is byte-identical to
@@ -838,6 +838,61 @@ Only **2 of 200** lots have an unchanged detection outcome, because the
 weld fires on the rest. Both show alpha IoU 1.000, so the gate passes, but
 on a sample too small to mean much. The gate needs leu.
 
+### leu, n=200 — the gate has a real population, and the alpha does drift
+
+52 of 200 lots have byte-identical detection output between k=7 and k=5:
+same ndets, same Hough status, same bboxes. On those the crop alpha should
+not move. It does.
+
+| alpha IoU on the 52 unchanged-outcome lots | lots |
+|---|---:|
+| exactly 1.000 | 17 |
+| < 0.999 | 30 |
+| < 0.995 | 8 |
+| < 0.99 | **2** |
+| < 0.95 | **1** — lot 3679 at 0.889 |
+
+Median 0.9986, mean 0.9958, min 0.889. Binary IoU over the same lots is
+0.901–0.938, so again the segmentation mask moves far more than the alpha.
+
+**The 0.889 outlier is not a coin pair.** Lot 3679's detections are a
+723,941px blob at circularity **0.337** and a 1,769px speck — the large one
+covering 88% of a 1200×799 frame, against `CIRCULARITY_RELAXED` of 0.65.
+That is a segmentation failure, and its "11% alpha drift" is a giant
+amorphous region whose boundary naturally moves with kernel size. It says
+nothing about crop quality.
+
+Excluding it, **the worst genuine drift on leu is 1.1%**. The other seven
+lots under the bar all show two roughly equal detections at ~46% of frame
+each — ordinary two-coin lots — with alpha IoU between 0.9888 and 0.9947:
+
+| alpha IoU | genuine two-coin lots (of ~40) |
+|---|---:|
+| 0.9888–0.9947 | 7 |
+| ≥ 0.995 | the rest |
+
+So the honest statement is: **on genuine coin lots the crop alpha moves by
+at most ~1.1%, on about 13% of unchanged-outcome lots, with a median of
+0.14%.** That is real §7.4 drift and it does invalidate those embeddings,
+but it is a small, bounded effect — not the 11% the raw minimum suggests.
+
+The 0.995 bar is a choice made here, not one the spec sets; the brief asked
+for "IoU ≈ 1.0". The distribution is reported in full so the bar can be set
+deliberately, and any bar should be applied *after* excluding degenerate
+lots — 12 of the 52 have a detection covering over half the frame, which is
+a pre-existing L1 issue on leu worth its own look and unrelated to this
+change.
+
+**Method note.** An earlier reading of this table called lot 3679 "the
+finding" and reported 11% embedding drift. That was wrong, and only checking
+the detection geometry caught it. Alpha IoU alone cannot distinguish a crop
+that shifted from a segmentation that failed; screen for degenerate
+detections before quoting the tail.
+
+**cng_feature cannot answer this question** — it has only 2 unchanged-outcome
+lots, both at IoU 1.000, because the weld fires on the rest. The gate needed
+the house where roughly a quarter of lots are untouched.
+
 ### §9.3c option 2b — run for the first time
 
 §4.5 called this "the definitive one and has not been run". Result on
@@ -852,13 +907,62 @@ contours actually overlap:
 Strictly this fails §5's "zero lots where a crop gains a sliver" bar, at
 0.5% incidence. But the cause is not the kernel.
 
-### The one sliver is rim recovery, not the close
+### leu, undilated — the change removes the two worst slivers outright
+
+leu's gate run predates the two-dilation fix, so its sliver columns are the
+d=3 form. The eight lots it flags as nonzero in either arm were re-measured
+undilated; that set is exhaustive, since `dilate(A) ⊇ A` means a d=3 zero
+guarantees a d=0 zero.
+
+| lot | control (k=7) | auto (k=5) |
+|---|---:|---:|
+| 357 | 0 | 0 |
+| 751 | 0 | 0 |
+| 713 | 0.014% | 0.033% |
+| 582 | 0.44% | 0.48% |
+| 995 | 0 | 0.54% |
+| 3661 | 3.29% | 1.69% |
+| **3717** | **17.8%** | **0** |
+| **3736** | **10.6%** | **0** |
+
+Counting lots, the arms are close: control 5 of 200, auto 4 of 200.
+Counting *severity* they are not. **The two worst slivers in the sample —
+17.8% and 10.6% of a neighbouring coin — are both in the control arm, and
+both go to exactly zero under k=5.** auto's worst case is 1.7%.
+
+So today's production path is carrying real, large slivers on leu, and the
+change removes them. This is the first evidence that the change is a
+**quality** improvement on leu rather than only a cost optimisation, and it
+directly contradicts §7.1's fear that removing the weld would regress to
+slivers.
+
+It also revises §6.5's backfill precondition, which held that backfill is
+worthless if "Hough is producing clean crops today". On leu it is not: lots
+3717 and 3736 are 17.8% and 10.6% contaminated right now.
+
+### The slivers are rim recovery, not the close
 
 Lot 215298's two detections both carry `rim_recovered=True`. Layer 1.5
 replaces the true contour with a HoughCircles-fitted circle
 (`layer1_geometry.py:271`), and on a near-touching pair the two synthesised
 circles overlap. The other two lots that show overlap only under dilation
 have `rim_recovered=False` and are clean undilated.
+
+leu confirms it at scale and with much larger magnitudes. Every lot with a
+real overlap has at least one `rim_recovered=True` detection, in whichever
+arm carries it, and the two worst are saturated with them — lot 3717's
+control arm has three of five detections rim-recovered (17.8% overlap), lot
+3736's has three of three (10.6%). Where the same lot's `auto` arm recovers
+fewer rims, or recovers them on better-separated blobs, the overlap goes to
+zero.
+
+**So the sliver mechanism is Layer 1.5, not the MORPH_CLOSE kernel.** The
+kernel matters only in that it decides how many blobs Layer 1.5 is handed
+and how well separated they are. That reframes the whole §7.1 risk: slivers
+are a rim-recovery property, they exist in production *today* at up to
+17.8%, and the kernel change happens to reduce them. A durable fix belongs
+in `validate_rim_recovery` — which currently accepts a fitted circle without
+any reference to neighbouring candidates — and would help both arms.
 
 So this is a **pre-existing Layer 1.5 behaviour that the change exposes**,
 not a defect the change introduces — and it is the same failure class as
@@ -1416,31 +1520,51 @@ blocked**. `CLOSE_KERNEL_BY_HOUSE` now ships `cng_feature={min:3,max:3}`,
    behaviour the change exposes. A fix belongs in `validate_rim_recovery`.
 
 4. **The mask-IoU gate gates the alpha mask, not the segmentation mask.**
-   On unchanged-outcome lots the post-close binary IoU is 0.864/0.878 while
-   the filled-contour alpha — what `crop_with_alpha` writes and what
-   reaches the embedding — is exactly **1.000**. Gating the binary would
-   have read as serious drift and been wrong. cng_feature passes on only 2
-   lots, since the weld fires on the rest; leu is the house with a real
-   unchanged population (52 lots bbox-identical, 94 ndets+hough-identical)
-   and its run is still in flight.
+   On cng_feature's unchanged-outcome lots the post-close binary IoU is
+   0.864/0.878 while the filled-contour alpha — what `crop_with_alpha`
+   writes and what reaches the embedding — is exactly **1.000**. Gating the
+   binary would have read as serious drift and been wrong.
 
-5. **Dilated overlap measures proximity, not contamination.** At d=3 the
+5. **leu shows real but small alpha drift.** 52 lots have byte-identical
+   detection output; on those the alpha still moves on 8, median 0.9986.
+   The 0.889 minimum is a **segmentation failure**, not a crop shift — a
+   724k-px blob at circularity 0.337 covering 88% of frame. Excluding it,
+   the worst genuine drift is **1.1%**. Real §7.4 drift, bounded and small.
+   Screen for degenerate detections before quoting the tail: an earlier
+   reading of this table reported the 11% figure as the finding and was
+   wrong.
+
+6. **leu's slivers are large, and in the *control* arm.** Undilated, the
+   two worst in the sample are 17.8% and 10.6% of a neighbouring coin —
+   both under today's k=7 — and both go to **zero** at k=5. auto's worst is
+   1.7%. So production is carrying real contamination on leu today, and the
+   change removes it. This contradicts §7.1's fear and revises §6.5's
+   backfill precondition, which assumed Hough crops are clean.
+
+7. **The sliver mechanism is Layer 1.5 rim recovery, not the kernel.**
+   Every lot with real overlap has a `rim_recovered=True` detection, in
+   whichever arm carries it; lot 3717's control arm has three of five.
+   `validate_rim_recovery` accepts a fitted circle without reference to
+   neighbouring candidates. A durable fix belongs there and helps both
+   arms.
+
+8. **Dilated overlap measures proximity, not contamination.** At d=3 the
    arms invert — auto 4 lots, control 0 — because a 3px dilation bridges
    any sub-3px gap, and Hough's circles under-cover an irregular flan while
    threshold contours track it. Gate on d=0; read d=3 as a diagnostic.
 
-6. **Populating the table neuters future sweeps.** Per-house min/max clamp
+9. **Populating the table neuters future sweeps.** Per-house min/max clamp
    an explicit `TRIVALAYA_CLOSE_KERNEL_FRAC` — deliberate and tested — so
    with `min == max` pinned, every arm collapses to the pinned k on all
    three houses. Re-running leu's k∈{3,5,7} sweep today would return 5,5,5
    and read as a null result. Asserted in
    `test_shipped_pins_neuter_a_sweep_arm`; a sweep must clear the table.
 
-7. **kuenker's entry is a status-quo pin, not a measurement.** No A/B, no
+10. **kuenker's entry is a status-quo pin, not a measurement.** No A/B, no
    sweep. It exists because `auto` would otherwise scatter kuenker across
    k=3/5/7/9 unmeasured.
 
-8. **Two retractions, both from the same sampling error.** Ordering lots by
+11. **Two retractions, both from the same sampling error.** Ordering lots by
    `sale_id, lot_number` and taking every Nth concentrates in
    alphabetically-early sales. It produced "cng is uniformly 500px" and
    "kuenker is 417–2000px, `auto` never yields 7" — both wrong. kuenker is
@@ -1448,7 +1572,7 @@ blocked**. `CLOSE_KERNEL_BY_HOUSE` now ships `cng_feature={min:3,max:3}`,
    substantially right. Sample *within* each sale. Same class as the
    retracted `_min_gap` finding in §4.5.
 
-9. **Restored the missing `## 5.` header.** The acceptance-criteria list sat
+12. **Restored the missing `## 5.` header.** The acceptance-criteria list sat
    orphaned after §4.6 even though §5.1/§5.4/§5.5 are referenced throughout.
 
 ### v5 — 2026-07-21
