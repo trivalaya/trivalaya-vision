@@ -32,19 +32,72 @@ def house_table(monkeypatch):
 
 # --- Inert by default -------------------------------------------------------
 
-def test_table_ships_empty():
+def test_shipped_table_is_exactly_the_measured_entries():
     """
-    Guards against someone adding a guessed constant.  Entries are legitimate
-    only with SS4.2 measurements behind them -- and when they land, this test
-    is the prompt to confirm that happened.
+    Was test_table_ships_empty, whose docstring made it the prompt to confirm
+    that measurements existed when entries landed.  They landed 2026-07-21:
+    cng_feature from SS4.5 (n=200), leu from SS4.6's k in {3,5,7} sweep
+    (n=200), kuenker as a status-quo pin with NO sweep behind it -- see the
+    citations in config.py.  This test now pins the table so a fourth house
+    cannot be added without someone rewriting this assertion, which is the
+    same guard by other means.
     """
-    assert Layer1Config.CLOSE_KERNEL_BY_HOUSE == {}
+    assert Layer1Config.CLOSE_KERNEL_BY_HOUSE == {
+        "cng_feature": {"min": 3, "max": 3},
+        "leu": {"min": 5, "max": 5},
+        "kuenker": {"min": 7, "max": 7},
+    }
+
+
+@pytest.mark.parametrize("house,width,expect", [
+    # The measured operating point must hold across each house's real width
+    # range, which is the point of pinning min == max rather than a frac.
+    ("cng_feature", 500, 3), ("cng_feature", 714, 3), ("cng_feature", 1278, 3),
+    ("leu", 1047, 5), ("leu", 1200, 5),
+    ("kuenker", 417, 7), ("kuenker", 1636, 7), ("kuenker", 2000, 7),
+])
+def test_shipped_entries_pin_k_across_each_houses_observed_widths(house, width,
+                                                                  expect):
+    assert _close_kernel_size(600, width, house=house) == expect
+
+
+def test_shipped_table_leaves_unlisted_houses_on_the_global_formula():
+    """cng is 3000x1440 and deliberately absent -- it must still get k=7."""
+    assert _close_kernel_size(1440, 3000, house="cng") == 7
+    assert _close_kernel_size(234, 500, house="gorny") == 3
+
+
+def test_shipped_pins_neuter_a_sweep_arm():
+    """
+    Documents the hazard the populated table introduces (see config.py).  A
+    numeric TRIVALAYA_CLOSE_KERNEL_FRAC is the SS4.2/SS9.3d sweep knob and is
+    meant to mean one thing corpus-wide, but per-house min/max still clamp it
+    -- so with min == max pinned, every arm collapses to the pinned k on these
+    three houses.  Re-running leu's k=3/5/7 sweep today would return 5, 5, 5
+    and read as a null result.  A sweep must clear the table first.
+
+    This asserts the behaviour rather than fixing it: the clamp is deliberate
+    (test_per_house_bounds_still_clamp_an_explicit_frac pins the intent), so
+    the fix belongs in the harness, not in the precedence rule.
+    """
+    for frac in (1 / 400, 1 / 250, 0.0042, 1 / 100):
+        assert _close_kernel_size(604, 1200, house="leu", frac=frac) == 5
+        assert _close_kernel_size(720, 2000, house="kuenker", frac=frac) == 7
+    # ...while an unlisted house still tracks the arm, which is the contrast
+    # that makes a mixed-house sweep result unreadable rather than merely flat.
+    assert _close_kernel_size(604, 1200, house="cng", frac=1 / 100) == 13
 
 
 @pytest.mark.parametrize("house", [None, "", "cng", "cng_feature", "kuenker",
                                    "leu", "no_such_house"])
 @pytest.mark.parametrize("width", [370, 500, 1200, 1700, 3000])
-def test_house_is_a_noop_with_empty_table(house, width):
+def test_house_is_a_noop_with_empty_table(house, width, house_table):
+    """
+    The mechanism itself is inert without a table.  This used to rely on the
+    shipped table being empty; now that it ships populated, the empty table is
+    installed explicitly so the test still means "house alone changes nothing".
+    """
+    house_table({})
     assert _close_kernel_size(100, width, house=house) == \
            _close_kernel_size(100, width)
 

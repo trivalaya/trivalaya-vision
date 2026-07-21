@@ -32,25 +32,70 @@ class Layer1Config:
     CLOSE_KERNEL_MAX = 21        # bounds cost / over-welding on 4000px+ plates
     CLOSE_ITERATIONS = 2         # Number of closing operations
 
-    # Per-house kernel overrides.  EMPTY BY DESIGN -- see below.
+    # Per-house kernel overrides.  Populated 2026-07-21 -- see below.
     #
     # Keys are auction_house as stored in auction_data.auction_house
     # (matched case-insensitively).  Values may override any of
     # frac / min / max; unspecified keys fall back to the globals above.
     # Precedence: TRIVALAYA_CLOSE_KERNEL_FRAC > per-house > global.
     #
-    # This table is deliberately empty at landing.  The scale-relative
-    # formula already absorbs the axis houses most obviously differ on --
-    # image dimensions -- so an override is only justified where a house
-    # differs on something else (gap distribution, toning, glare) AND the
-    # SS4.2 sweep measured it.  Populating it from guesses would repeat the
-    # exact failure this spec spent three revisions correcting: v1's
-    # round() gave the 42,080-coin cng house more bridging than it had
-    # today, silently, because a constant was reasoned about rather than
-    # computed.  Add entries from sweep data, with the measurement cited.
+    # Entries are only legitimate with measurement behind them.  Guessing a
+    # constant here would repeat the exact failure this spec spent three
+    # revisions correcting: v1's round() gave the 42,080-coin cng house more
+    # bridging than it had today, silently, because a constant was reasoned
+    # about rather than computed.  Each entry below cites its measurement.
     #
-    #   "cng_feature": {"frac": 1 / 250},   # example shape only
-    CLOSE_KERNEL_BY_HOUSE: dict = {}
+    # Every entry pins min == max, which fixes k outright and makes it
+    # independent of both image width and CLOSE_KERNEL_FRAC.  That is
+    # deliberate: what §4.5/§4.6 measured is a *kernel*, not a fraction, and
+    # encoding the measured quantity directly is what keeps a later change to
+    # the global frac from silently moving a house off its measured operating
+    # point.  Widths cited are from the raws on disk on 2026-07-21.
+    #
+    #   cng_feature -- k=3.  §4.5, n=200 (Auction 91), the `auto` arm:
+    #     Hough 97.5% -> 1.0%, weld signature 90.5% -> 1.0%, true
+    #     fragmentation 0.5%, ndets 2 on all 200 in both arms.  Otsu had
+    #     already separated the coins in 200/200 lots; the 7x7 close was
+    #     destroying a correct segmentation.  Corpus is 1231/1233 lots at
+    #     500px (outliers 714 and 1278), and the global formula yields k=3
+    #     across all of them -- so this entry is identical to `auto` on 100%
+    #     of the observed corpus and exists to say so explicitly.
+    #
+    #   leu -- k=5.  §4.6, n=200 (sale_id 75), the `0.0042` sweep arm, which
+    #     yielded k=5 on all 200 lots (widths 1047-1200).  k=5 removes 86% of
+    #     leu's Hough rate at zero fragmentation cost (0.5% true-split, 0.0%
+    #     in the 2-blob cell -- identical to k=7 on both).  **The global
+    #     formula assigns leu k=3**, which buys the remaining 14% by tripling
+    #     true fragmentation and introducing 2.0% splitting in the two-coin
+    #     cell.  Fragmentation is a correctness risk (§7.2 -> §7.4 embedding
+    #     drift across 256k coins); residual Hough is a cost issue.  This
+    #     entry is the whole reason the table exists.
+    #
+    #   kuenker -- k=7.  **STATUS-QUO PIN, NOT A SWEEP RESULT.**  No A/B or
+    #     kernel sweep has been run on kuenker; its evidence is §"Measured
+    #     evidence"'s n=10 gap sample (~25px gaps, 0/10 welded at k=7) plus a
+    #     0.7% corpus Hough rate -- enough to say the 7x7 close is not
+    #     hurting kuenker, not enough to say k=7 is optimal.  It is pinned
+    #     because enabling `auto` would otherwise move kuenker off today's
+    #     behaviour unmeasured: the raws are 417-2000px (median 2000), so the
+    #     global formula yields k=5 on 87% of lots and k=3 on the 330-lot
+    #     small tail -- it never yields 7.  (§1's "kuenker spans 800-3000px,
+    #     so it straddles k=3 through k=7" does not match the raws on disk;
+    #     max observed is 2000.)  Remove this entry when kuenker is measured.
+    CLOSE_KERNEL_BY_HOUSE: dict = {
+        "cng_feature": {"min": 3, "max": 3},
+        "leu": {"min": 5, "max": 5},
+        "kuenker": {"min": 7, "max": 7},
+    }
+    # HAZARD, now that the table is non-empty: per-house min/max clamp an
+    # explicit TRIVALAYA_CLOSE_KERNEL_FRAC as well as the global one.  That is
+    # deliberate and tested (test_per_house_bounds_still_clamp_an_explicit_frac)
+    # -- bounds are bounds, not the quantity under test -- but with min == max
+    # pinned on all three houses it means **a future sweep arm is a no-op on
+    # every house in this table**.  The k=3/5/7 sweep that produced leu's entry
+    # would, re-run today, return k=5 for every arm and look like a null result.
+    # A sweep must clear the table (or pass house=None) for the arm to mean
+    # anything.  tools/two_coin_weld_ab.py carries the same warning.
 
     # Background Detection
     BRIGHT_BACKGROUND_THRESHOLD = 110   # Gray value to classify as light background
