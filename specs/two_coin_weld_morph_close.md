@@ -1217,6 +1217,23 @@ Implemented at the call site in `_segment_and_extract_candidates`, with the
 gate and the override lookup sharing one case-insensitive spelling rule so a
 house cannot pass the gate and then miss its own entry.
 
+**A second consumer the gate protects, found while enabling.** L1 is not run
+only by the pipeline: `trivalaya-search` runs `analyze_image` on *query*
+images for search-by-image (`visual_search/decode_crop.py:48`), and it calls
+it with **no house** — it cannot know one, since the query is an upload.
+
+Under ungated `auto` that path would have sized the kernel by query-image
+width, silently segmenting query crops differently from the indexed corpus
+they are matched against — a query/index skew that would have degraded
+search quality with no failing test and no obvious symptom. Membership
+gating pins it to 7×7 by construction. (`trivalaya-search.service` also has
+no `EnvironmentFile=`, so it never sees the variable at all; the gate makes
+that belt-and-braces rather than the only defence.)
+
+This is the second control-surface-reachability problem in the same feature,
+found the same way: by asking who *actually* calls the code rather than who
+is supposed to.
+
 ---
 
 ## 7. Failure modes
