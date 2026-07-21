@@ -200,21 +200,37 @@ def _segment_and_extract_candidates(
     """
     blurred = cv2.GaussianBlur(gray_enhanced, (7, 7), 0)
     _, binary = cv2.threshold(blurred, 0, 255, thresh_type)
-    # Kernel sizing is env-gated: unset means literally today's fixed 7x7, so
-    # this lands without changing production behavior.  When the default flips,
-    # the unset branch becomes _close_kernel_size(h, w, house=house).
+    # Kernel sizing is env-gated: unset means literally today's fixed 7x7.
     #
     #   unset    -> fixed 7x7 (today's production behavior)
-    #   "auto"   -> scale-relative using configured values (per-house, then
-    #               global) -- this is what the flipped default will do
+    #   "auto"   -> MEMBERSHIP-GATED scale-relative: houses with a measured
+    #               entry in CLOSE_KERNEL_BY_HOUSE get their entry's kernel;
+    #               every other house, and any image with no house at all,
+    #               stays on today's fixed 7x7.  See below.
     #   <float>  -> scale-relative forcing that frac for every house; the
     #               SS4.2 A/B knob, and it deliberately outranks per-house so a
-    #               sweep arm means one thing corpus-wide
+    #               sweep arm means one thing corpus-wide.  NOT membership-
+    #               gated -- a sweep has to be able to reach a house that has
+    #               no entry yet, since that is how entries get measured.
+    #
+    # Why "auto" is membership-gated (owner decision 2026-07-21).  The
+    # standing rule is that only measured data populates the table; the
+    # corollary is that only tabled houses deviate from today's kernel.
+    # Ungated, "auto" would size by width alone for ~85,000 welded detections
+    # across houses that have never been A/B'd -- sending most of them to k=3,
+    # the setting SS4.6 examined and *rejected* for leu on fragmentation
+    # grounds, and sending cng's 3200-3999px plates to k=9, i.e. MORE bridging
+    # than today on the 42,080-coin house.  Gating on membership makes those
+    # houses bit-identical to today, so the blast radius of enabling is
+    # exactly the three measured houses.  Houses join one A/B at a time.
+    # See specs/two_coin_weld_morph_close.md SS6.7.
     _frac_env = _os.environ.get("TRIVALAYA_CLOSE_KERNEL_FRAC")
     if not _frac_env:
         k = 7
     elif _frac_env.strip().lower() == "auto":
-        k = _close_kernel_size(h, w, house=house)
+        _tabled = bool(house) and house.strip().lower() in \
+            Layer1Config.CLOSE_KERNEL_BY_HOUSE
+        k = _close_kernel_size(h, w, house=house) if _tabled else 7
     else:
         k = _close_kernel_size(h, w, frac=float(_frac_env), house=house)
     binary = cv2.morphologyEx(

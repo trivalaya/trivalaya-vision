@@ -82,11 +82,17 @@ def _preprocess(img: np.ndarray):
     return gray_enhanced, edge_zone, thresh_type, h, w
 
 
-def segment(img: np.ndarray):
-    """Run the real _segment_and_extract_candidates. Returns (candidates, binary)."""
+def segment(img: np.ndarray, house=None):
+    """
+    Run the real _segment_and_extract_candidates. Returns (candidates, binary).
+
+    `house` is forwarded so tests can exercise the per-house override and the
+    membership gate on `auto`; omitted it means "caller does not know the
+    house", which is itself a case the gate has to handle (it stays on 7x7).
+    """
     gray_enhanced, edge_zone, thresh_type, h, w = _preprocess(img)
     return _segment_and_extract_candidates(
-        img, gray_enhanced, edge_zone, thresh_type, h, w, h * w
+        img, gray_enhanced, edge_zone, thresh_type, h, w, h * w, house=house
     )
 
 
