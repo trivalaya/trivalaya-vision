@@ -31,7 +31,7 @@ Date: 2026-07-20 (v1–v4 — see §10)
 | Re-baseline of wall-clock per coin | **done** 2026-07-20 — recovered from `created_at` spans |
 | §5.5 wall-clock on an idle box | **done** 2026-07-21 — see §4.8; PASSES (1.58× → 0.036×) |
 | Mask-IoU gate + alpha-drift check | **done** 2026-07-21, both houses — see §4.7 |
-| **Enable in production** | env staged, runner restart pending — §6.6 resolved, `auto` membership-gated |
+| **Enable in production** | **DONE** 2026-07-21 15:49:54 UTC — §6.8; membership-gated, blast radius = leu + cng_feature |
 
 Verified at landing: with the env var unset, L1 output is byte-identical to
 the pre-change code on real lots (bboxes + areas, `data/test_images`), and
@@ -1210,6 +1210,60 @@ vision paths source the same file, so one line covers them:
 `trivalaya-runner.service` at a job boundary picks it up; the nightly batch
 picks it up on its next fire. kuenker — the nightly batch's current scope —
 is pinned to k=7, so that path is a no-op by construction.
+
+### 6.8 ENABLED IN PRODUCTION — 2026-07-21 15:49:54 UTC
+
+`TRIVALAYA_CLOSE_KERNEL_FRAC=auto` added to
+`/home/claudeuser/trivalaya-pipeline/.env` (backup `.env.bak.20260721`),
+which systemd injects into `trivalaya-runner.service` via `EnvironmentFile=`
+and the 05:00 UTC `vision_nightly_batch.sh` picks up via `set -a; source`.
+
+Restarted at a clean job boundary: no job had been claimed since 2026-07-20
+04:54, the runner had been idle in its poll loop for 17h (95s CPU total),
+and `pipeline_jobs` held no `claimed`/`running` row.
+
+Confirmed pickup, three ways:
+
+1. `TRIVALAYA_CLOSE_KERNEL_FRAC=auto` present in `/proc/<pid>/environ` of
+   the new runner process (PID 3940486).
+2. `deploy_staleness.py` reports **`runner py=a61543c✓ vision✓`** — both the
+   pipeline code and the vision code the runner has loaded are now at HEAD.
+3. End-to-end kernel spy through the real `VisionAdapter` before enabling:
+   leu→5, cng_feature→3, kuenker/cng/mashops/stacksbowers/no-house→7.
+
+**Still reported stale, deliberately:** `search code: 1 code commit pending`
+and `data: 182 files newer`. `trivalaya-search` imports vision `src/`, so
+this repo's commits mark it stale, but it calls `analyze_image` with no
+house and is therefore pinned to 7×7 by the membership gate — restarting it
+is not required for this change and was not in scope. The `data:` half is
+the annex refresh gap, unrelated.
+
+#### Next-day verification (not yet run)
+
+The weld signature should collapse on **leu and cng_feature only**, with
+every other house flat. Query detections created after the restart:
+
+```sql
+SELECT ad.auction_house,
+       COUNT(*) AS dets,
+       SUM(cd.vision_metadata LIKE '%"split_method": "hough"%') AS hough,
+       100.0 * SUM(cd.vision_metadata LIKE '%"split_method": "hough"%')
+             / COUNT(*) AS hough_pct
+FROM coin_detections cd
+JOIN auction_data ad ON cd.auction_record_id = ad.id
+WHERE cd.created_at > '2026-07-21 15:49:54'
+GROUP BY ad.auction_house;
+```
+
+Expected against the §1 census baselines: cng_feature 85.4% → ~1%, leu
+41.7% → ~8.5% (k=5 keeps a residual by design; k=3 would zero it but was
+rejected on fragmentation). Every other house must stay at its census rate —
+a *move* elsewhere means the membership gate leaked and is a rollback
+signal.
+
+Rollback is one line: remove `TRIVALAYA_CLOSE_KERNEL_FRAC` from `.env` and
+restart the runner. No data migration, since this is new-lots-only and no
+backfill has run.
 
 ### 6.7 The table covers 60% of the welded population; `auto` decides the rest
 
