@@ -1075,10 +1075,22 @@ hold the sale fixed will manufacture regressions like this one.
    actually carry slivers. If Hough is producing clean crops today,
    backfill buys nothing but risk.
 
-### 6.6 BLOCKER — `house` never reaches Layer 1 in production
+### 6.6 `house` never reached Layer 1 — RESOLVED 2026-07-21
 
-**Populating `CLOSE_KERNEL_BY_HOUSE` does nothing in production today, and
-enabling `auto` without fixing this regresses leu to k=3.** Found
+> **Resolved.** Owner approved the cross-repo change the same day;
+> trivalaya-pipeline `5e7fd95` plumbs `house` through, and this repo
+> membership-gates `auto` (§6.7). Verified end to end by spying on the
+> kernel reaching `cv2.getStructuringElement` through the real
+> `VisionAdapter`: with `auto`, leu→5, cng_feature→3, and kuenker, cng,
+> mashops, stacksbowers and the no-house case all→7; with the env unset,
+> every house→7. The section is kept because the *shape* of the bug is the
+> reusable part — a control surface built, tested, and documented, but
+> never wired to its caller, so every test passed and the feature was inert.
+> It was caught pre-production only because reachability was verified
+> instead of assumed.
+
+**Populating `CLOSE_KERNEL_BY_HOUSE` did nothing in production, and
+enabling `auto` without fixing it would have regressed leu to k=3.** Found
 2026-07-21 while executing the rollout.
 
 The vision side is fully plumbed. `pipeline_manager.analyze_image` takes
@@ -1177,11 +1189,33 @@ and returned "cng is uniformly 500px". That was wrong and is retracted;
 these figures come from sampling within each sale. Sample across sales.)
 
 Enabling `auto` corpus-wide is therefore a materially bigger change than
-"populate three measured houses" implies. Two ways to bound it, both cheap
-relative to the blast radius: gate the scale-relative path on
-table-membership so unlisted houses keep k=7 until measured, or A/B the
-three largest unmeasured houses (mashops, naumann, nomos — 70,042 welded
-detections between them) before the flip.
+"populate three measured houses" implies.
+
+### RESOLVED — `auto` is membership-gated (owner decision 2026-07-21)
+
+The standing rule is that only measured data populates
+`CLOSE_KERNEL_BY_HOUSE`. The adopted corollary: **only tabled houses
+deviate from today's kernel.** Under `auto`, a house with no entry — and any
+image whose house is unknown — stays on the fixed 7×7.
+
+This is strictly safer than the alternative of A/B'ing three more houses
+first, and it gets leu's win live now:
+
+- the ~85,000 welded detections in unmeasured houses are **bit-identical to
+  today**, so they carry zero new risk rather than a bounded one;
+- the cng k=9 hazard evaporates, because cng is not in the table;
+- the blast radius of enabling is exactly **leu and cng_feature**;
+- houses join one A/B at a time, whenever measured — the table stays the
+  single record of what has been earned.
+
+Bare width-driven `auto` is dead as a production mode. An explicit numeric
+`TRIVALAYA_CLOSE_KERNEL_FRAC` is deliberately **not** gated: a sweep must be
+able to reach a house that has no entry yet, since that is how entries get
+measured. Gating it would make the table unpopulatable.
+
+Implemented at the call site in `_segment_and_extract_candidates`, with the
+gate and the override lookup sharing one case-insensitive spelling rule so a
+house cannot pass the gate and then miss its own entry.
 
 ---
 

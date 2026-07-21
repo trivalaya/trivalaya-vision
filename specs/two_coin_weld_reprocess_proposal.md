@@ -102,39 +102,99 @@ Two things to flag:
 
 ---
 
-## 3. Is reprocessing justified? The evidence points yes, but weakly
+## 2.5 Accepted: the mask-IoU drift bar — owner decision 2026-07-21
+
+The mask-IoU gate (§4.7) is **accepted**, and the acceptance is recorded
+here because it is the same ledger the reprocess decision draws on.
+
+What was measured, on leu's 52 byte-identical-outcome lots:
+
+| | |
+|---|---|
+| worst genuine alpha drift | **1.1%** |
+| median | 0.14% |
+| lots above the 0.995 bar | 8 of 52 |
+| the 0.889 minimum | **excluded** — a segmentation failure, not a crop shift |
+
+Accepted on the grounds that 1.1% is an order of magnitude inside the drift
+band that parked dp=2.0, and — unlike dp=2.0 — the other side of the ledger
+carries a *measured* benefit: 10–18% contamination removed on leu's worst
+lots (§4.7's undilated sliver table). Drift of this size against a
+correctness gain of that size is a trade worth making.
+
+Two instrument-discipline notes attach to this acceptance, both cases where
+the measurement corrected its own author:
+
+- **Lot 3679's "11% drift" was not drift.** It is a 723,941px blob at
+  circularity 0.337 covering 88% of the frame — L1 failing to segment, not a
+  crop moving. Caught only by checking detection geometry; alpha IoU alone
+  cannot distinguish the two. Screen for degenerate detections before
+  quoting a tail.
+- **The kuenker width range was sampled wrong.** Ordering lots by
+  `sale_id, lot_number` and taking every Nth concentrates in
+  alphabetically-early sales, which produced a false 417–2000px range and a
+  false claim that the spec was wrong. Real range is 408–3381px.
+
+Both are retracted in place rather than silently fixed, and both are the
+reason this acceptance is worth trusting.
+
+## 3. Is reprocessing justified? The evidence changed — it is now yes
 
 §6.5 sets the precondition: backfill is worth it **only if the current
 crops actually carry slivers**. If Hough is producing clean crops, backfill
-buys nothing but risk. Three measurements bear on this, and they do not all
-agree.
+buys nothing but risk.
 
-- **Against reprocessing.** §4.5 measured Hough-arm crop quality directly
-  and found it acceptable; per-house GREEN rates are healthy (leu 90.8%,
-  cng_feature 84–88%).
-- **For reprocessing.** §4.5's tight-rect IoU shows the *Hough* arm is the
-  one placing coins with overlap: 67.0% of Hough lots are under the 0.02
-  disjointness bar against 99.0% for the threshold path, median IoU 0.0079
-  vs 0.0000. §7.1 feared removing the weld would regress to slivers; the
-  geometry says the opposite.
-- **For reprocessing, visually.** The montages in
-  `two_coin_weld_maskgate_cng_feature_20260721_montage/` show the
-  mechanism: Hough fits a *circle* to an irregular ancient flan, clipping
-  rim on chipped or oval coins, while the threshold contour traces the
-  actual outline. The circle is a worse mask for exactly the coins
-  numismatic embeddings care most about.
+**That precondition is now measured, and it is satisfied.** §9.3c option 2b
+was run for the first time on 2026-07-21. Undilated, on leu:
 
-**Recommendation: do not open a bulk reprocess ticket yet.** The case is
-real but it is a *quality improvement* argument, not a *defect* argument,
-and it is not what §6.5's precondition asked for. The cheaper decision
-first is whether crop quality improves enough to justify 120,700 rewrites
-that also invalidate the corresponding embeddings (§7.4). That is
-answerable on a few hundred lots — compare embedding-relevant crop metrics
-between arms on the frozen samples — and should precede any bulk run.
+| lot | control (production today, k=7) | auto (k=5) |
+|---|---:|---:|
+| 3717 | **17.8%** of the neighbouring coin | **0** |
+| 3736 | **10.6%** | **0** |
+| 3661 | 3.3% | 1.7% |
 
-If a ticket is opened anyway, scope it to **cng_feature first** (~28,800
-detections, highest weld rate, smallest blast radius, and the house whose
-kernel is most firmly measured), and only then consider leu's ~91,900.
+Production is carrying real alpha contamination on leu right now — up to
+17.8% of a coin's area filled with its neighbour — and the measured kernel
+removes the two worst cases entirely. This is no longer a "quality
+improvement" argument. It is a defect argument, which is exactly what §6.5
+asked for.
+
+Supporting evidence points the same way:
+
+- §4.5's tight-rect IoU already showed the *Hough* arm placing coins with
+  overlap: 67.0% of Hough lots under the 0.02 disjointness bar against
+  99.0% for the threshold path.
+- The montages in `two_coin_weld_maskgate_*_montage/` show the mechanism —
+  Hough fits a *circle* to an irregular ancient flan, clipping rim on
+  chipped and oval coins, while the threshold contour traces the outline.
+- Per-house GREEN rates (leu 90.8%, cng_feature 84–88%) do **not**
+  contradict this. GREEN does not measure neighbour contamination, which is
+  why the sliver check had to be built.
+
+### But sequence it behind the rim-recovery fix
+
+The contamination mechanism is **Layer 1.5 rim recovery**, not the kernel
+(`specs/rim_recovery_neighbor_aware.md`). The kernel change removes the two
+worst lots incidentally, by handing rim recovery better-separated seeds — it
+does not make the failure impossible, and lot 995 shows `auto` producing
+0.54% overlap where control produced none.
+
+Reprocessing 120,700 detections *before* that fix would bake a
+still-defective mask into a new generation of crops and embeddings, and the
+crops are overwritten in place, so there is no second chance at the same
+keys.
+
+**Recommendation, revised: open the ticket, but sequence it third.**
+
+1. Enable the per-house kernel (in progress) — new lots only, no backfill.
+2. Land neighbour-aware rim validation, and re-run the sliver gate until
+   undilated overlap is zero in **both** arms.
+3. *Then* backfill, scoped to **cng_feature first** (~28,800 detections,
+   highest weld rate, smallest blast radius, firmest kernel evidence),
+   and only afterwards leu's ~91,900.
+
+Reprocessing at step 3 buys clean crops. Reprocessing now buys a different
+set of dirty ones.
 
 ---
 
