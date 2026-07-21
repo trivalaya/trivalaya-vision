@@ -1,5 +1,23 @@
 # Handoff: run the leu A/B for the two-coin weld change
 
+> **DONE — 2026-07-21. Results in §4.6 of the spec; read that, not this.**
+>
+> The mechanism generalizes: leu Hough 60.0% → 0.0% at k=3, n=200 on
+> sale_id 75. The §4.1 prediction below offered 5–11px or ~25px; leu came
+> in at a median of **12.00px**, sitting exactly on k=7's 12px bridging
+> threshold, which explains its 48.5% weld rate rather than leaving the
+> result ambiguous. A follow-on k ∈ {3,5,7} sweep shows **k=5 is leu's
+> operating point, not k=3** — same Hough win, none of the fragmentation.
+>
+> Two things below are now known to be wrong or incomplete:
+> - "leu's 41.7% Hough rate" — this sample measures **60.0%**. Single
+>   sale; not a corpus comparison (gotcha #4 applies to it too).
+> - Step 4's fragment-rate bar uses `post > 2`, which is invalid on a
+>   multi-coin house and overstates leu's fragmentation by 10×.
+>
+> Retained as the record of what was asked and the environment notes,
+> which are still accurate.
+
 Companion to `specs/two_coin_weld_morph_close.md` (v4). Read this first,
 then §4.5 and §7.3 of the spec. Written 2026-07-20.
 

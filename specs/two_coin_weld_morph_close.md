@@ -542,6 +542,20 @@ current `(7,7)` blur; a blur change is out of scope for this spec.
 Pick the `CLOSE_KERNEL_FRAC` that minimizes weld rate on small formats
 **without** raising fragment rate on cng/mashops/obolos.
 
+**Partially run — leu only (§4.6, 2026-07-21):** k ∈ {3,5,7} at
+`iterations=2` and blur `(7,7)`, n=200. The blur and iterations axes are
+unswept, and no other house has been swept. Two corrections that any
+remaining sweep must apply:
+
+- **"fragment rate (`post > 2` where coins should be 2)" carries an
+  unstated proviso** — it is only valid where every lot *is* 2-coin.
+  cng_feature satisfies that; leu does not (53/200 lots have ≥3 blobs
+  legitimately), and there the metric overstates fragmentation by 10×.
+  Use `post > pre`, or condition on `blobs_pre_close == 2`.
+- **Do not pick one global frac from a single house.** leu's optimum
+  (k=5) differs from what the global formula assigns it (k=3), which is
+  what `CLOSE_KERNEL_BY_HOUSE` is for.
+
 ### 4.3 Crop-equivalence check
 
 The change alters segmentation for every house, so verify output
@@ -643,14 +657,147 @@ mask). Tight-rect disjointness is necessary, not sufficient — extraction
 adds a 5% margin on top. That check is the definitive one and has not been
 run.
 
+---
+
+## 4.6 leu A/B and kernel sweep — 2026-07-21, n=200 leu
+
+Run with `tools/two_coin_weld_ab.py` over 200 lots frozen from leu
+`sale_id 75` ("Web Auction 42"), raws pulled from Spaces. Three arms
+against identical decoded images in one process: `control` (7×7), `auto`
+(scale-relative ⇒ k=3 at 1047–1200px), and `0.0042` (⇒ k=5 across the
+whole observed width range, with margin on both sides).
+
+| metric | control (k=7) | **0.0042 (k=5)** | auto (k=3) |
+|---|---|---|---|
+| hough rate | **60.0%** | **8.5%** | **0.0%** |
+| weld signature (`pre==2 → post==1`) | 48.5% | 7.0% | 0.0% |
+| fragmentation, true (`post > pre`) | 0.5% | **0.5%** | 1.5% |
+| fragmentation, 2-blob cell | 0.0% | **0.0%** | 2.0% |
+| ndets changed vs control | — | 4/200 | 4/200 |
+| tight-rect IoU exactly 0 | 53.1% | 92.2% | 99.0% |
+
+**The mechanism generalizes.** §4.1's falsifiable prediction offered two
+branches — gaps like cng_feature (5–11px) or like kuenker (~25px). leu
+came in at neither, and the middle turns out to be explanatory rather
+than ambiguous.
+
+### leu straddles its own welding threshold
+
+Gap distribution, 2-blob cell (n=147): p10 9.00, **median 12.00**, p90
+16.00. k=7's bridging reach is `2 × iterations × (k//2)` = **exactly
+12px**. leu's gap distribution is centred on the threshold that decides
+whether it welds.
+
+That single fact explains the whole house:
+
+- **Why the weld rate is 48.5%, not cng_feature's 90.5%** — only ~43% of
+  leu's 2-blob lots have gaps under the k=7 reach. cng_feature's median
+  of 7.0 sits far below its threshold, so nearly everything welds.
+- **Why k=3 kills it completely** — a 4px reach clears all but one lot in
+  the sample.
+- **Why leu's Hough rate has a second cause.** Hough is 60.0% but the
+  weld signature is 48.5%. Unlike cng_feature, where the 7pp gap was
+  3–8-blob lots merging to 1 (still the close destroying a valid
+  segmentation), leu's residual is not fully accounted for. Removing the
+  weld does drive Hough to 0.0% at k=3, so the close is upstream of all
+  of it, but the mechanism is not exclusively the narrow 2→1 signature.
+
+Control Hough here is **60.0%**, against the 41.7% measured corpus-wide
+in v4. Same direction, materially higher; this is one sale, and per §5's
+kuenker worked example a single-sale rate is not a corpus comparison.
+
+### The fragment-rate metric is misleading on any multi-coin house
+
+`fragment_rate` as reported by the harness is `blobs_post_close > 2`.
+On cng_feature that was unambiguous — every lot was 2-coin. **On leu it
+is not**: 53/200 lots have ≥3 blobs *legitimately*, so the metric counts
+real multi-coin lots as fragmentation. It reports 15.0% at k=3.
+
+True fragmentation — `post > pre`, i.e. the close *splitting* something
+it should have healed — is **1.5%**, and 2.0% restricted to the
+2-blob cell. The headline figure overstates it by 10×. Any house sampled
+without a coin-count filter needs the corrected metric; §4.2's "fragment
+rate (`post > 2` where coins should be 2)" only holds under that proviso,
+which leu does not satisfy.
+
+The same trap applies to gap statistics: `_min_gap` measures the two
+*largest* blobs, so on a 3+ blob lot it is not measuring a coin pair.
+Segment by `blobs_pre_close` or the medians are not comparable across
+houses. Re-scoring cng_feature this way gives a 2-blob cell of median
+7.00 / p90 10.00 / 93.6% under 12px — marginally tighter than the
+published 91.5% headline, and in the same direction.
+
+### leu's operating point is k=5, not k=3
+
+k=5 removes **86% of leu's Hough rate at zero fragmentation cost** — 0.5%
+true-split and 0.0% in the 2-blob cell, identical to k=7 on both. k=3
+buys the remaining 14% by tripling true fragmentation and introducing
+2.0% splitting in the two-coin cell where k=5 and k=7 both have none.
+
+That trade favours k=5. Fragmentation is a **correctness** risk — §7.2
+establishes that fragments survive as real candidates and emit silent bad
+crops, which across leu's 256k coins is embedding drift (§7.4). Residual
+Hough is a **cost** issue. Paying correctness for cost is the wrong
+direction, and the global formula assigning leu k=3 is precisely the case
+§"per-house override" anticipated.
+
+**This is the measured sweep data `CLOSE_KERNEL_BY_HOUSE` requires.** The
+table remains empty pending an explicit decision to populate it; it is
+recorded here, not shipped. Note also that the k=3 and k=5 arms shift
+ndets on the *same* 4 lots (+1:3, +2:1), so §9.3e's primary bar passes
+identically for both — the choice between them rests on fragmentation, not
+on detection count.
+
+### The bridging formula is ~1–2px optimistic
+
+`2 × iterations × (k//2)` under-predicts welding in both arms:
+
+| arm | predicted reach | predicted weld | observed weld |
+|---|---|---|---|
+| control (k=7) | 12px | 41.0% | 48.5% |
+| 0.0042 (k=5) | 8px | — | 7.0% |
+
+The 14 lots still welding at k=5 have gaps of **7.0–9.8px** against a
+predicted 8px reach. The bias is consistent and one-directional, most
+likely diagonal connectivity in the ellipse kernel — the formula assumes
+axis-aligned bridging. No conclusion in this spec changes, but the
+formula should be treated as a lower bound on reach, not an equality.
+§9.2's synthetic fixtures pin the model as exact; they pass because
+synthetic gaps are axis-aligned.
+
+### Determinism verified
+
+The k=5 run re-ran `control` over the same frozen sample. It reproduces
+the first leu run **byte-identically across all 21 structural columns on
+all 200 lots**. The harness is deterministic over a frozen sample, which
+was previously assumed for the A/B (the freezer's determinism was
+established; the A/B's was not). Both leu results are therefore
+like-for-like, and a future re-run after a kernel tweak is a valid
+comparison.
+
+### Still open after this
+
+- **§4.3 equivalence** — unrun, no cng lots sampled.
+- **§9.3c option 2b**, the contour-level sliver check — unrun, and still
+  the definitive quality gate.
+- **Wall-clock** — both leu runs were taken at load 1.6–1.9 with the
+  production runner active. Structural columns are unaffected; the timing
+  columns in both JSONs are unusable. §5.5 still wants an idle box.
+
 ### What this does and does not license
 
 Does **not** license flipping the default. Three gaps remain:
 
-1. **leu is untested**, and it owns 47% of all Hough splits against
-   cng_feature's 12% (§"Rate is not cost"). The change is riskiest there
-   (k moves 7→3 across 256k coins) and worth the most. A cng_feature-only
-   result says nothing about it.
+1. ~~**leu is untested**~~ — **closed by §4.6.** leu is measured at
+   n=200 and the mechanism generalizes: Hough 60.0% → 0.0% at k=3. But it
+   closed with a condition attached rather than cleanly. leu's gaps
+   straddle the k=7 threshold (median 12.00px against a 12px reach), and
+   the sweep shows **k=5, not the k=3 the global formula assigns**, is its
+   operating point — k=3 raises true fragmentation 0.5% → 1.5% for a
+   Hough gain k=5 mostly already captures. Flipping the default sends leu
+   to k=3. So this gap is now a reason to populate
+   `CLOSE_KERNEL_BY_HOUSE` before the flip, not a reason the flip is
+   blocked outright.
 2. **§4.3 equivalence is unrun** — no cng lots sampled yet.
 3. **Wall-clock is unmeasured** in the §5.5 sense. The 6.71 → 0.013 s/lot
    figures were taken at load average 7.6 with the production runner and
@@ -802,6 +949,16 @@ fragment crop is far smaller than its sibling coin), not
 `status=skip` — a skip-count-only dashboard shows this failure as
 all-clear, and an ndets-only dashboard misses the two-detection
 variant too.
+
+**The guard metric itself needs conditioning (§4.6).** `ndets > 2` and
+`post > 2` both read a legitimately-multi-coin lot as a fragmented one.
+On leu that inflates the measured fragment rate from 1.5% to 15.0% —
+large enough to fail a rollout gate on houses that are behaving
+correctly. Compare `post` against `pre` per lot, or restrict to lots
+where `blobs_pre_close == 2`. This failure mode is real on leu (true
+fragmentation does rise 0.5% → 1.5% at k=3, and 0.0% → 2.0% in the
+2-coin cell) — it is the *magnitude* the naive metric gets wrong, and
+it is why leu's operating point is k=5.
 
 ### 7.3 Silent behavior change on mid-size houses
 
@@ -1040,6 +1197,41 @@ conflates.
 ---
 
 ## 10. Revision history
+
+### v5 — 2026-07-21
+
+leu measured at n=200 (sale_id 75) plus a k ∈ {3,5,7} sweep. Read-only;
+default not flipped, `CLOSE_KERNEL_BY_HOUSE` still empty. See §4.6.
+
+1. **The mechanism generalizes to leu** — Hough 60.0% → 0.0%, weld
+   signature 48.5% → 0.0% at k=3, ndets essentially unshifted (196/200),
+   tight-rect IoU 53.1% → 99.0% exactly-disjoint. v4's item 2 identified
+   leu as the house the decision turns on; it turns the right way.
+2. **§4.1's binary prediction was the wrong shape.** leu's gaps came in
+   between the two offered branches — 2-blob median **12.00px** against
+   cng_feature's 7.00 and kuenker's ~25 — because leu sits *on* its own
+   welding threshold (k=7 reach is exactly 12px). This explains its 48.5%
+   weld rate against cng_feature's 90.5% rather than leaving it ambiguous.
+3. **leu wants k=5, not k=3.** The sweep shows k=5 removing 86% of the
+   Hough rate at zero fragmentation cost, where k=3 triples true
+   fragmentation for the last 14%. This is the first measured data
+   qualifying under §"per-house override"; recorded, not shipped.
+4. **`fragment_rate` is invalid on multi-coin houses.** `post > 2` counts
+   leu's 53/200 legitimately-multi-coin lots as fragmentation, reporting
+   15.0% where true splitting (`post > pre`) is 1.5%. The same segmenting
+   error inflates gap medians. Both metrics need conditioning on
+   `blobs_pre_close`; §4.2's definition carries an unstated 2-coin proviso.
+5. **The bridging formula `2 × iters × (k//2)` is ~1–2px optimistic** and
+   should be read as a lower bound. Lots weld at gaps of 7.0–9.8px against
+   a predicted 8px reach at k=5, and k=7 predicts 41.0% weld against 48.5%
+   observed. §9.2's synthetics miss this because they are axis-aligned.
+6. **The A/B harness is deterministic over a frozen sample** — verified,
+   not assumed, by re-running `control` and diffing all 21 structural
+   columns across 200 lots. Previously only the freezer's determinism was
+   established.
+7. `tools/two_coin_weld_ab.py` gained a Spaces source (`--source`,
+   `--cache-dir`), the tooling gap the handoff identified. leu raws are
+   not on local disk.
 
 ### v4 — 2026-07-20
 
