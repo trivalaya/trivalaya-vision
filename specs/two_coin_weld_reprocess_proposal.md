@@ -146,4 +146,4 @@ kernel is most firmly measured), and only then consider leu's ~91,900.
   must include the embedding re-index, or it ships a corpus where crops and
   embeddings disagree.
 - None of this is actionable until the per-house table actually reaches
-  Layer 1 in production — see the blocker in §11 of the main spec.
+  Layer 1 in production — see the blocker in §6.6 of the main spec.

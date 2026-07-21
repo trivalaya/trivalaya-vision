@@ -893,6 +893,88 @@ hold the sale fixed will manufacture regressions like this one.
    actually carry slivers. If Hough is producing clean crops today,
    backfill buys nothing but risk.
 
+### 6.6 BLOCKER — `house` never reaches Layer 1 in production
+
+**Populating `CLOSE_KERNEL_BY_HOUSE` does nothing in production today, and
+enabling `auto` without fixing this regresses leu to k=3.** Found
+2026-07-21 while executing the rollout.
+
+The vision side is fully plumbed. `pipeline_manager.analyze_image` takes
+`house` and forwards it to `layer_1_structural_salience`, which forwards it
+to `_segment_and_extract_candidates` and `_close_kernel_size`. The
+**pipeline side never supplies it**:
+
+| where | what it does |
+|---|---|
+| `trivalaya_pipeline/pipeline.py:606` | `self.vision.process_image(local_path, source_type="auction")` — no house |
+| `vision_adapter.py::process_image` | no `house` parameter at all |
+| `vision_adapter.py::_run_vision_pipeline:198` | `self._analyze_image(str(image_path), source_type=source_type)` — no house |
+
+`auction_house` appears nowhere in `vision_adapter.py`. So `house=None`
+reaches `_close_kernel_size`, the override lookup is skipped, and every
+house gets the global formula.
+
+**Why that is worse than a no-op.** With the table unreachable, setting
+`TRIVALAYA_CLOSE_KERNEL_FRAC=auto` gives every house k by width alone.
+Sampling leu's welded lots from Spaces gives 1160–1200px ⇒ **k=3 on 32/32**
+— precisely the regression §4.6 rejected, at 0.5% → 1.5% true
+fragmentation across 256k coins. The per-house table cannot prevent it
+because it is never consulted.
+
+**The fix** is three edits in trivalaya-pipeline, and the value is already
+in scope — `record.auction_house` is used twenty lines below the call site,
+at `pipeline.py:625`:
+
+1. `pipeline.py:606` — pass `house=record.auction_house`
+2. `vision_adapter.py::process_image` — accept `house: Optional[str] = None`, forward it
+3. `vision_adapter.py::_run_vision_pipeline` — accept it, pass to `self._analyze_image(..., house=house)`
+
+Not applied here: it is a cross-repo production change outside the rollout
+brief, and that repo had a live `append_search_annex` job writing to its
+working tree at the time.
+
+**Where "enable in production config" would land, once unblocked.** Both
+vision paths source the same file, so one line covers them:
+`/home/claudeuser/trivalaya-pipeline/.env`, injected into
+`trivalaya-runner.service` via `EnvironmentFile=` and into the 05:00 UTC
+`vision_nightly_batch.sh` via `set -a; source`. Restarting
+`trivalaya-runner.service` at a job boundary picks it up; the nightly batch
+picks it up on its next fire. kuenker — the nightly batch's current scope —
+is pinned to k=7, so that path is a no-op by construction.
+
+### 6.7 The table covers 60% of the welded population; `auto` decides the rest
+
+A second finding from the same session, and the larger risk. The historical
+census (`specs/two_coin_weld_reprocess_proposal.md`) counts **228,450
+Hough-split detections of 779,165 (29.3%)**. cng_feature, leu and kuenker
+together hold 136,062 of them — **59.6%**. The remaining 40% sits in houses
+with no A/B, no sweep and no entry, which `auto` would move by width alone:
+
+| house | Hough-split | `auto` would give |
+|---|---:|---|
+| mashops | 37,432 | k=3 (84%), k=5 (16%) |
+| naumann | 22,586 | k=3 (100%) |
+| nomos | 10,024 | k=3 (100%) |
+| obolos | 9,674 | k=3 (97%) |
+| cng | 7,092 | k=3 (53%), k=5 (9%), k=7 (38%) |
+| gorny | 4,832 | k=3 (88%) |
+| stacksbowers | 208 | **k=11 (75%)** |
+
+**~85,000 welded detections would land on k=3** — the setting §4.6 examined
+most closely and *rejected* for leu on fragmentation grounds. And
+stacksbowers (4736px) would get k=11, kuenker's largest plates k=9: 20px and
+16px of bridging reach against today's 12px. That is the scale-relative
+formula working as designed on 4000px+ input, not a bug, but it is an
+unmeasured change in the *welding* direction on houses that were never the
+problem.
+
+Enabling `auto` corpus-wide is therefore a materially bigger change than
+"populate three measured houses" implies. Two ways to bound it, both cheap
+relative to the blast radius: gate the scale-relative path on
+table-membership so unlisted houses keep k=7 until measured, or A/B the
+three largest unmeasured houses (mashops, naumann, nomos — 70,042 welded
+detections between them) before the flip.
+
 ---
 
 ## 7. Failure modes
