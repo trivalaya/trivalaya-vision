@@ -29,8 +29,9 @@ Date: 2026-07-20 (v1–v4 — see §10)
 | §9.3c option 2b contour-level sliver check | **done** 2026-07-21 — see §4.7; cause is rim recovery, not the close |
 | Re-baseline of hough rates + GREEN against production (v4) | **done** 2026-07-20 |
 | Re-baseline of wall-clock per coin | **done** 2026-07-20 — recovered from `created_at` spans |
+| §5.5 wall-clock on an idle box | **done** 2026-07-21 — see §4.8; PASSES (1.58× → 0.036×) |
 | Mask-IoU gate + alpha-drift check | **done** 2026-07-21, both houses — see §4.7 |
-| **Enable in production** | **BLOCKED** — `house` never reaches L1, see §6.6 |
+| **Enable in production** | env staged, runner restart pending — §6.6 resolved, `auto` membership-gated |
 
 Verified at landing: with the env var unset, L1 output is byte-identical to
 the pre-change code on real lots (bboxes + areas, `data/test_images`), and
@@ -983,6 +984,80 @@ montages show this plainly on chipped and oval coins.
 
 The tool therefore records d=0 and d=3 separately and gates on d=0. Read
 d=3 as a proximity diagnostic only.
+
+---
+
+## 4.8 §5.5 wall-clock — 2026-07-21, the first usable timings
+
+Every previous timing in this spec was taken under load 7.6 with the
+production runner and another job active, and §4.5 retracted its absolute
+numbers. This run had the runner idle in its poll loop (17h, 95s CPU total),
+no competing job, and started at load average 1.49 on 4 cores,
+single-threaded. Both houses measured in the same session on the same box,
+as §5.5 requires.
+
+| house | arm | k | s/lot (median) | s/coin | hough |
+|---|---|---|---:|---:|---:|
+| cng_feature | control | 7 | 4.0448 | **2.0865** | 97.5% |
+| cng_feature | **auto** | 3 | 0.0083 | **0.0470** | 1.0% |
+| kuenker | control | 7 | 0.1860 | **1.3166** | 1.0% |
+| kuenker | auto | 7 | 0.1782 | 1.2888 | 1.0% |
+
+### The bar, and the verdict
+
+§5.5 asks for cng_feature per-coin time within **1.5×** of kuenker's.
+
+- **Before: 2.0865 / 1.3166 = 1.58× — FAILS.** The bar was correctly aimed;
+  cng_feature really was the anomaly it was written to catch.
+- **After: 0.0470 / 1.3166 = 0.036× — PASSES**, by a factor of ~28 against
+  the bar rather than marginally.
+
+**§5.5 is met.** cng_feature goes from 1.6× kuenker's per-coin cost to 1/28th
+of it.
+
+Both conclusions survive the caveat below, because contamination inflates
+*kuenker's* time in both of them: it makes the "after" pass more easily and
+the "before" fail harder. Neither verdict is balanced on the noisy term.
+
+### Caveat: kuenker's run was partially contaminated
+
+`append_search_annex` restarted partway through the kuenker run and drove
+load from 1.16 to 6.33. cng_feature's run was clean throughout. kuenker's
+absolute numbers are therefore an upper bound, not a clean measurement. Not
+re-run, because the 28× margin cannot be closed by contention of that scale
+and the bias direction is conservative for both verdicts.
+
+### kuenker's cost is a long tail, and it is not the weld
+
+The mean/median gap is extreme and matters more than the headline:
+
+| | |
+|---|---|
+| p50 | 0.186 s |
+| p95 | 0.413 s |
+| **p99** | **138.7 s** |
+| **max** | **313.2 s** (lot 1289, 1969×1362) |
+
+**The five slowest lots account for 675 s of the 791 s total — 85%.** The
+typical kuenker lot costs 0.19 s; a handful cost minutes.
+
+Three of the top five, including the 313 s worst case, have **`hough=0`** —
+no two-coin split ran. So this is not the weld and not the resolver. The
+remaining suspect inside L1 is rim recovery, which runs `HoughCircles` per
+low-circularity candidate and which §4.7 already implicated in the sliver
+defect. kuenker averages 3.0 detections per lot against cng_feature's 2.0,
+so it offers more candidates for that path to fire on.
+
+This deserves its own investigation, alongside the handoff's unexplained
+"cng is the slowest house at 3.9–16.7 s/coin on a 6.4% hough rate". Both
+smell like the same non-weld cost. Recorded here rather than chased, per the
+one-open-front rule.
+
+### The kuenker pin is a verified no-op
+
+kuenker's `control` and `auto` arms produced **byte-identical bboxes on
+200/200 lots**. The status-quo pin plus membership gating do exactly what
+they claim: enabling the feature does not move kuenker at all.
 
 ---
 
