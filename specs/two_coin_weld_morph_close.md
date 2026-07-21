@@ -18,17 +18,19 @@ Date: 2026-07-20 (v1–v4 — see §10)
 |---|---|
 | §1 kernel helper + env gate + config constants | **done** |
 | §1 dead-constant cleanup (`CLOSE_KERNEL_SIZE_*` deleted, `CLOSE_ITERATIONS` wired) | **done** |
-| Per-house override mechanism (**deviation from §3** — see below) | **done, table empty** |
+| Per-house override mechanism (**deviation from §3** — see below) | **done, table populated** 2026-07-21 — cng_feature=3, leu=5, kuenker=7 (§4.6, §6.6) |
 | §9 harness prerequisite (venv rebuild, `tests/` + pytest) | **done** |
 | §9.1 tier 1 — kernel sizing | **done** (47 tests) |
 | §9.2 tier 2 — synthetic weld fixtures | **done** (95 tests) |
 | §4.1 frozen sample (cng_feature/Auction 91, n=200) | **done** 2026-07-20 — `specs/two_coin_weld_sample_ids.csv` |
-| §4.3 frozen sample (2400–3199px band) | **not started** — draw from Spaces, not time-pressured |
+| §4.3 frozen sample (2400–3199px band) | **not started** — and note §6.7: the band is only 72% of cng |
 | §9.3d A/B, cng_feature n=200 | **done** 2026-07-20 — see §4.5, results in `specs/results/` |
-| §9.3e leu distributional check | **not started** — the house that matters most |
-| §9.3c option 2b contour-level sliver check | **not started** — the definitive quality gate |
+| §9.3e leu distributional check | **done** 2026-07-21 — see §4.6 |
+| §9.3c option 2b contour-level sliver check | **done** 2026-07-21 — see §4.7; cause is rim recovery, not the close |
 | Re-baseline of hough rates + GREEN against production (v4) | **done** 2026-07-20 |
 | Re-baseline of wall-clock per coin | **done** 2026-07-20 — recovered from `created_at` spans |
+| Mask-IoU gate + alpha-drift check | **done** 2026-07-21 (cng_feature); leu in flight — see §4.7 |
+| **Enable in production** | **BLOCKED** — `house` never reaches L1, see §6.6 |
 
 Verified at landing: with the env var unset, L1 output is byte-identical to
 the pre-change code on real lots (bboxes + areas, `data/test_images`), and
@@ -1381,6 +1383,73 @@ conflates.
 ---
 
 ## 10. Revision history
+
+### v6 — 2026-07-21
+
+Rollout execution: table populated, both quality gates run, **enable
+blocked**. `CLOSE_KERNEL_BY_HOUSE` now ships `cng_feature={min:3,max:3}`,
+`leu={min:5,max:5}`, `kuenker={min:7,max:7}`. Production remains on a fixed
+7×7 — the env gate is still unset.
+
+1. **§6.6 — the blocker. `house` never reaches Layer 1.** The vision side
+   is plumbed end to end; the pipeline side never supplies the argument
+   (`auction_house` appears nowhere in `vision_adapter.py`). The override
+   table is unreachable in production, so enabling `auto` today would give
+   every house k by width alone and send leu to k=3 — the exact regression
+   the table exists to prevent. Three-edit cross-repo fix documented; not
+   applied.
+
+2. **§6.7 — the table covers 59.6% of the welded population.** The census
+   finds 228,450 Hough-split detections of 779,165. The other ~85,000 sit
+   in unmeasured houses that `auto` would mostly send to k=3. Separately,
+   **§4.3's equivalence test would certify only 72% of cng**: the house
+   spans 500–3910px, and 6.9% of it moves to k=9 — *more* bridging than
+   today, the v1 `round()` direction reached by a different route.
+
+3. **§4.7 — §9.3c option 2b is run**, the gate §4.5 called definitive and
+   unrun. cng_feature n=200, undilated: control 0/200 lots with contour
+   overlap, auto 1/200 (580px, 1.1% of the neighbour). **The one sliver is
+   rim recovery, not the close** — lot 215298's detections both carry
+   `rim_recovered=True`, and Layer 1.5 replaces the contour with a
+   HoughCircles fit that on a near-touching pair overlaps its neighbour.
+   §7.1 is answered: slivers return at 0.5%, from a pre-existing Layer 1.5
+   behaviour the change exposes. A fix belongs in `validate_rim_recovery`.
+
+4. **The mask-IoU gate gates the alpha mask, not the segmentation mask.**
+   On unchanged-outcome lots the post-close binary IoU is 0.864/0.878 while
+   the filled-contour alpha — what `crop_with_alpha` writes and what
+   reaches the embedding — is exactly **1.000**. Gating the binary would
+   have read as serious drift and been wrong. cng_feature passes on only 2
+   lots, since the weld fires on the rest; leu is the house with a real
+   unchanged population (52 lots bbox-identical, 94 ndets+hough-identical)
+   and its run is still in flight.
+
+5. **Dilated overlap measures proximity, not contamination.** At d=3 the
+   arms invert — auto 4 lots, control 0 — because a 3px dilation bridges
+   any sub-3px gap, and Hough's circles under-cover an irregular flan while
+   threshold contours track it. Gate on d=0; read d=3 as a diagnostic.
+
+6. **Populating the table neuters future sweeps.** Per-house min/max clamp
+   an explicit `TRIVALAYA_CLOSE_KERNEL_FRAC` — deliberate and tested — so
+   with `min == max` pinned, every arm collapses to the pinned k on all
+   three houses. Re-running leu's k∈{3,5,7} sweep today would return 5,5,5
+   and read as a null result. Asserted in
+   `test_shipped_pins_neuter_a_sweep_arm`; a sweep must clear the table.
+
+7. **kuenker's entry is a status-quo pin, not a measurement.** No A/B, no
+   sweep. It exists because `auto` would otherwise scatter kuenker across
+   k=3/5/7/9 unmeasured.
+
+8. **Two retractions, both from the same sampling error.** Ordering lots by
+   `sale_id, lot_number` and taking every Nth concentrates in
+   alphabetically-early sales. It produced "cng is uniformly 500px" and
+   "kuenker is 417–2000px, `auto` never yields 7" — both wrong. kuenker is
+   408–3381px across its six sales, and §1's "kuenker spans 800–3000px" is
+   substantially right. Sample *within* each sale. Same class as the
+   retracted `_min_gap` finding in §4.5.
+
+9. **Restored the missing `## 5.` header.** The acceptance-criteria list sat
+   orphaned after §4.6 even though §5.1/§5.4/§5.5 are referenced throughout.
 
 ### v5 — 2026-07-21
 
