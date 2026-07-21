@@ -803,8 +803,84 @@ Does **not** license flipping the default. Three gaps remain:
    figures were taken at load average 7.6 with the production runner and
    another job active; the ratio is too large to be explained by
    contention, but the absolute numbers are not usable.
+---
 
+## 4.7 Mask-IoU gate and §9.3c option 2b — 2026-07-21
 
+Run with `tools/two_coin_weld_mask_gate.py`, which runs both arms on one
+decoded image like the A/B harness but measures the **masks** rather than
+the summary columns. Arms are `control` (fixed 7×7) and `auto` (now
+resolving through the populated `CLOSE_KERNEL_BY_HOUSE`, so k=3 on
+cng_feature and k=5 on leu). Every column is structural, so box load does
+not invalidate it.
+
+### The gated quantity is the alpha mask, not the segmentation mask
+
+The tool measures two masks per arm, and keeping them apart is what makes
+the result readable:
+
+- **binary** — the post-close segmentation mask. Differs between arms *by
+  construction*, since the kernel differs.
+- **alpha** — the union of filled detection contours. This is literally
+  what `pipeline_manager.crop_with_alpha` writes into the alpha channel and
+  therefore what reaches the embedding (§7.4).
+
+On cng_feature's unchanged-outcome lots the binary IoU is **0.864/0.878**
+while the alpha IoU is **exactly 1.000**. The segmentation mask moves
+substantially; the crop alpha does not move at all. Gating on the binary
+mask would have read as serious drift and been wrong.
+
+### cng_feature, n=200 — the gate passes but has almost no population
+
+Only **2 of 200** lots have an unchanged detection outcome, because the
+weld fires on the rest. Both show alpha IoU 1.000, so the gate passes, but
+on a sample too small to mean much. The gate needs leu.
+
+### §9.3c option 2b — run for the first time
+
+§4.5 called this "the definitive one and has not been run". Result on
+cng_feature, **undilated** — the contamination form, i.e. do the filled
+contours actually overlap:
+
+| arm | lots with contour overlap | worst |
+|---|---|---|
+| control (Hough) | **0 / 200** | — |
+| auto (k=3) | **1 / 200** | 580px, 1.1% of the neighbour |
+
+Strictly this fails §5's "zero lots where a crop gains a sliver" bar, at
+0.5% incidence. But the cause is not the kernel.
+
+### The one sliver is rim recovery, not the close
+
+Lot 215298's two detections both carry `rim_recovered=True`. Layer 1.5
+replaces the true contour with a HoughCircles-fitted circle
+(`layer1_geometry.py:271`), and on a near-touching pair the two synthesised
+circles overlap. The other two lots that show overlap only under dilation
+have `rim_recovered=False` and are clean undilated.
+
+So this is a **pre-existing Layer 1.5 behaviour that the change exposes**,
+not a defect the change introduces — and it is the same failure class as
+Hough's: a fitted circle does not respect its neighbour. It answers §7.1
+("slivers return") directly: they do, at 0.5%, from rim recovery. A fix
+belongs in `validate_rim_recovery`, not in the kernel.
+
+### Dilation measures proximity, not contamination — do not compare it across arms
+
+§9.3c words the check as "dilated a few px". At d=3 the result inverts:
+auto shows 4 lots with contour overlap and control 0. That is an artifact.
+A 3px dilation bridges any sub-3px gap, so an arm whose masks track the
+true flan edge scores *worse* than one whose masks sit inside it — and
+that is exactly the control/auto difference. Hough fits a circle that
+under-covers an irregular ancient flan, leaving slack the dilation does not
+cross; the threshold contour hugs the real outline, so it does. The
+montages show this plainly on chipped and oval coins.
+
+The tool therefore records d=0 and d=3 separately and gates on d=0. Read
+d=3 as a proximity diagnostic only.
+
+---
+
+## 5. Acceptance criteria
 
 All required before bulk rollout:
 
