@@ -1,0 +1,74 @@
+{
+  "lots": 200,
+  "missing_raws": 0,
+  "arms": [
+    "control",
+    "auto",
+    "0.0042"
+  ],
+  "sample": "/home/claudeuser/trivalaya-vision/specs/two_coin_weld_sample_ids.csv",
+  "by_arm": {
+    "control": {
+      "hough_rate": 0.6,
+      "weld_rate": 0.485,
+      "fragment_rate": 0.035,
+      "mean_ndets": 2.03,
+      "ndets_hist": {
+        "1": 1,
+        "2": 194,
+        "3": 4,
+        "5": 1
+      },
+      "median_seconds": 42.6295,
+      "total_seconds": 7022.59,
+      "kernels": [
+        7
+      ]
+    },
+    "auto": {
+      "hough_rate": 0.0,
+      "weld_rate": 0.0,
+      "fragment_rate": 0.15,
+      "mean_ndets": 2.055,
+      "ndets_hist": {
+        "2": 194,
+        "3": 3,
+        "4": 1,
+        "5": 2
+      },
+      "median_seconds": 0.0441,
+      "total_seconds": 641.17,
+      "kernels": [
+        3
+      ],
+      "bbox_identical_vs_control": 0.115
+    },
+    "0.0042": {
+      "hough_rate": 0.085,
+      "weld_rate": 0.07,
+      "fragment_rate": 0.075,
+      "mean_ndets": 2.055,
+      "ndets_hist": {
+        "2": 193,
+        "3": 5,
+        "5": 2
+      },
+      "median_seconds": 0.0389,
+      "total_seconds": 1333.93,
+      "kernels": [
+        5
+      ],
+      "bbox_identical_vs_control": 0.26
+    }
+  },
+  "gap_pre_close": {
+    "n": 200,
+    "median": 12.0,
+    "p10": 9.06,
+    "p90": 18.0
+  },
+  "gap_pre_blur": {
+    "n": 200,
+    "median": 12.0
+  }
+}
