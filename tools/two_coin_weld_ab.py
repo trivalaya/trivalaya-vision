@@ -259,8 +259,19 @@ def _load(row, raw_root: Path, source: str = "local",
         if p is None:
             return None
     else:
-        p = raw_root / row["house"] / row["sale_id"] / f"Lot_{row['lot_number']}.jpg"
-        if not p.exists():
+        # Local raws are named inconsistently across houses: cng_feature uses
+        # the bare lot number (Lot_215268.jpg) while kuenker zero-pads to 5
+        # (Lot_01001.jpg for lot 1001).  Try the bare form first, then the
+        # padded one -- %05d is a no-op on numbers already longer than 5
+        # digits, so one fallback covers both conventions.  Previously this
+        # branch was bare-only, which silently loaded 0/200 kuenker lots.
+        base = raw_root / row["house"] / row["sale_id"]
+        lot = row["lot_number"]
+        for name in (f"Lot_{lot}.jpg", f"Lot_{int(lot):05d}.jpg"):
+            p = base / name
+            if p.exists():
+                break
+        else:
             return None
     img, _ = _load_and_resize(str(p))   # same resize production applies
     return img

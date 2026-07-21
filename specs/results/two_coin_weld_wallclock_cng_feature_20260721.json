@@ -1,0 +1,50 @@
+{
+  "lots": 200,
+  "missing_raws": 0,
+  "arms": [
+    "control",
+    "auto"
+  ],
+  "sample": "/home/claudeuser/trivalaya-vision/specs/two_coin_weld_sample_ids.csv",
+  "by_arm": {
+    "control": {
+      "hough_rate": 0.975,
+      "weld_rate": 0.905,
+      "fragment_rate": 0.0,
+      "mean_ndets": 2.0,
+      "ndets_hist": {
+        "2": 200
+      },
+      "median_seconds": 4.0553,
+      "total_seconds": 834.59,
+      "kernels": [
+        7
+      ]
+    },
+    "auto": {
+      "hough_rate": 0.01,
+      "weld_rate": 0.01,
+      "fragment_rate": 0.005,
+      "mean_ndets": 2.0,
+      "ndets_hist": {
+        "2": 200
+      },
+      "median_seconds": 0.0083,
+      "total_seconds": 18.79,
+      "kernels": [
+        3
+      ],
+      "bbox_identical_vs_control": 0.01
+    }
+  },
+  "gap_pre_close": {
+    "n": 200,
+    "median": 7.0,
+    "p10": 6.0,
+    "p90": 11.0
+  },
+  "gap_pre_blur": {
+    "n": 200,
+    "median": 7.28
+  }
+}
