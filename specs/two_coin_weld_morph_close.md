@@ -32,6 +32,7 @@ Date: 2026-07-20 (v1–v4 — see §10)
 | §5.5 wall-clock on an idle box | **done** 2026-07-21 — see §4.8; PASSES (1.58× → 0.036×) |
 | Mask-IoU gate + alpha-drift check | **done** 2026-07-21, both houses — see §4.7 |
 | **Enable in production** | **DONE** 2026-07-21 15:49:54 UTC — §6.8; membership-gated, blast radius = leu + cng_feature |
+| §6.8 next-day production spot check | **NO-DATA 2026-07-22 — lane still OPEN.** Zero lots vision-processed on any house since the enable (queue had nothing due; kuenker's nightly cron backlog was already drained the prior morning). Not a regression signal — see `specs/results/two_coin_weld_section68_nextday_20260722.md` |
 
 Verified at landing: with the env var unset, L1 output is byte-identical to
 the pre-change code on real lots (bboxes + areas, `data/test_images`), and
@@ -1238,7 +1239,18 @@ house and is therefore pinned to 7×7 by the membership gate — restarting it
 is not required for this change and was not in scope. The `data:` half is
 the annex refresh gap, unrelated.
 
-#### Next-day verification (not yet run)
+#### Next-day verification — run 2026-07-22, NO DATA, lane still OPEN
+
+Ran the query below verbatim, 2026-07-22 (~29h45m post-enable): **0 rows,
+every house.** Traced to root cause: no `sale_ingestion` job has completed
+since 2026-07-20 04:54:24 (the two remaining pending jobs are scheduled for
+their sale's future close date), and the 05:00 UTC kuenker-scoped nightly
+cron found 0 unprocessed images on 2026-07-22 (its backlog was already
+drained by the 2026-07-21 05:00 run, which predates the 15:49:54 enable).
+Config confirmed still live in the runner's environment. This is a
+data-availability gap, not a rollback signal — full writeup in
+`specs/results/two_coin_weld_section68_nextday_20260722.md`. Re-run this
+same query once real post-enable volume exists.
 
 The weld signature should collapse on **leu and cng_feature only**, with
 every other house flat. Query detections created after the restart:
