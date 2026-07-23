@@ -604,12 +604,14 @@ the 84%-of-work fast path.
 
 ---
 
-## 7. Measurement plan for mechanism #1 (precommit-bar style)
+## 7. Measurement plan for mechanism #1 (precommit-bar style) — RATIFIED by owner 2026-07-23
 
 Following the convention of `analysis/prehammer_estimate/
 ea614_verdict_precommit_2026-07-21.md` and `specs/rim_recovery_neighbor_aware.md`
-§PRECOMMIT ACCEPTANCE BARS. **These bars are to be ratified before any
-measurement is run against them.**
+§PRECOMMIT ACCEPTANCE BARS. **RATIFIED by owner 2026-07-23 as drafted** — the
+bars below are frozen and measurement runs against them without silent
+revision. The measured run is recorded in
+`specs/results/rim_trigger_shape_guard_bars_2026-07-24.md`.
 
 **Ships default-off** behind `TRIVALAYA_RIM_TRIGGER_SHAPE_GUARD`, unset =
 today's behaviour bit-identical, following the Scope B precedent.

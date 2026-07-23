@@ -336,6 +336,13 @@ Owner ruling 2026-07-23: Scope A caps REJECTED — no speed-for-accuracy
 trade. Cost work continues only via mechanisms whose outcome changes are
 confined to the currently-pathological tail.
 
+Owner ruling 2026-07-23 (mechanism #1): the disc-test skip-Hough-only guard's
+PRECOMMIT bars in `specs/results/rim_stall_taxonomy_2026-07-23.md` §7 are
+RATIFIED as drafted. The guard ships default-off (`TRIVALAYA_RIM_TRIGGER_
+SHAPE_GUARD` unset = bit-identical); the default flip is a separate
+owner-gated step after Bar 4. Measured run:
+`specs/results/rim_trigger_shape_guard_bars_2026-07-24.md`.
+
 ## Acceptance (superseded by the PRECOMMIT bars above)
 
 Kept for the original ticket's exact wording, now formalized into Scope B's
