@@ -307,6 +307,16 @@ Fixture: frozen kuenker sample (`kuenker_wallclock`, sale 428, n=200).
   the mechanism in isolation. Detail: `specs/results/
   rim_neighbor_guard_sweep_2026-07-23.md`. Ships default-off
   (`TRIVALAYA_RIM_NEIGHBOR_GUARD` unset).
+  **Production-enabled 2026-07-23** (owner approval, bundled with the
+  weld-lane §6.8 closure batch): `TRIVALAYA_RIM_NEIGHBOR_GUARD=1` added to
+  `trivalaya-pipeline/.env`, `trivalaya-runner.service` restarted, confirmed
+  live in the runner's environ and absent from `trivalaya-search`'s. The
+  forced leu/75 200-lot batch gave the full-sample leu confirmation the
+  offline sweep couldn't get (its own guard-on 200-lot attempt ran >2h and
+  was killed): all six known sliver lots (713, 582, 995, 3661, 3717, 3736)
+  are sliver-free (d0=0.0) in the real production output, zero ndets
+  regressions attributable to the guard. Detail: `specs/results/
+  two_coin_weld_leu_batch_20260723.md`.
 - **Scope C (kuenker tail) — CONFIRMED.** Same `cv2.HoughCircles`-inside-
   `hough_rim_recovery` leaf, 99.6-99.8% of self time on the 3 slowest of a
   50-lot kuenker sample (not the full 200 — see that file's "Sample size").
@@ -342,6 +352,11 @@ RATIFIED as drafted. The guard ships default-off (`TRIVALAYA_RIM_TRIGGER_
 SHAPE_GUARD` unset = bit-identical); the default flip is a separate
 owner-gated step after Bar 4. Measured run:
 `specs/results/rim_trigger_shape_guard_bars_2026-07-24.md`.
+
+Owner ruling 2026-07-23 (Scope B production enable, step 2 of the 4-step
+sequence): approved, bundled with the weld-lane §6.8 forced leu batch.
+Both validated in production the same session — see the Scope B bullet
+above and `specs/results/two_coin_weld_leu_batch_20260723.md`.
 
 ## Acceptance (superseded by the PRECOMMIT bars above)
 

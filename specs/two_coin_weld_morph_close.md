@@ -34,6 +34,7 @@ Date: 2026-07-20 (v1–v4 — see §10)
 | **Enable in production** | **DONE** 2026-07-21 15:49:54 UTC — §6.8; membership-gated, blast radius = leu + cng_feature |
 | §6.8 next-day production spot check | **NO-DATA 2026-07-22 — lane still OPEN.** Zero lots vision-processed on any house since the enable (queue had nothing due; kuenker's nightly cron backlog was already drained the prior morning). Not a regression signal — see `specs/results/two_coin_weld_section68_nextday_20260722.md` |
 | §6.8 KS-17 spot check (job 312, the first post-enable job) | **STILL NO-DATA 2026-07-23 — lane still OPEN, 34h45m post-enable.** The Discord "cng_feature KS-17 ingested" line is misleading: KS-17 is actually `auction_house='cng'` (a discovery-agent mistag, not a kernel bug), untabled ⇒ k=7 regardless; its vision stage found 0 records under the wrong house filter and never ran; the "1494 coins" is an unrelated global-pair sweep of a pre-existing kuenker backlog. cng_feature and leu — the two houses this spec cares about — remain at **zero** production volume under the new kernel. See `specs/results/two_coin_weld_ks17_20260723.md` |
+| **§6.8 CLOSED** — forced leu/75 batch | **DONE 2026-07-23.** Owner-approved bounded write: 200 frozen leu/75 lots reset + reprocessed through the real production vision path. leu Hough 41.7%→**8.27%** (k=5 sweep predicted ~8.5%), every other house zero rows (leak check clean), guard validated sliver-free on all 6 known lots in real production output. See `specs/results/two_coin_weld_leu_batch_20260723.md`. |
 
 Verified at landing: with the env var unset, L1 output is byte-identical to
 the pre-change code on real lots (bboxes + areas, `data/test_images`), and
@@ -1253,7 +1254,37 @@ data-availability gap, not a rollback signal — full writeup in
 `specs/results/two_coin_weld_section68_nextday_20260722.md`. Re-run this
 same query once real post-enable volume exists.
 
-#### KS-17 spot check — run 2026-07-23, STILL NO DATA, lane still OPEN
+#### LANE CLOSED — forced leu/75 batch, run 2026-07-23
+
+Two consecutive natural-volume checks (07-22, 07-23 KS-17) found no
+post-enable production volume at all — a data-availability gap, not a
+rollback signal (see both writeups below). Rather than wait further, the
+owner approved a bounded forced batch: the frozen 200-lot leu/75 sample
+(`specs/two_coin_weld_sample_ids.csv`, `purpose=leu_ab`) reset to
+unprocessed and re-run through the real production vision path (`python -m
+trivalaya_pipeline vision --source leu/75`, NOT a full `sale_ingestion` job
+— that would have re-scraped all 3,754 lots of the sale, unscoped and
+pointless against a live external site; see the results doc for why).
+
+**Result: every §6.8 bar passes.** The exact query below, run against this
+batch: **leu 411 detections, 34 Hough-split = 8.27%** — matching the k=5
+sweep's own ~8.5% prediction, down from the 41.7% census baseline. Every
+other house: zero rows (leak check clean; nothing else was vision-processed
+in the window). Per-lot comparison against the pre-reset baseline shows the
+kernel's signature directly (Hough-perfect circles at k=7 reverting to
+rougher real seed contours at k=5), not just an aggregate rate shift.
+Fragmentation: 4/200 lots (2.0%) changed detection count, matching the
+already-measured, already-accepted k=5 cost (§4.6) almost exactly — not a
+new finding. Full detail, including the one non-paired lot (a pre-existing
+segmentation-failure case, not new): `specs/results/
+two_coin_weld_leu_batch_20260723.md`.
+
+**§6.8 is CLOSED.** `TRIVALAYA_CLOSE_KERNEL_FRAC=auto` stays enabled; no
+rollback needed. This batch was bundled with the Scope B
+(`TRIVALAYA_RIM_NEIGHBOR_GUARD`) production-enable validation — see
+`specs/rim_recovery_neighbor_aware.md`.
+
+#### KS-17 spot check — run 2026-07-23, STILL NO DATA, lane still OPEN (pre-closure)
 
 The first `pipeline_jobs` job to run post-enable (job 312, claimed
 2026-07-23 00:00:06 UTC) looked at first glance like exactly the volume
