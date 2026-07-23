@@ -183,7 +183,7 @@ def hough_rim_recovery(image_bgr, seed_contour):
     return contour, best[1]
 
 
-def recover_rim(image_bgr, seed_contour):
+def recover_rim(image_bgr, seed_contour, skip_hough=False):
     """
     Two-stage rim recovery for coin flans whose Otsu blob is non-circular.
 
@@ -198,6 +198,14 @@ def recover_rim(image_bgr, seed_contour):
     edge-support: an under-sized fit silently clips real coin (the
     109704-style failure), while an over-sized fit just admits a few
     background pixels around the rim.
+
+    skip_hough: when True, the Hough branch (step 2) is NOT run and this
+    collapses to a geometric-fit-only recovery. The caller (layer1_geometry
+    pass 2) sets this from the env-gated, default-off `rim_shape_guard`, which
+    only asks to skip when the seed is a provable disc -- i.e. the case where
+    Hough's answer is discarded in favour of the geometric fit anyway. See
+    specs/results/rim_stall_taxonomy_2026-07-23.md §7. Default False =>
+    bit-identical to the pre-guard behaviour, since nothing else changes.
     """
     t0 = time.perf_counter() if _PERF else 0
     geo_c, geo_conf = geometric_fit_recovery(image_bgr, seed_contour)
@@ -220,13 +228,20 @@ def recover_rim(image_bgr, seed_contour):
                   f"hough=SKIPPED total={t_geo*1000:.0f}ms")
         return geo_c, geo_conf
 
-    t1 = time.perf_counter() if _PERF else 0
-    hou_c, hou_conf = hough_rim_recovery(image_bgr, seed_contour)
-    t_hou = time.perf_counter() - t1 if _PERF else 0
+    if skip_hough:
+        # Shape-guard skip: geometric fit only. Falls through to the tie-break
+        # below with hou_c=None, which returns geo_c when it exists (or None,
+        # exactly as an all-branches-failed recovery does today).
+        hou_c, hou_conf, t_hou = None, 0, 0
+    else:
+        t1 = time.perf_counter() if _PERF else 0
+        hou_c, hou_conf = hough_rim_recovery(image_bgr, seed_contour)
+        t_hou = time.perf_counter() - t1 if _PERF else 0
     if _PERF:
         total = (time.perf_counter() - t0) * 1000
         print(f"  [rim] geo={t_geo*1000:.0f}ms conf={geo_conf:.2f} "
-              f"hough={t_hou*1000:.0f}ms hou_conf={hou_conf:.2f} total={total:.0f}ms")
+              f"hough={t_hou*1000:.0f}ms hou_conf={hou_conf:.2f} "
+              f"{'(guard-skipped)' if skip_hough else ''} total={total:.0f}ms")
     geo_r, hou_r = _radius(geo_c), _radius(hou_c)
 
     # Only one available

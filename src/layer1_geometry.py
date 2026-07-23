@@ -17,6 +17,7 @@ from src.math_utils import (
     validate_rim_recovery
 )
 from src.rim_logic import recover_rim
+from src import rim_shape_guard
 from src.crop_quality import get_detection_quality_flag
 
 # Import two-coin resolver (graceful fallback if not available)
@@ -317,7 +318,14 @@ def _segment_and_extract_candidates(
         recovered = False
 
         if p["need_recovery"]:
-            new_c, conf = recover_rim(img, c)
+            # Shape guard (env-gated, default OFF): when the seed blob is a
+            # provable disc, suppress ONLY the Hough branch of recover_rim --
+            # the geometric fit still runs. Bit-identical when the env flag is
+            # unset (should_skip_hough returns False). `binary` is passed so the
+            # optional largest_hole_frac conjunct can be evaluated. See
+            # src/rim_shape_guard.py and rim_stall_taxonomy_2026-07-23.md §7.
+            skip_hough = rim_shape_guard.should_skip_hough(c, binary, (h, w))
+            new_c, conf = recover_rim(img, c, skip_hough=skip_hough)
             if new_c is not None and validate_rim_recovery(new_c, c, (h, w)):
                 final_c = new_c
                 recovered = True
