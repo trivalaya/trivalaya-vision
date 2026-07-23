@@ -33,6 +33,7 @@ Date: 2026-07-20 (v1–v4 — see §10)
 | Mask-IoU gate + alpha-drift check | **done** 2026-07-21, both houses — see §4.7 |
 | **Enable in production** | **DONE** 2026-07-21 15:49:54 UTC — §6.8; membership-gated, blast radius = leu + cng_feature |
 | §6.8 next-day production spot check | **NO-DATA 2026-07-22 — lane still OPEN.** Zero lots vision-processed on any house since the enable (queue had nothing due; kuenker's nightly cron backlog was already drained the prior morning). Not a regression signal — see `specs/results/two_coin_weld_section68_nextday_20260722.md` |
+| §6.8 KS-17 spot check (job 312, the first post-enable job) | **STILL NO-DATA 2026-07-23 — lane still OPEN, 34h45m post-enable.** The Discord "cng_feature KS-17 ingested" line is misleading: KS-17 is actually `auction_house='cng'` (a discovery-agent mistag, not a kernel bug), untabled ⇒ k=7 regardless; its vision stage found 0 records under the wrong house filter and never ran; the "1494 coins" is an unrelated global-pair sweep of a pre-existing kuenker backlog. cng_feature and leu — the two houses this spec cares about — remain at **zero** production volume under the new kernel. See `specs/results/two_coin_weld_ks17_20260723.md` |
 
 Verified at landing: with the env var unset, L1 output is byte-identical to
 the pre-change code on real lots (bboxes + areas, `data/test_images`), and
@@ -1251,6 +1252,27 @@ Config confirmed still live in the runner's environment. This is a
 data-availability gap, not a rollback signal — full writeup in
 `specs/results/two_coin_weld_section68_nextday_20260722.md`. Re-run this
 same query once real post-enable volume exists.
+
+#### KS-17 spot check — run 2026-07-23, STILL NO DATA, lane still OPEN
+
+The first `pipeline_jobs` job to run post-enable (job 312, claimed
+2026-07-23 00:00:06 UTC) looked at first glance like exactly the volume
+§6.8 was waiting for — runner Discord line "cng_feature KS-17 ingested. 0
+lots, 1494 coins." It is not. `job_id=312` is tagged
+`auction_house='cng_feature'`, but every one of KS-17's 374 lots is actually
+stored under `auction_house='cng'` (a different, untabled house — the
+`Lots.aspx` archive, not `Coin.aspx?CoinID=`) — a discovery-agent mistag
+(`discovered_sales.id=392`) that propagated into the job. Scoped to the
+job's wrong tag, the vision stage found 0 records and never ran
+(`Found 0 unprocessed images`); `cng` remains 0/374 vision-processed. The
+"1494 coins" is `pair_detections()`'s globally-unscoped sweep finally
+pairing a pre-existing, pre-enable kuenker backlog (eLive-92/eLive-93/428,
+682+651+161=1494 exact) — unrelated to KS-17 or the kernel. Full writeup,
+including why a from-scratch structural re-probe was attempted and then
+deliberately aborted (contention with a separate live rim-recovery-cost
+investigation on the same photo class), in
+`specs/results/two_coin_weld_ks17_20260723.md`. cng_feature and leu remain
+at zero production volume under the new kernel.
 
 The weld signature should collapse on **leu and cng_feature only**, with
 every other house flat. Query detections created after the restart:
