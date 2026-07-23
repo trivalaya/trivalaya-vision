@@ -282,10 +282,53 @@ Fixture: frozen kuenker sample (`kuenker_wallclock`, sale 428, n=200).
   freely before that commit lands, not after "Results" below has entries to
   grade against it.
 
-## Results
+## Results (2026-07-23)
 
-(To be filled in as measurements land — see commit history for this file
-rather than a running edit log here.)
+- **Scope A (cost) — does not clear its bar as tested.** cap800 and
+  cap1024 (`TRIVALAYA_RIM_HOUGH_CAP`, env-value only) both cut p99
+  CPU-seconds ≥50% on the KS-17 fixture (cap800: -80%, cap1024: -55%), but
+  both change real detection outcomes on 6-15% of sides — some improve
+  (Hough succeeds at lower res where full-res failed), some regress (a
+  clean full-res recovery fails at the lower cap, and the crop falls back
+  to the bitten seed contour) — which is a FAIL against the precommitted
+  ≤2%-individually-reviewed bar, not a rounding difference. Full detail
+  and the case-by-case bbox/circularity readout: `specs/results/
+  rim_recovery_cost_ab_ks17_2026-07-23.md`. **No default flip
+  recommended**; this needs an explicit owner risk-acceptance call or a
+  different mechanism (see that file's "Verdict").
+- **Scope B (neighbor-aware validation) — PASSES.** Real-data sweep on
+  both frozen weld-lane samples (cng_feature n=200 full, leu targeted at
+  the 6 lots the guard-off sweep flagged) reproduces every previously-cited
+  sliver (plus one new one, lot 713) and reverts every one of them to
+  exactly zero d0 overlap, zero `n_detections` regressions anywhere
+  checked. Threshold (`RIM_NEIGHBOR_OVERLAP_MAX_DEFAULT = 0.0001`) is set
+  from the measured distribution, not guessed. Plus a deterministic
+  synthetic fixture (`tests/test_rim_neighbor_aware.py`, 6 tests) proving
+  the mechanism in isolation. Detail: `specs/results/
+  rim_neighbor_guard_sweep_2026-07-23.md`. Ships default-off
+  (`TRIVALAYA_RIM_NEIGHBOR_GUARD` unset).
+- **Scope C (kuenker tail) — CONFIRMED.** Same `cv2.HoughCircles`-inside-
+  `hough_rim_recovery` leaf, 99.6-99.8% of self time on the 3 slowest of a
+  50-lot kuenker sample (not the full 200 — see that file's "Sample size").
+  kuenker triggers 2-3 recovery calls per slow lot (vs KS-17's 0-1),
+  meaning Scope A2 may transfer better here than it did on KS-17 — not yet
+  separately measured. Detail: `specs/results/
+  rim_recovery_profile_kuenker_2026-07-23.md`.
+- **Cross-cutting: all shipped default-off, 230/230 tests passing**
+  (219 pre-existing + 11 new: `tests/test_rim_neighbor_aware.py`,
+  `tests/test_rim_recovery_cap.py`). Scope A2
+  (`TRIVALAYA_RIM_RECOVERY_MAX_PER_IMAGE`) is implemented and tested
+  alongside Scope B in `src/layer1_geometry.py`'s restructured
+  `_segment_and_extract_candidates` (a two-pass design was needed for both
+  A2 and B simultaneously — see the function's own comments) even though
+  its KS-17 cost measurement showed near-zero effect alone; it is a real,
+  independent, default-off improvement for the documented "stacks 2-5x"
+  multi-contour case and may matter more on kuenker (see Scope C).
+- Incidental fix, unrelated to any scope: `tools/two_coin_weld_mask_gate.py`
+  had a pre-existing crash (`TypeError`) in `PASS_d0_contour` when a lot
+  has <2 detections; fixed (filters `""` before `max()`, matching the
+  pattern `sliver_stats` already used) since it was hit while running
+  Scope B's own sweep.
 
 ## Ruling
 

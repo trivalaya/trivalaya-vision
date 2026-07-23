@@ -113,6 +113,27 @@ def _set_arm(arm: str):
         os.environ[ENV_FRAC] = arm
 
 
+# Scope B (specs/rim_recovery_neighbor_aware.md) -- optional neighbor-aware
+# rim-recovery guard, orthogonal to the control/auto kernel arm above.
+# Default (--neighbor-guard not passed) means both env vars stay unset for
+# every arm, i.e. this script's output is bit-identical to before this
+# option existed.
+ENV_GUARD = "TRIVALAYA_RIM_NEIGHBOR_GUARD"
+ENV_OVERLAP_MAX = "TRIVALAYA_RIM_NEIGHBOR_OVERLAP_MAX"
+
+
+def _set_guard(enabled: bool, overlap_max: Optional[float]):
+    if not enabled:
+        os.environ.pop(ENV_GUARD, None)
+        os.environ.pop(ENV_OVERLAP_MAX, None)
+        return
+    os.environ[ENV_GUARD] = "1"
+    if overlap_max is not None:
+        os.environ[ENV_OVERLAP_MAX] = str(overlap_max)
+    else:
+        os.environ.pop(ENV_OVERLAP_MAX, None)
+
+
 def _fill(contours: List[np.ndarray], shape: Tuple[int, int]) -> np.ndarray:
     m = np.zeros(shape, dtype=np.uint8)
     if contours:
@@ -269,12 +290,29 @@ def main():
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--montage", type=int, default=12,
                     help="how many changed-outcome lots to montage (0 = none)")
+    ap.add_argument("--neighbor-guard", action="store_true",
+                    help="Scope B: enable TRIVALAYA_RIM_NEIGHBOR_GUARD for "
+                         "every arm (control AND auto); default off = "
+                         "bit-identical to before this option existed")
+    ap.add_argument("--neighbor-overlap-max", type=float, default=None,
+                    help="Scope B: TRIVALAYA_RIM_NEIGHBOR_OVERLAP_MAX; "
+                         "only meaningful with --neighbor-guard, otherwise "
+                         "unused (unset means the code's own default)")
     ap.add_argument("--out", type=Path, default=Path("two_coin_weld_maskgate"))
+    ap.add_argument("--lots", default=None,
+                    help="comma-separated lot_number values to restrict to "
+                         "(e.g. targeted re-confirmation of known-affected "
+                         "lots without paying for a full-sample re-run)")
     args = ap.parse_args()
+
+    _set_guard(args.neighbor_guard, args.neighbor_overlap_max)
 
     rows = [r for r in csv.DictReader(open(args.sample))
             if r["purpose"] == args.purpose
             and (args.house is None or r["house"] == args.house)]
+    if args.lots:
+        wanted = {x.strip() for x in args.lots.split(",") if x.strip()}
+        rows = [r for r in rows if r["lot_number"] in wanted]
     if args.limit:
         rows = rows[:args.limit]
     if not rows:
@@ -352,6 +390,8 @@ def main():
 
     summary = {
         "house": args.house, "purpose": args.purpose, "n": len(out_rows),
+        "neighbor_guard": args.neighbor_guard,
+        "neighbor_overlap_max": args.neighbor_overlap_max,
         "dilate_px": DILATE_PX, "iou_bar": IOU_BAR,
         "outcome_unchanged": len(unchanged),
         "outcome_changed": len(changed_rows),
@@ -389,8 +429,10 @@ def main():
                 "auto": sliver_stats(out_rows, "auto", f"sliverd{DILATE_PX}"),
             },
             "PASS_d0_contour": (
-                max([r["control.sliver_contour_frac"] for r in out_rows]
-                    + [r["auto.sliver_contour_frac"] for r in out_rows]
+                max([r["control.sliver_contour_frac"] for r in out_rows
+                     if r["control.sliver_contour_frac"] != ""]
+                    + [r["auto.sliver_contour_frac"] for r in out_rows
+                       if r["auto.sliver_contour_frac"] != ""]
                     or [0]) == 0
             ),
         },

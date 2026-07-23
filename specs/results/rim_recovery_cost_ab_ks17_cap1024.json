@@ -1,0 +1,98 @@
+{
+  "ingest/baseline": {
+    "n": 82,
+    "n_stall_gt20s_wall": 42,
+    "cpu_s": {
+      "p50": 65.677,
+      "p90": 122.088,
+      "p99": 206.031,
+      "max": 206.031,
+      "sum": 4610.8
+    },
+    "wall_s": {
+      "p50": 20.792,
+      "p90": 39.925,
+      "p99": 66.637,
+      "max": 66.637,
+      "sum": 1485.8
+    },
+    "outcome_unchanged": 82,
+    "alpha_iou_vs_baseline": {
+      "min": 1.0,
+      "median": 1.0,
+      "below_0995": 0
+    }
+  },
+  "ingest/cap1024": {
+    "n": 82,
+    "n_stall_gt20s_wall": 6,
+    "cpu_s": {
+      "p50": 29.077,
+      "p90": 55.908,
+      "p99": 93.14,
+      "max": 93.14,
+      "sum": 2196.7
+    },
+    "wall_s": {
+      "p50": 9.563,
+      "p90": 19.647,
+      "p99": 31.889,
+      "max": 31.889,
+      "sum": 723.4
+    },
+    "outcome_unchanged": 77,
+    "alpha_iou_vs_baseline": {
+      "min": 0.8036261002678913,
+      "median": 1.0,
+      "below_0995": 5
+    }
+  },
+  "query/baseline": {
+    "n": 82,
+    "n_stall_gt20s_wall": 41,
+    "cpu_s": {
+      "p50": 67.48,
+      "p90": 121.99,
+      "p99": 216.312,
+      "max": 216.312,
+      "sum": 4673.3
+    },
+    "wall_s": {
+      "p50": 20.107,
+      "p90": 42.594,
+      "p99": 69.165,
+      "max": 69.165,
+      "sum": 1516.6
+    },
+    "outcome_unchanged": 82,
+    "alpha_iou_vs_baseline": {
+      "min": 1.0,
+      "median": 1.0,
+      "below_0995": 0
+    }
+  },
+  "query/cap1024": {
+    "n": 82,
+    "n_stall_gt20s_wall": 8,
+    "cpu_s": {
+      "p50": 31.517,
+      "p90": 61.237,
+      "p99": 96.505,
+      "max": 96.505,
+      "sum": 2230.2
+    },
+    "wall_s": {
+      "p50": 10.128,
+      "p90": 19.684,
+      "p99": 32.525,
+      "max": 32.525,
+      "sum": 728.0
+    },
+    "outcome_unchanged": 77,
+    "alpha_iou_vs_baseline": {
+      "min": 0.8036261002678913,
+      "median": 1.0,
+      "below_0995": 5
+    }
+  }
+}
