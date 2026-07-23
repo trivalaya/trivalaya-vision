@@ -1,0 +1,7 @@
+ctl_n,prb_n,primary_bbox_iou,ctl_primary_area,prb_primary_area,ctl_primary_circ,prb_primary_circ,ctl_recovered,prb_recovered,hough_calls_ctl,hough_skipped,ctl_cpu_s,prb_cpu_s,cpu_saved_s,alpha_iou,min_bbox_iou,outcome_unchanged,id,side,mechanism,arm
+2,2,1.0,690928,690928,0.998,0.998,2,2,4,1,96.45,0.68,95.77,1.0,1.0,True,755369,rev,low_contrast_coastline,hough_skip
+2,2,1.0,690090,690090,0.998,0.998,2,2,5,1,110.05,0.65,109.39,1.0,1.0,True,755387,obv,low_contrast_coastline,hough_skip
+1,1,1.0,744666,744666,0.998,0.998,1,1,7,1,124.24,0.69,123.55,1.0,1.0,True,755387,rev,low_contrast_coastline,hough_skip
+2,2,1.0,732754,732754,0.998,0.998,2,2,12,1,106.8,1.13,105.67,1.0,1.0,True,755401,obv,low_contrast_coastline,hough_skip
+1,1,1.0,655298,655298,0.997,0.997,1,1,5,1,92.22,0.47,91.75,1.0,1.0,True,755408,rev,low_contrast_coastline,hough_skip
+1,1,1.0,633106,633106,0.997,0.997,1,1,4,1,71.49,0.36,71.13,1.0,1.0,True,755409,rev,low_contrast_coastline,hough_skip

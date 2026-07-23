@@ -1,0 +1,13 @@
+ctl_n,prb_n,ctl_recovered,prb_recovered,hough_calls_ctl,hough_skipped,ctl_cpu_s,prb_cpu_s,cpu_saved_s,alpha_iou,min_bbox_iou,outcome_unchanged,id,side,mechanism
+1,1,0,0,0,0,0.15,0.13,0.02,1.0,1.0,True,755357,obv,HEALTHY
+1,1,0,0,0,0,0.19,0.17,0.01,1.0,1.0,True,755357,rev,HEALTHY
+1,1,0,0,0,0,0.12,0.12,-0.01,1.0,1.0,True,755363,rev,HEALTHY
+1,1,0,0,0,0,0.13,0.14,-0.01,1.0,1.0,True,755365,obv,HEALTHY
+1,1,0,0,0,0,0.1,0.1,-0.0,1.0,1.0,True,755368,obv,HEALTHY
+1,1,0,0,0,0,0.12,0.12,-0.01,1.0,1.0,True,755379,obv,HEALTHY
+1,1,0,0,0,0,0.15,0.14,0.01,1.0,1.0,True,755379,rev,HEALTHY
+1,1,0,0,0,0,0.13,0.11,0.01,1.0,1.0,True,755380,rev,HEALTHY
+1,1,0,0,0,0,0.11,0.13,-0.02,1.0,1.0,True,755381,obv,HEALTHY
+1,1,0,0,0,0,0.12,0.12,-0.01,1.0,1.0,True,755382,obv,HEALTHY
+1,1,0,0,0,0,0.11,0.12,-0.01,1.0,1.0,True,755382,rev,HEALTHY
+1,1,0,0,0,0,0.1,0.11,-0.01,1.0,1.0,True,755383,rev,HEALTHY

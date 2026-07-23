@@ -1,0 +1,9 @@
+ctl_n,prb_n,primary_bbox_iou,ctl_primary_area,prb_primary_area,ctl_primary_circ,prb_primary_circ,ctl_recovered,prb_recovered,hough_calls_ctl,hough_skipped,ctl_cpu_s,prb_cpu_s,cpu_saved_s,alpha_iou,min_bbox_iou,outcome_unchanged,id,side,mechanism
+2,1,0.8862,690928,690345,0.998,0.175,2,0,4,1,99.99,0.71,99.28,0.88499,0.0,False,755369,rev,low_contrast_coastline
+2,1,0.9024,690090,694763,0.998,0.275,2,0,5,1,108.35,0.51,107.84,0.91465,0.0,False,755387,obv,low_contrast_coastline
+1,2,0.8957,744666,731736,0.998,0.22,1,0,7,1,146.43,0.64,145.79,0.92562,0.8957,False,755387,rev,low_contrast_coastline
+2,1,0.9163,732754,708377,0.998,0.159,2,0,12,1,110.12,1.04,109.07,0.90851,0.0,False,755401,obv,low_contrast_coastline
+1,2,0.8614,655298,672865,0.997,0.151,1,1,5,1,95.26,0.41,94.86,0.88402,0.8614,False,755408,rev,low_contrast_coastline
+1,1,0.8661,633106,632787,0.997,0.149,1,0,4,1,91.86,0.41,91.44,0.91314,0.8661,False,755409,rev,low_contrast_coastline
+4,4,0.9048,664340,673916,0.997,0.274,2,2,12,1,53.34,0.79,52.55,0.85725,0.0,False,755411,obv,low_contrast_coastline
+2,5,0.8549,650171,633998,0.997,0.144,2,4,15,1,68.93,1.1,67.83,0.87354,0.8549,False,755414,rev,low_contrast_coastline

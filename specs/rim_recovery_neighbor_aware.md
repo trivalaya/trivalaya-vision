@@ -332,8 +332,9 @@ Fixture: frozen kuenker sample (`kuenker_wallclock`, sale 428, n=200).
 
 ## Ruling
 
-(Owner rules after Results are read against the PRECOMMIT bars above;
-recorded here with date.)
+Owner ruling 2026-07-23: Scope A caps REJECTED — no speed-for-accuracy
+trade. Cost work continues only via mechanisms whose outcome changes are
+confined to the currently-pathological tail.
 
 ## Acceptance (superseded by the PRECOMMIT bars above)
 

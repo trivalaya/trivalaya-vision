@@ -1,0 +1,9 @@
+id,side,polarity,avg_bg,backdrop_ring_mean,corner_path_trusted,contour_idx,mechanism,cost_tier,hole_frac,largest_hole_frac,n_holes,area_frac_frame,circularity,area_ratio,geo_conf,edge_support,enc_r,roi_px,touches_border,max_dip_run_deg,max_spike_run_deg,n_spike_runs,cv_r,solidity,roi_px_,deficit_frac_bglike,deficit_frac_darker,blob_mean,deficit_mean
+kuenker1030,single,INV,255.0,244.02,True,1,multi_object_weld,expensive,0.0671,0.0079,15,0.50955,0.2902,0.3159,0.0,0.953,749.4,901456,True,121.0,40.0,4,0.4569,0.814,901456,0.9478,0.0517,131.4494,248.5162
+kuenker1030,single,INV,255.0,244.02,True,2,attached_artifact,cheap,0.0,0.0,0,0.0066,0.388,0.5092,0.3826,0.897,67.2,12771,True,37.0,48.0,4,0.4026,0.7677,12771,0.9723,0.0255,92.4881,253.4764
+kuenker1070,single,INV,255.0,251.45,True,10,non_circular_flan,expensive,0.007,0.0012,1,0.24262,0.6096,0.6614,0.5211,0.9339,495.6,1131952,False,0.0,19.0,4,0.1037,0.9711,1131952,0.9199,0.0787,119.3152,251.0815
+kuenker1070,single,INV,255.0,251.45,True,11,non_circular_flan,expensive,0.0031,0.0,0,0.24587,0.6488,0.6692,0.517,0.9845,496.0,1150888,False,0.0,17.0,4,0.099,0.9824,1150888,0.9578,0.0413,114.4465,252.6596
+kuenker1070,single,INV,255.0,251.45,True,12,sub_coin_noise_blob,cheap,0.0,0.0,0,0.00347,0.3949,0.5167,0.3837,0.8967,67.1,13200,True,37.0,47.0,4,0.3976,0.7735,13200,0.9862,0.0123,94.8484,253.874
+kuenker1289,single,INV,255.0,239.31,True,0,attached_artifact,expensive,0.0784,0.0386,17,0.2928,0.5979,0.6386,0.5077,0.9983,625.6,1496838,False,0.0,25.0,1,0.1209,0.9274,1496838,0.9202,0.0787,162.5704,245.9538
+kuenker1289,single,INV,255.0,239.31,True,1,non_circular_flan,expensive,0.0753,0.0384,18,0.29342,0.6089,0.6258,0.5044,0.9892,632.6,1496838,True,0.0,24.0,2,0.1379,0.9241,1496838,0.913,0.0862,161.8367,243.8948
+kuenker1289,single,INV,255.0,239.31,True,2,sub_coin_noise_blob,cheap,0.0,0.0,0,0.00266,0.3995,0.5197,0.3873,0.8873,66.1,12544,True,40.0,48.0,4,0.3898,0.775,12544,0.9691,0.0282,96.8308,253.5635

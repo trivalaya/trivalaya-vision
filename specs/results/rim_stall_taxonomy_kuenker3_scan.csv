@@ -1,0 +1,4 @@
+id,side,h,w,avg_bg,polarity,otsu_t,close_k,n_valid,n_need_recovery,n_will_hough,max_hough_roi_px,scan_wall_s,scan_cpu_s
+kuenker1030,single,547,2000,255.0,INV,171.0,7,3,2,2,901456,0.274,0.368
+kuenker1070,single,1052,2000,255.0,INV,179.0,7,3,3,3,1150888,0.211,0.387
+kuenker1289,single,1362,1969,255.0,INV,184.0,7,3,3,3,1496838,0.289,0.51

@@ -1,0 +1,7 @@
+id,side,h,w,avg_bg,polarity,otsu_t,close_k,n_valid,n_need_recovery,n_will_hough,max_hough_roi_px,scan_wall_s,scan_cpu_s
+leu3661,single,799,1200,215.71,INV,144.0,7,4,2,2,641597,0.284,0.372
+leu3717,single,799,1200,221.58,INV,146.0,7,8,4,4,674934,0.249,0.405
+leu3736,single,799,1200,225.0,INV,162.0,7,4,3,3,509792,0.324,0.403
+leu582,single,600,1081,255.0,INV,157.0,7,3,2,2,355200,0.103,0.173
+leu713,single,600,1109,255.0,INV,162.0,7,2,1,1,362400,0.134,0.195
+leu995,single,600,1047,255.0,INV,165.0,7,2,1,1,351000,0.08,0.132
