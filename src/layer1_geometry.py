@@ -7,7 +7,7 @@ Now includes two-coin resolution for auction-style obv/rev images.
 
 import cv2
 import numpy as np
-from typing import Dict, List, Literal, Optional
+from typing import Dict, List, Literal, Optional, Tuple
 from src.config import Layer1Config, CoinConfig
 from src.math_utils import (
     detect_background_histogram,
@@ -244,8 +244,12 @@ def _segment_and_extract_candidates(
         binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
     )
 
-    candidates: List[Dict] = []
-
+    # --- Pass 1: cheap per-contour geometry, no rim recovery yet -----------
+    # Split out so Scope A2 (below) can rank/cap which contours are allowed
+    # to invoke recovery before any Hough call runs, and so Scope B's
+    # neighbor-aware pass (after pass 2) can compare finished candidates
+    # against each other. See specs/rim_recovery_neighbor_aware.md.
+    pending: List[Dict] = []
     for c in contours:
         valid, _ = is_contour_valid(c, min_area=Layer1Config.Standard.MIN_AREA_PX)
         if not valid:
@@ -265,10 +269,6 @@ def _segment_and_extract_candidates(
 
         circularity = compute_circularity_safe(c)
 
-        # --- Optional rim recovery ---
-        final_c = c
-        recovered = False
-
         # Two-stage gate (perf): only run rim recovery when the seed contour
         # is BOTH non-circular AND under-filling its enclosing circle.
         # The eaten-mask failure (Pattern B) shows circularity ~0.04 and
@@ -281,51 +281,168 @@ def _segment_and_extract_candidates(
             area_ratio = area / enc_area if enc_area > 0 else 1.0
             need_recovery = area_ratio < 0.85
 
-        if need_recovery:
+        pending.append({
+            "contour": c, "area": area, "edge_support": edge_support,
+            "need_recovery": need_recovery,
+        })
+
+    # Perf gate (Scope A2): cap how many contours in this call may invoke
+    # rim recovery at all. Unset (default) = unlimited = today's behavior,
+    # bit-identical: every need_recovery contour attempts recovery, exactly
+    # as before this restructuring. Runtime override:
+    # TRIVALAYA_RIM_RECOVERY_MAX_PER_IMAGE. A cluttered image can otherwise
+    # stack 2-5+ HoughCircles calls -- the mechanism the KS-17 diagnosis
+    # measured (specs/results/ks17_mask_stall_diagnosis_2026-07-22.md).
+    # This function is only ever called twice per image, and the second
+    # call is a polarity-flip fallback that fires solely when the first
+    # call yielded zero candidates (see layer_1_structural_salience) -- so
+    # "per call" and "per image" never double up in practice.
+    _max_recovery = _os.environ.get("TRIVALAYA_RIM_RECOVERY_MAX_PER_IMAGE")
+    if _max_recovery:
+        _cap = int(_max_recovery)
+        _qualifying = sorted(
+            (p for p in pending if p["need_recovery"]),
+            key=lambda p: p["area"], reverse=True,
+        )
+        _allowed = {id(p) for p in _qualifying[:_cap]}
+        for p in pending:
+            if p["need_recovery"] and id(p) not in _allowed:
+                p["need_recovery"] = False
+
+    # --- Pass 2: attempt recovery on allowed contours, build candidates ----
+    candidates: List[Dict] = []
+    for p in pending:
+        c = p["contour"]
+        final_c = c
+        recovered = False
+
+        if p["need_recovery"]:
             new_c, conf = recover_rim(img, c)
             if new_c is not None and validate_rim_recovery(new_c, c, (h, w)):
                 final_c = new_c
                 recovered = True
-                area = cv2.contourArea(final_c)
-                circularity = compute_circularity_safe(final_c)
 
         if final_c is None or len(final_c) < 3:
             continue
 
-        hull = cv2.convexHull(final_c)
-        hull_area = cv2.contourArea(hull)
-        solidity = area / hull_area if hull_area > 0 else 0
+        cand = _build_candidate(final_c, p["edge_support"], recovered)
+        # Internal-only bookkeeping for pass 3's revert path; stripped
+        # before this function returns so it never reaches callers.
+        cand["_seed_contour"] = c
+        cand["_edge_support"] = p["edge_support"]
+        candidates.append(cand)
 
-        bbox = cv2.boundingRect(final_c)
+    # --- Pass 3 (Scope B): neighbor-aware revert, default OFF -------------
+    # See "Sketch of the fix" in specs/rim_recovery_neighbor_aware.md. A
+    # recovered rim that swallows part of a neighbouring coin passes every
+    # self-referential check in validate_rim_recovery cleanly, since that
+    # function's signature carries no information about other candidates.
+    # This compares each recovered candidate's filled contour against every
+    # OTHER candidate's filled contour as they stood right after pass 2 --
+    # i.e. before any revert, so the decision is order-independent -- and
+    # falls back to the pre-recovery seed contour if the overlap (as a
+    # fraction of the NEIGHBOUR's area) exceeds a threshold.
+    if _os.environ.get("TRIVALAYA_RIM_NEIGHBOR_GUARD", "").strip().lower() in ("1", "true"):
+        candidates = _revert_neighbor_overlapping_recoveries(candidates, (h, w))
 
-        coin_likelihood = (
-            0.45 * circularity +
-            0.35 * edge_support +
-            0.20 * solidity
-        )
-
-        label = "Circle" if circularity > Layer1Config.CIRCULARITY_THRESHOLD else "Geometric"
-
-        candidates.append({
-            "score": area * edge_support,
-            "classification": {
-                "label": label,
-                "confidence": round(edge_support, 2)
-            },
-            "geometry": {
-                "area": int(area),
-                "circularity": round(circularity, 3),
-                "solidity": round(solidity, 3),
-                "coin_likelihood": round(coin_likelihood, 3)
-            },
-            "contour": final_c,
-            "bbox": bbox,
-            "debug_data": {
-                "rim_recovered": recovered
-            }
-        })
+    for cand in candidates:
+        cand.pop("_seed_contour", None)
+        cand.pop("_edge_support", None)
 
     return candidates, binary
+
+
+def _build_candidate(contour: np.ndarray, edge_support: float, recovered: bool) -> Dict:
+    """Assemble the geometry/classification dict for one final contour."""
+    area = cv2.contourArea(contour)
+    circularity = compute_circularity_safe(contour)
+    hull = cv2.convexHull(contour)
+    hull_area = cv2.contourArea(hull)
+    solidity = area / hull_area if hull_area > 0 else 0
+    bbox = cv2.boundingRect(contour)
+    coin_likelihood = (
+        0.45 * circularity +
+        0.35 * edge_support +
+        0.20 * solidity
+    )
+    label = "Circle" if circularity > Layer1Config.CIRCULARITY_THRESHOLD else "Geometric"
+    return {
+        "score": area * edge_support,
+        "classification": {
+            "label": label,
+            "confidence": round(edge_support, 2)
+        },
+        "geometry": {
+            "area": int(area),
+            "circularity": round(circularity, 3),
+            "solidity": round(solidity, 3),
+            "coin_likelihood": round(coin_likelihood, 3)
+        },
+        "contour": contour,
+        "bbox": bbox,
+        "debug_data": {
+            "rim_recovered": recovered
+        }
+    }
+
+
+# Scope B default overlap threshold, as a fraction of the NEIGHBOUR's filled
+# area. Measured (not guessed) 2026-07-23 against the frozen weld-lane
+# samples (specs/two_coin_weld_sample_ids.csv, weld_ab=cng_feature n=200 +
+# leu_ab=leu n=200): the smallest REAL d0 (undilated) contour-vs-neighbor
+# overlap observed across both samples/both kernel arms was 0.00014 (34px,
+# lot 713 leu control) -- d0 is the tool's own "definitive contamination"
+# form (tools/two_coin_weld_mask_gate.py docstring), not a proximity
+# measure, so there is no natural noise floor to tolerate above zero. This
+# default sits just below that smallest measured value so every real
+# sliver found in the sample reverts; see specs/results/
+# rim_neighbor_guard_sweep_2026-07-23.md for the full distribution.
+# Inert unless TRIVALAYA_RIM_NEIGHBOR_GUARD is also on.
+RIM_NEIGHBOR_OVERLAP_MAX_DEFAULT = 0.0001
+
+
+def _revert_neighbor_overlapping_recoveries(candidates: List[Dict],
+                                             shape: Tuple[int, int]) -> List[Dict]:
+    threshold = float(_os.environ.get(
+        "TRIVALAYA_RIM_NEIGHBOR_OVERLAP_MAX", str(RIM_NEIGHBOR_OVERLAP_MAX_DEFAULT)
+    ))
+
+    def _fill(contour: np.ndarray) -> np.ndarray:
+        m = np.zeros(shape, dtype=np.uint8)
+        cv2.drawContours(m, [contour], -1, 255, -1)
+        return m
+
+    masks = [_fill(cand["contour"]) for cand in candidates]
+    to_revert = set()
+    for i, cand in enumerate(candidates):
+        if not cand["debug_data"].get("rim_recovered"):
+            continue
+        for j in range(len(candidates)):
+            if i == j:
+                continue
+            area_j = int(np.count_nonzero(masks[j]))
+            if area_j == 0:
+                continue
+            overlap_px = int(np.count_nonzero(masks[i] & masks[j]))
+            if overlap_px / area_j > threshold:
+                to_revert.add(i)
+                break
+
+    if not to_revert:
+        return candidates
+
+    out = []
+    for i, cand in enumerate(candidates):
+        if i not in to_revert:
+            out.append(cand)
+            continue
+        seed = cand["_seed_contour"]
+        reverted = _build_candidate(seed, cand["_edge_support"], recovered=False)
+        reverted["_seed_contour"] = seed
+        reverted["_edge_support"] = cand["_edge_support"]
+        reverted["debug_data"]["rim_neighbor_reverted"] = True
+        out.append(reverted)
+    return out
 
 
 def _validate_split(

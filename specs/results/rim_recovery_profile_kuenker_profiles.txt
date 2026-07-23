@@ -1,0 +1,75 @@
+=== lot 1289 (pass1 cpu_s=205.559) ===
+         1048 function calls in 199.792 seconds
+
+   Ordered by: cumulative time
+   List reduced from 142 to 15 due to restriction <15>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.004    0.004  199.792  199.792 /home/claudeuser/trivalaya-vision-worktrees/rim-recovery/src/layer1_geometry.py:559(layer_1_structural_salience)
+        1    0.000    0.000  199.699  199.699 /home/claudeuser/trivalaya-vision-worktrees/rim-recovery/src/layer1_geometry.py:186(_segment_and_extract_candidates)
+        3    0.000    0.000  199.658   66.553 /home/claudeuser/trivalaya-vision-worktrees/rim-recovery/src/rim_logic.py:186(recover_rim)
+        3    0.001    0.000  199.512   66.504 /home/claudeuser/trivalaya-vision-worktrees/rim-recovery/src/rim_logic.py:80(hough_rim_recovery)
+        3  199.424   66.475  199.424   66.475 {HoughCircles}
+        6    0.185    0.031    0.185    0.031 {Canny}
+        3    0.000    0.000    0.144    0.048 /home/claudeuser/trivalaya-vision-worktrees/rim-recovery/src/rim_logic.py:35(geometric_fit_recovery)
+        3    0.000    0.000    0.140    0.047 /home/claudeuser/trivalaya-vision-worktrees/rim-recovery/src/math_utils.py:369(validate_with_annulus_support)
+        1    0.027    0.027    0.027    0.027 {method 'apply' of 'cv2.CLAHE' objects}
+        2    0.027    0.013    0.027    0.013 {resize}
+        7    0.020    0.003    0.020    0.003 {cvtColor}
+        2    0.000    0.000    0.020    0.010 /home/claudeuser/trivalaya-pipeline/.venv/lib/python3.13/site-packages/numpy/lib/_function_base_impl.py:3902(median)
+        2    0.000    0.000    0.020    0.010 /home/claudeuser/trivalaya-pipeline/.venv/lib/python3.13/site-packages/numpy/lib/_function_base_impl.py:3815(_ureduce)
+        2    0.000    0.000    0.020    0.010 /home/claudeuser/trivalaya-pipeline/.venv/lib/python3.13/site-packages/numpy/lib/_function_base_impl.py:3991(_median)
+        2    0.000    0.000    0.020    0.010 /home/claudeuser/trivalaya-pipeline/.venv/lib/python3.13/site-packages/numpy/_core/fromnumeric.py:732(partition)
+
+
+
+=== lot 1070 (pass1 cpu_s=139.063) ===
+         1028 function calls in 138.989 seconds
+
+   Ordered by: cumulative time
+   List reduced from 141 to 15 due to restriction <15>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000  138.988  138.988 /home/claudeuser/trivalaya-vision-worktrees/rim-recovery/src/layer1_geometry.py:559(layer_1_structural_salience)
+        1    0.000    0.000  138.925  138.925 /home/claudeuser/trivalaya-vision-worktrees/rim-recovery/src/layer1_geometry.py:186(_segment_and_extract_candidates)
+        3    0.000    0.000  138.889   46.296 /home/claudeuser/trivalaya-vision-worktrees/rim-recovery/src/rim_logic.py:186(recover_rim)
+        3    0.001    0.000  138.767   46.256 /home/claudeuser/trivalaya-vision-worktrees/rim-recovery/src/rim_logic.py:80(hough_rim_recovery)
+        3  138.723   46.241  138.723   46.241 {HoughCircles}
+        6    0.144    0.024    0.144    0.024 {Canny}
+        3    0.000    0.000    0.121    0.040 /home/claudeuser/trivalaya-vision-worktrees/rim-recovery/src/rim_logic.py:35(geometric_fit_recovery)
+        3    0.000    0.000    0.117    0.039 /home/claudeuser/trivalaya-vision-worktrees/rim-recovery/src/math_utils.py:369(validate_with_annulus_support)
+        1    0.020    0.020    0.020    0.020 {method 'apply' of 'cv2.CLAHE' objects}
+        6    0.019    0.003    0.019    0.003 {GaussianBlur}
+        7    0.017    0.002    0.017    0.002 {cvtColor}
+        2    0.000    0.000    0.015    0.007 /home/claudeuser/trivalaya-pipeline/.venv/lib/python3.13/site-packages/numpy/lib/_function_base_impl.py:3902(median)
+        2    0.000    0.000    0.015    0.007 /home/claudeuser/trivalaya-pipeline/.venv/lib/python3.13/site-packages/numpy/lib/_function_base_impl.py:3815(_ureduce)
+        2    0.000    0.000    0.015    0.007 /home/claudeuser/trivalaya-pipeline/.venv/lib/python3.13/site-packages/numpy/lib/_function_base_impl.py:3991(_median)
+        2    0.000    0.000    0.015    0.007 /home/claudeuser/trivalaya-pipeline/.venv/lib/python3.13/site-packages/numpy/_core/fromnumeric.py:732(partition)
+
+
+
+=== lot 1030 (pass1 cpu_s=36.502) ===
+         740 function calls in 36.271 seconds
+
+   Ordered by: cumulative time
+   List reduced from 142 to 15 due to restriction <15>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000   36.271   36.271 /home/claudeuser/trivalaya-vision-worktrees/rim-recovery/src/layer1_geometry.py:559(layer_1_structural_salience)
+        1    0.000    0.000   36.226   36.226 /home/claudeuser/trivalaya-vision-worktrees/rim-recovery/src/layer1_geometry.py:186(_segment_and_extract_candidates)
+        2    0.000    0.000   36.177   18.088 /home/claudeuser/trivalaya-vision-worktrees/rim-recovery/src/rim_logic.py:186(recover_rim)
+        2    0.001    0.000   36.156   18.078 /home/claudeuser/trivalaya-vision-worktrees/rim-recovery/src/rim_logic.py:80(hough_rim_recovery)
+        2   36.132   18.066   36.132   18.066 {HoughCircles}
+        3    0.044    0.015    0.044    0.015 {Canny}
+        4    0.038    0.009    0.038    0.009 {minEnclosingCircle}
+        2    0.000    0.000    0.021    0.011 /home/claudeuser/trivalaya-vision-worktrees/rim-recovery/src/rim_logic.py:35(geometric_fit_recovery)
+        1    0.000    0.000    0.019    0.019 /home/claudeuser/trivalaya-vision-worktrees/rim-recovery/src/math_utils.py:369(validate_with_annulus_support)
+        1    0.017    0.017    0.017    0.017 {method 'apply' of 'cv2.CLAHE' objects}
+        2    0.000    0.000    0.009    0.004 /home/claudeuser/trivalaya-pipeline/.venv/lib/python3.13/site-packages/numpy/lib/_function_base_impl.py:3902(median)
+        2    0.000    0.000    0.009    0.004 /home/claudeuser/trivalaya-pipeline/.venv/lib/python3.13/site-packages/numpy/lib/_function_base_impl.py:3815(_ureduce)
+        2    0.000    0.000    0.009    0.004 /home/claudeuser/trivalaya-pipeline/.venv/lib/python3.13/site-packages/numpy/lib/_function_base_impl.py:3991(_median)
+        2    0.000    0.000    0.008    0.004 /home/claudeuser/trivalaya-pipeline/.venv/lib/python3.13/site-packages/numpy/_core/fromnumeric.py:732(partition)
+        2    0.008    0.004    0.008    0.004 {method 'partition' of 'numpy.ndarray' objects}
+
+
+
