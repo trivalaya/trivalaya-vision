@@ -6,6 +6,21 @@ lane (open, well-mapped). Every number below is measured and links to the
 doc that measured it. Repos: `~/trivalaya-vision` (Layer 1/1.5 code, most
 results docs), `~/trivalaya-pipeline` (house plumbing, one diagnosis doc).
 
+> **UPDATE 2026-07-26, later the same day — owner review of this document.**
+> **The rim-recovery lane is now CLOSED as a cost lane** (owner ruling; full
+> reasoning and the item-by-item disposition are in
+> `specs/rim_recovery_neighbor_aware.md` → "Ruling"). Decisive new
+> measurement: the production job queue is **empty and has been since
+> 07-23 23:18** — runner idle at ~0% CPU, zero failed/canceled/blocked jobs
+> in 14 days, the only pending job deferred to `run_after=2026-07-30`.
+> Nothing is waiting on Hough, so cost work has no remaining claim.
+>
+> Of the six open items below, **five are dropped or downgraded and one is
+> promoted**: background modeling (was #4) is the shared upstream cause of
+> four of the seven taxonomy classes and moves to its own ticket,
+> `specs/background_estimator_repair.md`. Read the "Open items" section
+> below as historical.
+
 ## Production state today (2026-07-26)
 
 | Mechanism | Env flag | State |
@@ -114,14 +129,37 @@ rim. Bar 4 (kuenker+leu) passed clean → the failure is CNG-specific, but
 CNG is 42k coins. Side-fact banked: the query lane's JPEG round-trip is
 NOT geometry-inert vs ingest (firing sets 138 vs 140).
 
-**Open items, ranked:** (1) trigger-metric fix — hull/downscaled
-circularity so the 40% correctly-segmented class stops triggering
-recovery at all (unfunded, next recommended attempt); (2) klippen
+**Open items, ranked** — *superseded 2026-07-26; kept as the historical
+ranking that the closure review overturned.* (1) trigger-metric fix —
+hull/downscaled circularity so the 40% correctly-segmented class stops
+triggering recovery at all (unfunded, next recommended attempt); (2) klippen
 corner-clipping — rim recovery actively damages square coins (kuenker
 1070: 58.6 CPU-s making the crop worse) — a CORRECTNESS bug at any
 speed, independent of cost; (3) time-budget escalation; (4) background
 modeling (kills the backdrop class + the estimator misfire); (5) cheap
 A2-on-kuenker measurement; (6) unclassified_ragged root-cause.
+
+**Disposition 2026-07-26:** (1) DROPPED — same feature family as the failed
+mechanism #1, on the same class; a relief-tracing seed has high hull
+circularity too. (2) DOWNGRADED to logged known-limitation — sized at
+~400–700 coins = 0.1–0.2% of corpus, no detector exists; a
+circularity/solidity DB triage is available first and needs no vision run.
+(3) DROPPED — `cv2.HoughCircles` has no abort hook. (4) **PROMOTED** to
+`specs/background_estimator_repair.md`. (5) DROPPED — moot without a cost
+mandate. (6) DROPPED — no known correctness harm; folds into (4) if it is a
+background-regime artifact.
+
+**The ranking error worth remembering.** Items 1, 3, 5, 6 and part of 2 were
+all downstream consequences of item 4. Four of the taxonomy's seven classes
+(`backdrop_vignette_blob`, `relief_self_segmentation`, `sub_coin_noise_blob`,
+`low_contrast_coastline` — 62.7%+ of Hough CPU) share one upstream cause:
+`detect_background_histogram` returns a background level ~48 grey levels
+wrong on 100% of the CNG corpus, because its corner-trust test fires 0/574
+against a vignetted composited backdrop and its fallback returns
+`mean(pixels<50)` = 31.2 where the truth is 79.0. Three cost mechanisms were
+built and rejected attacking those classes individually; none touched the
+cause. **When a taxonomy's classes correlate with a single upstream regime,
+rank the regime, not the classes.**
 
 ## Test inventory
 

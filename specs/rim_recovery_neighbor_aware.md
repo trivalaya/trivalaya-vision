@@ -1,6 +1,13 @@
 # Rim-recovery lane: Hough cost + neighbor-aware validation
 
-> **Status: IN PROGRESS 2026-07-22** (branch
+> **Status: CLOSED 2026-07-26 as a cost lane** (owner ruling — see "Ruling"
+> below). Scope B shipped and is live; Scope A rejected; Scope C confirmed
+> but unfunded. The one surviving item (background modeling) moved to its own
+> ticket, `specs/background_estimator_repair.md`. Do not reopen the cost
+> thread without new evidence that Hough CPU is blocking production — it was
+> measured idle on 2026-07-26.
+>
+> *Historical status: IN PROGRESS 2026-07-22* (branch
 > `rim-recovery-cost-and-neighbor-aware`). Successor to the two-coin weld
 > rollout ([[two-coin-weld-kernel-lane]]); scope grew 2026-07-22 to also own
 > the KS-17 mask-stall cost class once `specs/results/
@@ -357,6 +364,92 @@ Owner ruling 2026-07-23 (Scope B production enable, step 2 of the 4-step
 sequence): approved, bundled with the weld-lane §6.8 forced leu batch.
 Both validated in production the same session — see the Scope B bullet
 above and `specs/results/two_coin_weld_leu_batch_20260723.md`.
+
+**Owner ruling 2026-07-26: THE COST THREAD IS CLOSED. Lane closed as a cost
+lane.** Reviewed against a fresh production measurement and the accumulated
+mechanism record. Basis:
+
+1. **Nothing in the BATCH lane is waiting on Hough.** Measured 2026-07-26:
+   job queue empty
+   (last job finished 07-23 23:18; the only pending job, `cng/EA-614`, is
+   deliberately deferred to `run_after=2026-07-30`), runner idle at ~0% CPU,
+   **zero** failed/canceled/blocked/retry jobs in 14 days, zero vision errors
+   on every job sampled. Throughput ran ~2,000 lots/day through 07-18. The
+   real pathology (Triton XXV/XXVII/XXVIII, ~4.8-day single-worker drain,
+   07-08→12) was already bounded by the 07-11 resolution fix and the 07-18
+   second worker. Cost work now buys CPU that nothing is short of.
+2. **The predictive-skip family is structurally blocked**, not unlucky. Three
+   mechanisms tried, three rejected (k=3 fragmentation; Scope A caps 6–15%
+   outcome churn, owner-rejected on principle; mechanism #1 full-population
+   FAIL). Root cause is general: the cheap pre-Hough features
+   (`cv_r`, `area_ratio`, `largest_hole_frac`) do not carry the deciding bit
+   — "will the geometric fit recover this rim, or is Hough load-bearing?"
+   Any further mechanism drawn from that feature family inherits the same
+   defect.
+3. **The largest cost class has no quality upside.** `low_contrast_coastline`
+   (40.4% of Hough CPU) is, by the taxonomy's own finding, *correctly
+   segmented* coins. Fixing it returns CPU and nothing else.
+
+**Disposition of the six open items** (from
+`specs/vision_work_summary_2026-07.md`):
+
+| # | Item | Disposition 2026-07-26 |
+|---|---|---|
+| 1 | Trigger-metric fix (hull/downscaled circularity) | **DROPPED** — same feature family as mechanism #1 on the same class; a relief-tracing Otsu seed has high hull circularity too, so it inherits the measured failure. |
+| 2 | Klippen corner-clipping | **DOWNGRADED to logged known-limitation.** Real correctness bug, but sized 2026-07-26 at ~400–700 coins = **0.1–0.2% of corpus**; no detector exists. The "15% of Hough CPU" figure is a share of the expensive tier on one house's images, not a population share. See note below. |
+| 3 | Time-budget escalation | **DROPPED** — `cv2.HoughCircles` is one blocking C call with no abort hook; a real budget means subprocess-per-call. Cost-only benefit, and cost is closed. |
+| 4 | Background modeling | **PROMOTED — the only survivor.** Re-scoped out of this lane into its own ticket: `specs/background_estimator_repair.md`. It is not cost work and is not governed by the tail-confinement ruling. |
+| 5 | Cheap A2-on-kuenker measurement | **DROPPED** — A2 measured near-zero alone; moot without a cost mandate. |
+| 6 | `unclassified_ragged` root-cause | **DROPPED** — 12.6% of expensive tier, Hough answer used 0/3, no known correctness harm. Folds into item 4 if it is a background-regime artifact. |
+
+**Klippen note (item 2), for whoever picks it up.** Two facts change the
+economics and were not in the original ranking. (a) The ~500 affected coins
+skew to siege klippen, Strasbourg-type pieces, Indian punch-marked and
+square-module Indo-Greek — disproportionately the rare material the owner
+actually collects, so *interest* share exceeds *population* share. (b) A
+triage exists that needs **no vision run and no new detector**:
+`coin_detections` already persists `circularity` and `solidity`. A square
+flan scores circularity ≈ 0.785 (π/4) with solidity ≈ 1.0, where a ragged
+round coin drops both — so a DB query alone can enumerate the affected
+population and show how badly their crops are clipped before anyone commits
+to building classification. Do that before funding a detector.
+
+**The one counterargument, and why it does not reopen the lane.** The
+2026-07-23 brain brief noted that the stall is **user-facing in
+search-by-image**: the query lane runs Layer 1 per query
+(`appv2._mask_query_image_meta` → `analyze_image`), so a full-res upload can
+burn 40–166 CPU-s of *response time*, and an idle batch queue says nothing
+about that. That is a real mechanism — mechanism #1's run independently
+measured 140/574 query-lane sides firing recovery, and its Bar 3 recorded
+−50%/−46% p99 on firing sides — though **the production query-lane latency
+itself has never been measured**; the 40–166 s figure is transferred from the
+ingest profile, not observed on a real user request.
+
+It does not reopen the cost thread, because the surviving item is also its
+fix. Query-lane latency is driven by the same trigger explosion — 84% of
+sides trip recovery *because* the background is misestimated by ~48 grey
+levels. Repairing the estimator collapses the trigger rate at the source,
+with no speed-for-accuracy trade to accept. A predictive skip-guard would
+have bought the same latency by discarding correct recoveries; the background
+repair buys it by making the trigger correct.
+
+**If** search-by-image latency is later measured and found to be hurting
+users before the background repair lands, that is new evidence and this
+closure should be revisited on it — with a real measurement of the query
+lane, not an inference from ingest.
+
+**What stays live from this lane:** the Scope B neighbor guard
+(`TRIVALAYA_RIM_NEIGHBOR_GUARD=1`, production-validated) and Scope A2
+(`TRIVALAYA_RIM_RECOVERY_MAX_PER_IMAGE`, shipped default-off). Neither is
+touched by this closure. The `rim-trigger-shape-guard` branch stays unmerged
+and inert as the measured record.
+
+**Method note worth keeping.** Every cost mechanism in this lane attacked a
+*symptom*. The 2026-07-26 review found that four of the taxonomy's seven
+failure classes are downstream of one broken function
+(`detect_background_histogram`), which is why item 4 was mis-ranked at #4
+behind three of its own consequences. When a taxonomy's classes correlate
+with a single upstream regime, rank the regime, not the classes.
 
 ## Acceptance (superseded by the PRECOMMIT bars above)
 
