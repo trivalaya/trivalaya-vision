@@ -142,6 +142,31 @@ and `backdrop_vignette_blob` share this cause. Report the contingency table of
 `masked:true`}, plus the full distribution of mask area fraction — not a
 single thresholded count.
 
+> **AMENDMENT 2026-07-26, same day, before any result exists.** As first
+> drafted, this bar was **not measurable on the sample it named**. KS-17 has
+> corner-trust firing on 0 of 574 sides, so the path variable is degenerate
+> there — every side takes the fallback and the contingency table has no
+> variance. Recorded as an amendment rather than a silent rewrite, per this
+> file's own no-revision rule; the "Results" section is still empty, so
+> nothing is being graded against a moved target.
+>
+> Amended sampling: **run `detect_background_histogram` alone on all 574
+> sides** (it is cheap — corner patches plus a histogram, no Hough — and
+> gives the full path / value / `corner_std` distribution). Run the
+> **expensive** `_mask_query_image_meta` path only on a stratified subsample:
+> all **57** light-backdrop sides (`avg_bg > 85`, the nearest thing to a
+> corner-trust arm, and cheap at a 17.5% expensive-trigger rate) plus a
+> **seeded random 60** of the 517 dark sides (`avg_bg < 45`, 64.2%). Record
+> the seed. If all 57 light sides still take the fallback, that is itself the
+> result — report it, do not go hunting for more images.
+>
+> Every mask-path call takes a **hard 180 s per-side timeout** (generous
+> against the measured bimodal split: fast <1.5 s, stall >20 s). A timeout is
+> a data row (`status: timeout`, with elapsed), not a run-ending failure.
+> Flush per side so an interrupted sweep is still readable. This is not
+> defensive polish — the first attempt at this measurement stalled on the
+> very pathology it was measuring.
+
 - **CONFIRMED** ⇒ proceed; the ticket carries both symptoms and the L229
   ticket is closed into this one.
 - **REFUTED** ⇒ the serving no-op is a separate defect. Proceed on the ingest
