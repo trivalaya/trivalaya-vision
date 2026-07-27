@@ -38,6 +38,12 @@ def main():
     ap.add_argument("--scan", default=f"{VISION_ROOT}/specs/results/rim_stall_taxonomy_ks17_scan.json")
     ap.add_argument("--images", default="/home/claudeuser/trivalaya-pipeline/analysis/incoming_screen/KS-17/incoming_images")
     ap.add_argument("--out", required=True)
+    ap.add_argument("--layout", choices=["half", "full"], default="half",
+                    help="half = split into obv/rev sides (what the taxonomy and "
+                         "the serving lane measure); full = the WHOLE photo, "
+                         "which is what the ingest lane's analyze_image "
+                         "actually receives. They are different geometries and "
+                         "must not be derived from one another.")
     a = ap.parse_args()
 
     cv2.setNumThreads(1)
@@ -56,7 +62,11 @@ def main():
         img = _load_and_resize(os.path.join(a.images, f"{img_id}.jpg"))
         if img is None:
             continue
-        parts = split_sides(img)
+        if a.layout == "full":
+            parts = {"full": img}
+            sides = ["full"]
+        else:
+            parts = split_sides(img)
         for side in sides:
             gray = cv2.cvtColor(parts[side], cv2.COLOR_BGR2GRAY)
             os.environ.pop(mu.BG_CORNER_LOCAL_TRUST_ENV, None)
