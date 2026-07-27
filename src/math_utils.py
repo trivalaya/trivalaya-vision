@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import os
 from typing import List, Dict, Tuple, Optional
 import logging
 
@@ -169,31 +170,80 @@ def is_contour_valid(contour: np.ndarray,
 
 # ... (Keep imports and compute_iou/nms/is_contour_valid as is) ...
 
+# M1 -- per-corner local consistency for background detection.
+# specs/background_estimator_repair.md, mechanism M1.  Default OFF; unset the
+# variable and this module is bit-identical to its pre-M1 behavior on every
+# input.  Production enable is a separate, owner-gated step.
+BG_CORNER_LOCAL_TRUST_ENV = "TRIVALAYA_BG_CORNER_LOCAL_TRUST"
+
+# Local std ceiling for a single corner patch.  Deliberately the SAME constant
+# as the pooled test it complements -- M1 changes which pixels the ceiling is
+# applied to, not how tight it is.
+CORNER_LOCAL_STD_MAX = 15.0
+
+
+def _bg_corner_local_trust_enabled() -> bool:
+    return os.environ.get(BG_CORNER_LOCAL_TRUST_ENV, "").strip().lower() in ("1", "true")
+
+
 def detect_background_histogram(gray_image: np.ndarray) -> Tuple[float, str]:
     """
     Robust background detection prioritizing corner sampling (standard for coins),
     falling back to histogram only if corners are noisy.
     """
     h, w = gray_image.shape
-    
+
     # 1. Corner Sampling (Robust Median)
     # Sample 5x5 patches from corners to avoid single-pixel noise
     corners = []
     margin = 5
     if h > 20 and w > 20:
-        corners.extend(gray_image[0:margin, 0:margin].flatten())       # Top-Left
-        corners.extend(gray_image[0:margin, w-margin:w].flatten())     # Top-Right
-        corners.extend(gray_image[h-margin:h, 0:margin].flatten())     # Bottom-Left
-        corners.extend(gray_image[h-margin:h, w-margin:w].flatten())   # Bottom-Right
-        
+        patches = (
+            gray_image[0:margin, 0:margin],          # Top-Left
+            gray_image[0:margin, w-margin:w],        # Top-Right
+            gray_image[h-margin:h, 0:margin],        # Bottom-Left
+            gray_image[h-margin:h, w-margin:w],      # Bottom-Right
+        )
+        for _patch in patches:
+            corners.extend(_patch.flatten())
+
         corner_median = np.median(corners)
         corner_std = np.std(corners)
-        
+
         # If corners are consistent (std < 15), trust them absolutely.
         # This fixes "Coin fills the frame" issues.
         if corner_std < 15:
             bg_type = "light" if corner_median > 127 else "dark"
             return float(corner_median), bg_type
+
+        # 1b. M1 -- per-corner local consistency (env-gated, default OFF).
+        #
+        # The pooled test above conflates two different things: "the corners are
+        # noisy" (which should reject them) and "the corners disagree with each
+        # other" (which a smooth vignette guarantees, even though each corner is
+        # locally clean background).  A composited backdrop with a brightness
+        # ramp is the second case -- e.g. CNG reads TL 96.0 / TR 99.4 / BL 54.6 /
+        # BR 53.4, pooled std 21.9, yet every patch is locally flat background.
+        #
+        # So judge each patch by its OWN std and, when all four are locally
+        # clean, take the median of the four corner medians (75.3 on the CNG
+        # numbers, against an honest outer-ring 79.0 -- versus the 31.2 the
+        # histogram fallback returns today).
+        #
+        # Ordering matters and is load-bearing: this branch sits AFTER the
+        # pooled test, so it can only ever ADD cases where the corners are
+        # trusted.  Every image whose pooled corner_std < 15 today returns from
+        # the branch above, untouched, gate or no gate -- the blast radius is
+        # bounded by construction, not by sampling (ticket Bar 2).
+        if _bg_corner_local_trust_enabled():
+            local_medians = [float(np.median(p)) for p in patches
+                             if float(np.std(p)) < CORNER_LOCAL_STD_MAX]
+            # All four must be locally clean.  A corner the coin intrudes into,
+            # or one carrying a sticker/caption, is a real reason to distrust
+            # the corners -- that case still falls through to the histogram.
+            if len(local_medians) == len(patches):
+                local_bg = float(np.median(local_medians))
+                return local_bg, ("light" if local_bg > 127 else "dark")
 
     # 2. Histogram Fallback (Complex scenes only)
     hist = cv2.calcHist([gray_image], [0], None, [256], [0, 256]).flatten()

@@ -2,6 +2,40 @@
 
 Empirical taxonomy + architecture assessment. 2026-07-23.
 
+> ## ⚠ ADDENDUM 2026-07-28 — §4.3's shared-cause claim is FALSIFIED for the dark-side classes
+>
+> **Do not inherit the causal chain this document draws from
+> `detect_background_histogram` to the dark-backdrop failure classes.** It was
+> measured and it does not hold. Full record:
+> `specs/background_estimator_repair.md`, "STRUCTURAL FINDING 2026-07-28";
+> data: `specs/results/m1_ab/threshold_crossing.csv` (all 574 sides).
+>
+> This document reasons that the estimator's wrong dark-side value (median
+> **31.2** against an honest outer-ring **79.0**) "chooses polarity
+> (`avg_bg=31 < 110` ⇒ treat as dark background) and sets up an Otsu split of a
+> histogram that is not bimodal", making it the shared upstream cause of four
+> of the seven classes — `backdrop_vignette_blob`, `relief_self_segmentation`,
+> `sub_coin_noise_blob`, `low_contrast_coastline`.
+>
+> **The middle link is false.** The estimator's value has exactly one consumer
+> (`src/layer1_geometry.py:592`, whose `bg_type` is discarded) and it is read by
+> exactly one comparison (`avg_bg > 110`, line 600). The honest value **79 is
+> also below 110** and selects the **same** `thresh_type` as the wrong value 31.
+> On the dark stratum the polarity decision was **already correct**, and
+> repairing the estimator changes **nothing**: measured, 560 of 574 sides
+> (97.6%) get a more accurate value with **byte-identical** downstream
+> behavior.
+>
+> Consequently the dark-side cost classes — and the 84% rim-recovery trip rate,
+> the over-detection, and the `MAX_DETECTIONS` cap saturation — are **not**
+> downstream of this function. Their cause lies downstream of the polarity
+> decision and is **unowned**; it needs its own root-cause ticket.
+>
+> **What survives.** The estimator IS the cause of the *light*-branch failure:
+> 12 of 574 sides (2.1%) cross the 110 threshold, and that crossing set is
+> exactly equal to the measured serving/ingest mask no-op set. §4.3's
+> shared-cause reading is correct for that class and wrong for the dark ones.
+
 Companion to `specs/rim_recovery_neighbor_aware.md` (whose §Ruling now records
 the owner's 2026-07-23 rejection of the Scope A caps), and successor to
 `specs/results/ks17_mask_stall_diagnosis_2026-07-22.md`,

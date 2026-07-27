@@ -208,16 +208,38 @@ Measured through `appv2._mask_query_image_meta` on the KS-17 set:
 
 ### Bar 4 — changed sides are improvements, adjudicated
 
-Volume of change is expected and is not itself a failure. Instead:
+> **SUPERSEDED 2026-07-28 by the amendment below.** Original text kept verbatim
+> per this file's no-revision rule. It could not run as written: it specifies a
+> 40-side sample of a population measured at **12**.
 
-- Draw a **stratified random sample of 40 changed sides** (stratified by
+~~Volume of change is expected and is not itself a failure. Instead:~~
+
+- ~~Draw a **stratified random sample of 40 changed sides** (stratified by
   taxonomy class), render before/after overlays, and adjudicate each as
-  IMPROVED / NEUTRAL / REGRESSED.
-- PASS requires **zero REGRESSED** and **≥30 of 40 IMPROVED**.
-- Any REGRESSED side is individually reported with its overlay. One confirmed
+  IMPROVED / NEUTRAL / REGRESSED.~~
+- ~~PASS requires **zero REGRESSED** and **≥30 of 40 IMPROVED**.~~
+- ~~Any REGRESSED side is individually reported with its overlay. One confirmed
   regression blocks the default flip and sends the mechanism back to design —
-  it does not get traded against the improvements.
-- The sample and its seed are recorded before adjudication begins.
+  it does not get traded against the improvements.~~
+- ~~The sample and its seed are recorded before adjudication begins.~~
+
+#### Bar 4 — AMENDMENT (owner-ratified 2026-07-28)
+
+Rationale: the changed-behavior population **measured at 12**, below the
+ratified sample size. The amendment **strengthens coverage** — the gates are
+unchanged in kind, and one of them becomes a census rather than a sample.
+
+- **4a — adjudicate ALL 12 changed-behavior sides.** 100% of the population,
+  not a sample. Overlay panels, each individually dispositioned.
+  **ZERO REGRESSED required.** Expectation, recorded but *not* gated: all 12
+  IMPROVE (no-op → healed mask), consistent with Bar 3.
+- **4b — the "inert below threshold" claim gets empirical teeth.** *Added, not
+  swapped.* On a **seeded sample of 40** of the 560 value-changed /
+  behavior-identical sides, **byte-compare the produced masks** M1-on vs
+  M1-off. Expected identical on **40/40**. Any non-identical mask is an
+  **automatic FAIL** of the inertness claim and reopens the blast-radius
+  question. (This inherits the original bar's n=40, pointed at the population
+  that actually needs the scrutiny now.)
 
 ### Bar 5 — both lanes, and the re-embed decision is explicit
 
@@ -253,6 +275,98 @@ this change; unexplained drift blocks.
   this ticket goes through masked transparent grey128 on both sides.
 
 ## Results
+
+### Bar 0 — RULING STAMP (owner, 2026-07-28)
+
+Verbatim, as dictated:
+
+> Predicate REFUTED (dark-branch mechanism never fires); ticket-level
+> shared-cause claim CONFIRMED via light_fallback (12/14 no-ops, +136 error,
+> downstream of corner-trust 0/117). Funding continues on two legs — live
+> serving doctrine violation (7 no-ops at real 518px geometry) + CNG ingest
+> detection quality; the latency leg is RETIRED (serving mask median 0.022s).
+> **Proceed to M1.**
+
+Bar 0 is CLOSED. The detail below (recorded 2026-07-27) stands unedited.
+
+### AMENDMENT 2026-07-28 (owner) — Bar 3 / Bar 5 instrumentation
+
+Recorded as an amendment, not an edit, per this file's no-revision rule. Both
+items correct a factual error in the M1 work order, **not** a bar threshold; no
+threshold moves.
+
+**The production `mask_noop` telemetry does not exist.** The M1 brief asserted
+that `mask_area_fraction` / `mask_noop` were "now first-class" and instructed
+the M1 session to measure through them. They are not: `appv2.
+_mask_query_image_meta` still returns only `{masked, mask_fallback_reason,
+n_detections}`, exactly as §7 of the Bar 0 write-up describes. Owner ruling:
+**this is an error in the brief, not in §7; do not build the telemetry in the
+M1 session — keep that diff exactly M1.**
+
+- **Bar 3** is measured with the Bar 0 harness method — `mask_area_fraction`
+  self-computed inside the measurement harness, both lanes, fixture sides plus
+  full population. That instrument is already validated (12/12 positive-control
+  reproduction, max |area delta| 0.0037). **The bar gates on the no-op COUNT,
+  not on which instrument counts it.** Threshold unchanged: zero.
+- **Bar 5** produces the re-embed count from the M1 A/B changed-sides set
+  **alone**. The historical no-op audit — which stored artifacts contain
+  raw-pixel embeds — does not exist either; it is recorded as a **REQUIRED JOIN
+  before the owner signs any re-embed execution**, not as an input to this
+  measurement. The Bar 5 deliverable is a **class table** (consumer artifact
+  classes as rows, owner signs per class), not a coin list, and it must keep
+  RE-EMBED (mask changes, same crop) and RE-VISION (detection geometry was
+  wrong) as separate numbers.
+
+Standing telemetry work remains open as its own ticket.
+
+### STRUCTURAL FINDING 2026-07-28 — the estimator's value is behaviorally inert except at one threshold
+
+**A first-class result of the M1 session, not a side note.** Measured on all
+574 KS-17 sides (`specs/results/m1_ab/threshold_crossing.csv`).
+
+`detect_background_histogram` has **exactly one** production consumer:
+
+```
+src/layer1_geometry.py:592   avg_bg, _ = detect_background_histogram(gray)
+src/layer1_geometry.py:600   thresh_type = INV if avg_bg > 110 else BINARY
+```
+
+`bg_type` is **discarded at the call site**. The returned value is consumed by
+a **single binary comparison** against `BRIGHT_BACKGROUND_THRESHOLD = 110`.
+Nothing else in the pipeline reads it. Therefore the estimator's accuracy is
+invisible to Layer 1 except where a change **crosses 110**.
+
+| | n | share |
+|---|---|---|
+| estimator VALUE changed by M1 | 572 | 99.7% |
+| **crosses the 110 threshold** (all Layer 1 can see) | **12** | **2.1%** |
+| behaviorally **INERT** improvement | 560 | 97.6% |
+
+All 12 crossings run `INV → BINARY`, and the crossing set is **exactly equal**
+to the Bar 0 no-op set — set equality, zero difference in either direction.
+
+**Consequences, recorded so no future reader inherits the broken chain:**
+
+- **Dark stratum: 31 → ~78, both below 110, ZERO behavioral change.** The
+  ticket's root-cause chain ("`avg_bg=31 < 110` ⇒ treat as dark ⇒ sets up a bad
+  Otsu split") does not hold: the honest 79 selects the *same* polarity as the
+  wrong 31. The polarity decision on dark sides was **already correct**.
+- Therefore the **84% rim-trip rate, over-detection and `MAX_DETECTIONS`
+  saturation are NOT downstream of the estimator value.** They have a different
+  cause, downstream of the polarity decision.
+- **M2 cannot deliver them either**, by the same threshold argument: its
+  outer-ring median returns ~79 on dark sides, still below 110, still `BINARY`.
+- The dark-branch error is **real but inert**. Bar 0's "predicate REFUTED" was
+  righter than its ruling credited — the dark branch is not merely no-op-free,
+  it is *unobservable* to the only consumer.
+
+**Funding, restated after this finding:**
+
+1. **Leg #1 — live serving doctrine violation — IS delivered by M1**, tightly
+   bounded to 12 sides, and remains worth shipping.
+2. **Leg #2 — CNG ingest detection quality — is NOT delivered by this ticket**,
+   and this finding does **not** widen its scope (per the ticket's own rule).
+   It needs its own root-cause ticket, aimed downstream of polarity.
 
 ### Bar 0 — OWNER RULING 2026-07-27
 
