@@ -91,6 +91,16 @@ measured, this repair is the mechanism that addresses it without the
 speed-for-accuracy trade the owner rejected on 2026-07-23: it collapses the
 trigger rate at the source rather than skipping correct recoveries.
 
+> **RETIRED 2026-07-27, owner ruling — this leg is dead, do not carry it
+> forward.** It has now been measured, and it does not hold. The serving lane
+> thumbnails uploads to `UPLOAD_MAX_DIM=518` *before* masking, so the L1 mask
+> step costs a median **0.022 s** (p90 0.35, max 1.26) — against **21.45 s**
+> median on full-res ingest geometry. The 40–166 s figure was transferred from
+> the ingest profile and never described serving at any point. The paragraph
+> above is kept for history per this file's no-revision rule; it is **not** a
+> live argument for funding this ticket. Evidence:
+> `specs/results/bg_estimator_bar0_2026-07-27.md` §6(c).
+
 This matters more than the CPU. CLAUDE.md's image-comparison doctrine is
 explicit that `masked:true` can silently no-op and that "a mask no-op is a bug
 to surface, never to ignore" — an unmasked embed is a **lesser metric shipped
@@ -244,7 +254,44 @@ this change; unexplained drift blocks.
 
 ## Results
 
-### Bar 0 — measured 2026-07-27 (clean, serialized, idle box)
+### Bar 0 — OWNER RULING 2026-07-27
+
+**Recorded verdict: predicate refuted, ticket-level claim CONFIRMED, scope
+unchanged.**
+
+- **Predicate refuted** — the dark-branch mechanism never fires (0 no-ops in
+  60/60, both lanes).
+- **The ticket-level shared-cause claim is CONFIRMED**, via the light branch:
+  `light_fallback` no-ops on 12 of 14 sides (86%), and M1 corrects 12/12 to
+  within Bar 1's ±8 with a polarity flip. `detect_background_histogram` is the
+  cause of the L229 serving no-op.
+- **Scope unchanged.** The ticket continues to carry both symptoms; the L229
+  ticket stays folded in. This is not a scope widening — it is the same
+  function, one branch over.
+
+**This is explicitly NOT the precommitted "refuted → CPU-only → park" outcome.**
+That inference was built on the proxy (*which strata*), and the proxy is what
+failed, not the claim. Honest bookkeeping follows the evidence, not the
+wording of a bar that turned out to name the wrong domain. Recorded as a
+ruling, not as an edit to the bar — the bar's original text stands above,
+unchanged.
+
+**Funding case after this run — two live legs, one retired:**
+
+1. **A live doctrine violation in production serving.** At real 518 px serving
+   geometry, **7 sides no-op** — raw-pixel embeds are being served under
+   `masked: true` **today**. This is the failure CLAUDE.md's image-comparison
+   doctrine exists to prevent, happening in production now.
+2. **CNG ingest detection quality.** 84% of sides trip rim recovery; KS-17
+   saturates the `MAX_DETECTIONS=5` cap on 34% of photos (49% GREEN vs a 76–78%
+   cohort norm). **KS-17's re-ingest is explicitly blocked on this fix** — the
+   three-table unwind of 2026-07-27 was taken on the understanding that
+   re-ingest waits for the repaired estimator.
+3. ~~Search-by-image latency~~ — **RETIRED**, see the stamped note at line ~92.
+   Measured at 0.022 s median on the serving lane; the argument is dead and
+   should not be restated.
+
+### Bar 0 — measurement detail (clean, serialized, idle box)
 
 Full write-up: **`specs/results/bg_estimator_bar0_2026-07-27.md`**. Data:
 `specs/results/bg_estimator_bar0_clean_2026-07-27.jsonl` (234 rows, 234 ok,

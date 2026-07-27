@@ -9,8 +9,17 @@ applied.
 no-op-free, 0/60, in both lanes — but the conclusion that predicate was written
 to license ("the L229 link dies; the serving no-op is a separate defect") is
 contradicted by the same run. The no-op is caused by this function, on the other
-fallback branch. Which of the two governs is an owner call; this document does
-not amend the bar.**
+fallback branch.**
+
+> **OWNER RULING 2026-07-27 — recorded outcome: predicate refuted (dark-branch
+> mechanism never fires); ticket-level shared-cause claim CONFIRMED via the
+> light branch; scope unchanged.** Explicitly **not** the precommitted
+> "refuted → CPU-only → park" outcome: that inference was built on the proxy,
+> and the proxy is what failed, not the claim. Honest bookkeeping follows the
+> evidence, not the wording. Funding rests on two live legs — (a) a live
+> doctrine violation in production serving, (b) CNG ingest detection quality
+> with KS-17 re-ingest blocked on this fix — with the latency leg **retired**
+> (§6c). See `specs/background_estimator_repair.md`, "Bar 0 — OWNER RULING".
 
 ---
 
@@ -156,11 +165,17 @@ estimator error ⇒ CONFIRMED; no-op-free ⇒ REFUTED (L229 link dies).*
   86% of the `light_fallback` branch no-ops, and the ticket's own M1 corrects
   every one of those sides to within ±8 with a polarity flip.
 
-These two do not point the same way, so **this document does not resolve them —
-it records both and leaves the ruling to the owner.** Per the ticket's
-no-revision rule the bar is not being edited after the fact. The honest summary
-is that Bar 0 tested a proxy (*which strata*) for the claim it cared about
-(*same cause*), and the proxy and the claim came apart.
+These two do not point the same way. Bar 0 tested a proxy (*which strata*) for
+the claim it cared about (*same cause*), and the proxy and the claim came apart.
+Per the ticket's no-revision rule the bar itself is not edited after the fact.
+
+**Resolved by owner ruling, 2026-07-27:** predicate refuted (the dark-branch
+mechanism never fires); **the ticket-level shared-cause claim is CONFIRMED** via
+the light branch; **scope unchanged** — the ticket keeps both symptoms and L229
+stays folded in. This is deliberately **not** the precommitted "refuted →
+CPU-only → park" outcome, because that inference was built on the proxy rather
+than on the claim. Where a precommitted bar's *wording* and its *evidence*
+diverge, the bookkeeping follows the evidence and says so out loud.
 
 What is **not** in dispute either way: the estimator is wrong on 117/117 sides
 measured (median |err| 46.4 healthy / 135.9 no-op), corner-trust fires 0/117, and
@@ -214,16 +229,35 @@ instances of it.
 
 ---
 
-## 8. Funding note (owner call, recorded not decided)
+## 8. Funding case after this run — two live legs, one retired
 
-The ticket's justification does not rest on Bar 0 alone. Independent of the link,
+**Owner ruling 2026-07-27.** The case is *sharper* after Bar 0, not weaker.
+
+**(a) A live doctrine violation in production serving.** At real 518 px serving
+geometry **7 sides no-op** — raw-pixel embeds are being served under
+`masked: true` **today**, indistinguishable from healthy on the telemetry any
+standing bar inspects (§7). CLAUDE.md's image-comparison doctrine exists to
+prevent exactly this. Full-res geometry shows 12; the downsize halves the rate
+and does not remove it.
+
+**(b) CNG ingest detection quality**, below — with the added weight that
+**KS-17's re-ingest is explicitly blocked on this fix**: the 2026-07-27
+three-table unwind was taken on the understanding that re-ingest waits for the
+repaired estimator.
+
+**(c) Search-by-image latency — RETIRED.** Measured at 0.022 s median on the
+serving lane (§6c). The 40–166 s figure was transferred from ingest and never
+described serving. The ticket carries a stamped retirement note so the dead
+argument is not restated; it must not reappear in future justifications.
+
+Independent of the link,
 the estimator bug is a measured **detection-quality** defect on live CNG data:
 modern `cng` over-detects at 2.76–3.16 dets/photo against ~2.0 on leu and legacy
 `cng_feature`, and on KS-17 — the ticket's own worst-case slice — **34% of photos
 (127) saturate the `MAX_DETECTIONS=5` per-image cap with spurious blobs**, with
 13.1% RED and 49% GREEN against a 76–78% cohort norm. That evidence is untouched
-by this run and stands on its own. Per the ticket's framing, funding is an owner
-call either way.
+by this run and stands on its own — and it is now load-bearing in a way it was
+not on 2026-07-26, because KS-17's re-ingest is queued behind this repair.
 
 ---
 
