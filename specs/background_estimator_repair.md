@@ -244,8 +244,73 @@ this change; unexplained drift blocks.
 
 ## Results
 
-*(empty — nothing measured yet. Step-0 / Bar-0 measurement launched
-2026-07-26.)*
+### Bar 0 — measured 2026-07-27 (clean, serialized, idle box)
+
+Full write-up: **`specs/results/bg_estimator_bar0_2026-07-27.md`**. Data:
+`specs/results/bg_estimator_bar0_clean_2026-07-27.jsonl` (234 rows, 234 ok,
+0 timeouts). The 2026-07-26 contended run is preserved under
+`specs/results/bar0_prior_run_2026-07-27_contended/` — geometry valid and
+reproduces, **latency contaminated and not reused**.
+
+Sample: the exact 117 sides of the 2026-07-26 selection (60 dark + 57 light),
+consumed from `l229_strata_selection.csv`. That run's `RNG_SEED = 42` is **not
+reproducible** — its dark pool was ordered by `as_completed()` — so the
+selection CSV, not the seed, is authoritative.
+
+| lane | stratum | n | corner-trust | est err vs truth | **no-ops** |
+|---|---|---|---|---|---|
+| `query518` (serving) | dark | 60 | 0/60 | −47.8 | **0** |
+| `query518` (serving) | light | 57 | 0/57 | +17.1 | **7** (12.3%) |
+| `fullres` (ingest) | dark | 60 | 0/60 | −48.1 | **0** |
+| `fullres` (ingest) | light | 57 | 0/57 | +17.1 | **12** (21.1%) |
+
+Instrument validated against the prior run on 94 shared sides: max
+|area delta| 0.0037, no-op count 12 vs 12 MATCH. The dark zero is a real zero.
+
+**VERDICT — the predicate and the conclusion it was written to license came
+apart; both are recorded, neither is edited, the ruling is the owner's.**
+
+- **Bar 0's predicate: REFUTED.** The dark strata is no-op-free (0/60, both
+  lanes) even though the estimator is wrong by ~48 levels on every side there.
+  The chain the ticket wrote down — dark_fallback 31-vs-79 ⇒ background as
+  foreground ⇒ full-frame contour — **never fires once**.
+- **But "the L229 link dies / the serving no-op is a separate defect" is
+  contradicted by the same run.** The no-op lives on `light_fallback`: **12 of
+  14 sides (86%)**, where the estimator returns ~215 against the same ~79
+  backdrop — error **+136**, larger and opposite in sign. Both branches are
+  downstream of the one root cause this ticket names: corner-trust fires
+  **0/117**.
+- **M1 counterfactual on the 12 no-op sides:** returns **75.0** vs 79.0 truth
+  (−4.0), **inside Bar 1's ±8 on 12/12**, and **flips polarity `light`→`dark`
+  on all 12**. Return-value/polarity counterfactual only — whether the masks
+  then come out healthy is Bar 3's job.
+
+Bar 0 tested a proxy (*which strata*) for the claim it cared about (*same
+cause*); the proxy and the claim disagree. Do not read "REFUTED" as "unrelated
+defect."
+
+**Three record corrections:**
+
+1. **The dark strata was not unmeasured.** The interim note said "0/60
+   completed"; the preserved CSV shows **38 of 60** completed (37 ok +
+   1 timeout), already no-op-free. This run's 60/60 supersedes it.
+2. **The serving lane is affected.** Production thumbnails uploads to 518 px
+   before masking; that halves the no-op rate (7 vs 12) but does **not**
+   eliminate it. The prior run measured full-res only and never characterised
+   the real serving geometry. The doctrine violation is live.
+3. **The latency motivation collapses.** Measured clean: `query518` L1 mask
+   median **0.022 s** (p90 0.35, max 1.26) vs `fullres` dark median **21.45 s**.
+   The 40–166 s figure was transferred from ingest and does not describe
+   serving. Retire the user-facing latency argument; the ingest cost is real.
+
+**Unchanged by this run:** the detection-quality justification (KS-17 cap
+saturation 34% of photos, 49% GREEN vs 76–78% cohort, 2.76–3.16 dets/photo on
+modern `cng`) stands on its own evidence. Funding remains an owner call.
+
+**Not done here (read-only run, no fixes):** no mechanism built, no default
+flipped, no standing telemetry changed. The `mask_area_fraction` telemetry gap
+(§7 of the write-up) remains open — all 12 no-ops are indistinguishable from
+healthy masks on `mask_fallback_reason` alone.
 
 ## Related
 

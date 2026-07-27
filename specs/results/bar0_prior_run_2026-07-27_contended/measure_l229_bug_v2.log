@@ -1,0 +1,29 @@
+[phase1] 287 images -> 574 sides (cheap, no Hough)
+[phase1] 50/287 images, 4s elapsed
+[phase1] 100/287 images, 7s elapsed
+[phase1] 150/287 images, 11s elapsed
+[phase1] 200/287 images, 14s elapsed
+[phase1] 250/287 images, 18s elapsed
+[phase1] 287/287 images, 20s elapsed
+[phase1] DONE 20s total
+[strata] light(avg_bg>85.0) n=57; dark(avg_bg<45.0) pool n=517, sampled 60 (seed=42)
+[phase2] 117 sides to run through _mask_query_image_meta (hard timeout 180s/side)
+[phase2] 5/117 sides, 122s elapsed (last: 755363/obv status=ok wall_s=122.332)
+[phase2] 10/117 sides, 131s elapsed (last: 755377/rev status=ok wall_s=129.871)
+[phase2] 15/117 sides, 258s elapsed (last: 755384/rev status=ok wall_s=1.284)
+[phase2] 20/117 sides, 262s elapsed (last: 755397/obv status=ok wall_s=0.821)
+[phase2] 25/117 sides, 382s elapsed (last: 755521/rev status=ok wall_s=0.651)
+[phase2] 30/117 sides, 385s elapsed (last: 755574/rev status=ok wall_s=1.594)
+[phase2] 35/117 sides, 388s elapsed (last: 755612/obv status=ok wall_s=0.993)
+[phase2] 40/117 sides, 390s elapsed (last: 755613/rev status=ok wall_s=1.085)
+[phase2] 45/117 sides, 394s elapsed (last: 755619/obv status=ok wall_s=1.458)
+[phase2] 50/117 sides, 396s elapsed (last: 755654/rev status=ok wall_s=1.173)
+[phase2] 55/117 sides, 428s elapsed (last: 755711/obv status=ok wall_s=1.19)
+[phase2] 60/117 sides, 560s elapsed (last: 755510/rev status=ok wall_s=1.269)
+[phase2] 65/117 sides, 666s elapsed (last: 755407/rev status=ok wall_s=3.703)
+[phase2] 70/117 sides, 816s elapsed (last: 755404/obv status=ok wall_s=0.995)
+[phase2] 75/117 sides, 910s elapsed (last: 755657/obv status=ok wall_s=71.553)
+[phase2] 80/117 sides, 987s elapsed (last: 755508/rev status=ok wall_s=1.374)
+[phase2] 85/117 sides, 1039s elapsed (last: 755475/obv status=ok wall_s=58.885)
+[phase2] 90/117 sides, 1139s elapsed (last: 755532/rev status=ok wall_s=99.018)
+[phase2] 95/117 sides, 1320s elapsed (last: 755549/rev status=ok wall_s=93.281)
