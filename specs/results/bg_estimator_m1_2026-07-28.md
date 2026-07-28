@@ -534,11 +534,67 @@ by M1 (§2.1) and is excluded from this sequence by design, not by omission.
 6. **Open the dark-side root-cause ticket** (downstream of polarity: Otsu on a
    non-bimodal histogram). This is where leg #2's value actually lives, and it
    is unowned today.
-7. **Open the standing-telemetry ticket** — `mask_area_fraction` / `mask_noop`
-   as first-class fields. Every historical "mask fallback 0/N" bar checked
+7. ~~**Open the standing-telemetry ticket**~~ — **DONE 2026-07-28**, shipped as
+   `trivalaya-pipeline cf7e6dd` ahead of the flip (see §6.2). `mask_area_fraction` / `mask_noop`
+   are now first-class fields. Every historical "mask fallback 0/N" bar checked
    `mask_fallback_reason` only and is **blind to this entire class**; this
    session had to compute the instrument by hand and validate it by
    cross-harness agreement (§5.1) precisely because the telemetry is absent.
+
+### 7.1 PRE-REGISTERED expectation for step 3's fixture sweep (owner ruling + measurement, 2026-07-28)
+
+**Registered BEFORE the flip is run.** Owner ruling: drift on a fixture whose
+mask *heals* is the fix working — disposition it with overlays as
+expected-change and queue a fixture re-capture at the new truth; **do not revert
+the flip for it.** Drift on any OTHER fixture stays a real failure per step 3.
+routing_bar family expectations are unaffected.
+
+The ruling was issued naming `01_geta_caesar_denarius`, the one no-op the new
+tripwire had surfaced. **Measuring the blast radius before the flip widens the
+named set to SIX fixtures and confirms the rest of the ruling.** Read-only,
+in-process, service untouched; both arms from one checkout via
+`TRIVALAYA_BG_CORNER_LOCAL_TRUST`.
+
+**All 248 fixtures × 2 sides swept. 53 sides change estimator VALUE; exactly 10
+sides (6 fixtures) CROSS 110** — and the crossing set is *identical* to the
+current no-op set, the same set equality Bar 0 found on KS-17, now reproduced on
+the serving fixture corpus. Raw-passthrough goes **10/10 OFF → 0/10 ON**.
+
+| fixture | sides | avg_bg OFF → ON | area OFF → ON | verdict |
+|---|---|---|---|---|
+| `01_geta_caesar_denarius` | obv+rev | 223.3/222.8 → 79.5 | 0.9952/0.9951 → 0.5191/0.5314 | heals |
+| `23_athenian_owl_new_style` | obv+rev | 222.9/218.2 → 80.0/80.5 | 0.9911 → 0.6259/0.7254 | heals |
+| `86_pergamon_cistophoric` | obv+rev | 226.0/225.5 → 76.0 | 0.9911 → 0.3563/0.3519 | heals |
+| `255_cyprus_kition_herakles` | obv+rev | 232.9/224.0 → 76.0 | 0.9911 → 0.3092/0.3124 | heals |
+| `214_macedon_demetrios_poliorketes` | rev | 222.5 → 79.0 | 0.9911 → 0.5135 | heals |
+| `235_hk_mithradates_vi` | obv | 228.9 → 79.5 | 0.9982 → 0.6235 | heals |
+
+Every one is the Bar-0 `light_fallback` signature (est ~218–233 vs ~76–80 truth,
+error ≈ +145, opposite sign). **No other fixture crosses 110, so no other
+fixture's mask changes** — which is exactly what makes the owner's "any other
+fixture is a real failure" clause safe to enforce.
+
+**Routing under the ON arm is now measured, not inferred: top-1
+material/cluster is IDENTICAL for all 6/6.** Cosines move — `01_geta`
+0.9360→0.9567, `23_athenian_owl` 0.8927→0.9145, `86_pergamon` 0.8323→0.8707,
+`235_hk_mithradates` 0.9191→0.9282, `214_macedon` 0.8441→0.8414,
+`255_cyprus_kition` 0.8612→0.8243 (4 up, 2 down). The cosine movement is what
+will shift stage-2 values and fixture-sweep entries; the card does not change.
+
+⚠ **Do not cite Bar 6 as evidence about the flip.** Bar 6's "fixture sweep 0 of
+230 differ" compared the merged branch **gate-OFF against the frozen pre-M1
+golden** — it proves *unset ⇒ bit-identical*, which is a different claim from
+*ON ⇒ unchanged*. The ON arm was unmeasured until this sub-section; it is the
+table above, not Bar 6, that licenses the expectation.
+
+**So, pre-registered:**
+1. Drift confined to the six fixtures above = **EXPECTED**, the fix working.
+   Disposition with overlays; queue a fixture re-capture at the new truth.
+2. Drift on any other fixture = **REAL FAILURE**, blocks (unchanged).
+3. A top-1 card change on any of the six = **REAL FAILURE** too — healing was
+   measured to preserve routing, so a card move is not covered by this ruling.
+4. If a fixture in the six does **not** move, that is also a finding — the flip
+   did not take effect where it was measured to.
 
 ---
 
