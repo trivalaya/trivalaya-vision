@@ -69,6 +69,13 @@ def main():
     from PIL import Image
     from io import BytesIO
 
+    # Trap 1: appv2._mask_query_image_meta hard-inserts the MAIN checkout into
+    # sys.path.  The pre-imports above put the worktree's src.* in sys.modules
+    # first; assert that actually happened, or the panels would show main's
+    # estimator under both arms and look reassuringly identical.
+    resolved = os.path.realpath(mu.__file__)
+    assert resolved.startswith(os.path.realpath(VISION_ROOT) + os.sep), resolved
+
     GATE = mu.BG_CORNER_LOCAL_TRUST_ENV
     UPLOAD_MAX_DIM = appv2.UPLOAD_MAX_DIM
 

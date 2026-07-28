@@ -40,6 +40,7 @@ import json
 import os
 import random
 import sys
+import threading
 import time
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
@@ -54,6 +55,16 @@ MARGIN = 5
 POOLED_STD_MAX = 15.0
 LOCAL_STD_MAX = 15.0
 BRIGHT_BACKGROUND_THRESHOLD = 110   # src/config.py Layer1Config; the only read
+
+# The gate is read from os.environ at CALL time inside the shipped function, and
+# os.environ is process-global.  Fetching runs on a thread pool (images are
+# Spaces-backed, ~0.1 s each), so without this lock one thread's `GATE=1` can
+# land inside another thread's OFF measurement -- which silently reports the ON
+# value as the OFF value, understating `value_changed` and `crosses_110` and
+# biasing the census toward "nothing changes".  The guarded region is four 5x5
+# patch reads plus a histogram (sub-millisecond); the pool exists for I/O
+# concurrency, not for this, so serializing it costs effectively nothing.
+_GATE_LOCK = threading.Lock()
 
 
 def _load_and_resize(path):
@@ -82,11 +93,12 @@ def classify(gray, mu):
     pooled_std = float(np.std(pooled))
     local_stds = [float(np.std(p)) for p in patches]
 
-    os.environ.pop(mu.BG_CORNER_LOCAL_TRUST_ENV, None)
-    off_v, _ = mu.detect_background_histogram(gray)
-    os.environ[mu.BG_CORNER_LOCAL_TRUST_ENV] = "1"
-    on_v, _ = mu.detect_background_histogram(gray)
-    os.environ.pop(mu.BG_CORNER_LOCAL_TRUST_ENV, None)
+    with _GATE_LOCK:
+        os.environ.pop(mu.BG_CORNER_LOCAL_TRUST_ENV, None)
+        off_v, _ = mu.detect_background_histogram(gray)
+        os.environ[mu.BG_CORNER_LOCAL_TRUST_ENV] = "1"
+        on_v, _ = mu.detect_background_histogram(gray)
+        os.environ.pop(mu.BG_CORNER_LOCAL_TRUST_ENV, None)
 
     if pooled_std < POOLED_STD_MAX:
         bucket = "pooled_fires"
