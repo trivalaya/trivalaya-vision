@@ -1,16 +1,29 @@
 # M1 — background estimator repair: build + measurement
 
-> **▶ MID-MEASUREMENT HANDOFF: `specs/results/m1_handoff_2026-07-28.md`.**
-> The A/B is still running (detached, PID 859552, ETA ~03:45 UTC 2026-07-28).
-> That file carries the running job's PIDs and verification command, the queued
-> order with exact commands for every pending bar, and ten traps a fresh
-> context cannot rediscover cheaply. **Read it before touching this work.**
+> **▶ MEASUREMENT COMPLETE 2026-07-28.** The A/B landed (both arms 1,148
+> tasks) and Bars 1, 2, 3, 4a, 4b, 5 are all measured and PASS. Only **Bar 6
+> (post-merge serving regression)** remains. The mid-measurement handoff
+> `specs/results/m1_handoff_2026-07-28.md` is retained for its ten traps, which
+> are still live for anyone re-running this work; its "running job" and "queued
+> order" sections are now historical.
 
 **Ticket:** `specs/background_estimator_repair.md` (Bar 0 closed by owner ruling
 2026-07-28, "Proceed to M1"). **Branch:** `bg-estimator-m1`.
-**Status of this document:** Bars 1, 2 and the structural finding are MEASURED
-and final. Bars 3, 4, 5, 6 are marked below with their live state — nothing in
-this file is a placeholder that could be mistaken for a result.
+
+**Status of this document:** every bar below is MEASURED except Bar 6, which is
+marked with its live state. Nothing here is a placeholder that could be
+mistaken for a result.
+
+| bar | verdict | where |
+|---|---|---|
+| 0 | CLOSED (owner ruling) | ticket §Results |
+| 1 | **PASS** — 0.0 % → 99.7 % within ±8, both lanes | §3 |
+| 2 | **PASS** — 28 tests vs frozen `_golden_pre_m1`; suite 230 → 258 | §4 |
+| 3 | **PASS** — no-ops 19 → 0, **0 new**, 19/19 fixtures resolved | §5.1 |
+| 4a | **PASS** — 12/12 sides adjudicated, **0 REGRESSED** | §5.2 |
+| 4b | **PASS** — 80/80 masks byte-identical | §5.3 |
+| 5 | **PASS** — both lanes measured separately; class table signed-ready | §6 |
+| 6 | **QUEUED** — post-merge, gate OFF | §7 step 1 |
 
 **Production is untouched.** M1 ships behind `TRIVALAYA_BG_CORNER_LOCAL_TRUST`,
 default OFF; env-unset is bit-identical to pre-M1 on every input. No default
@@ -148,30 +161,97 @@ comes from the census (§6).
 
 ---
 
-## 5. Bars 3, 4, 5 — measurement state
+## 5. Bars 3, 4 — MEASURED
 
-> **Bar 3 (no-op class eliminated, none created) — RUN IN FLIGHT.**
-> Full-population A/B (574 sides × 2 lanes × 2 gate arms = 2,296 mask calls)
-> launched 2026-07-27 23:07 UTC, 3 workers, `cv2.setNumThreads(1)`.
-> Instrument: `tools/bg_estimator_m1_ab.py`, descended from the Bar 0 probe
-> (validated: reproduced its predecessor to max \|area delta\| 0.0037, no-op
-> count 12 vs 12 MATCH). Per owner amendment 2026-07-28 the bar gates on the
-> no-op **count**, not on which instrument counts it — production `mask_noop`
-> telemetry does not exist and was **not** built in this session.
+The A/B completed 2026-07-28: both arms 1,148 tasks (574 sides × 2 lanes),
+3 workers, `cv2.setNumThreads(1)`. OFF 1,147 ok + 1 timeout; ON 1,146 ok + 2
+timeouts. Data: `specs/results/m1_ab/{ab_off,ab_on}.jsonl`, report
+`bar_report.txt`.
 
-> **Bar 4a (adjudicate ALL 12 changed sides) — QUEUED**, tooling built
-> (`tools/bg_estimator_m1_overlays.py`). Runs after the A/B; one heavy process
-> at a time.
+### 5.1 Bar 3 — **PASS**
 
-> **Bar 4b (byte-compare masks on 40 inert sides) — QUEUED**, tooling built
-> (`tools/bg_estimator_m1_inert_check.py`). Compares sha256 of the produced
-> RGBA buffers M1-on vs M1-off. Any non-identical mask is an automatic FAIL of
-> the inertness claim.
+| lane | n | no-ops OFF | no-ops ON | fixed | **NEW** |
+|---|---|---|---|---|---|
+| fullres | 572 | 12 | **0** | 12 | **0** |
+| query518 | 574 | 7 | **0** | 7 | **0** |
 
-> **Bar 5 (both lanes + re-embed class table) — PARTIAL.** Both lanes are
-> instrumented and measured separately at their own geometry (never derived).
-> The class table is §6; its per-class bound needs the census, which runs after
-> the A/B per owner sequencing.
+All **19/19** Bar-0 fixture no-op sides resolved (still-no-op 0, not-covered 0).
+`mask_fallback_reason` transitions: **none** — no side changed reason.
+
+**A positive control the bar did not require.** The OFF arm's no-op set,
+computed independently over all 574 sides by a different harness, is *exactly*
+the 19-row Bar-0 fixture set — same 12 fullres + 7 query518 side IDs, no
+additions, no misses. Since production has no `mask_noop` telemetry (owner
+amendment 2026-07-28) and the bar gates on the no-op **count**, this
+cross-harness agreement is the evidence that the self-computed
+`mask_area_fraction` proxy measures the real thing.
+
+**Changed set: 12 distinct sides / 19 (side,lane) tasks**, direction uniform —
+`est ≈ 215 (light fallback) → 75.0` against outer-ring ≈ 79, `no-op True →
+False`, detections `1 → 1`. These are the **light-fallback** class named in the
+Bar 0 ruling. Five sides changed at fullres only (`755397/rev`, `755619/obv`,
+`755619/rev`, `755654/obv`, `755654/rev`); at 518 px they were never no-ops.
+Lanes measured separately, never derived (Bar 5's rule).
+
+**The three timeouts are accounted, not waved.** `755630/obv/fullres` ran
+173.3 s under OFF against a 180 s wall and timed out under ON. Re-run at 900 s,
+one worker: it and `755632/obv` both complete at ~170 s under **both** gates
+with **bit-identical** mask outcomes (area 0.309356 / 0.293081 to the digit,
+dets 5→5) despite `avg_bg` moving 31.6 → 75.0. Contention against the wall, not
+an M1-induced stall — and incidental confirmation of the inertness claim on two
+of the slowest inert sides. Neither crosses 110. Data:
+`timeout_probe_{off,on}.jsonl`.
+
+Bar 4 stratification is **unavailable, not empty**:
+`rim_stall_taxonomy_ks17_classified.csv` contains none of the 12 changed side
+IDs. Moot for the gate, since amended Bar 4a is a census.
+
+### 5.2 Bar 4a — **PASS** (zero REGRESSED)
+
+All 12 changed-behavior sides, 24 panels (12 × 2 lanes), four independent
+Sonnet readers at six panels each, neutrally framed and explicitly pointed at
+what a regression looks like.
+
+**19 IMPROVED · 5 NEUTRAL · 0 REGRESSED · 0 AMBIGUOUS.**
+
+The dispositions corroborate the instrument rather than restate it: all five
+NEUTRALs land exactly on the query518 panels of the five fullres-only sides,
+and the A/B records those five as **bit-identical** area fractions
+(0.344525→0.344525, 0.385924→0.385924, 0.374642→0.374642, 0.336921→0.336921,
+0.33219→0.33219). The readers saw inertness where the harness measured it,
+blind to it. 24 panels − 5 unchanged = 19 = the changed-task count.
+
+**One reader miscall, overridden and recorded.** Reader C returned NEUTRAL for
+`755619/obv/fullres`; direct inspection shows OFF is the source frame with the
+slate backdrop intact while ON is the coin on flat grey128, and the instrument
+concurs (area 0.998639 → 0.387455). Corrected to IMPROVED. The override moves
+*toward* improvement and so cannot affect the zero-REGRESSED gate in either
+direction. Reader agreement with the instrument: 23/24.
+
+Two cosmetic sub-findings, neither a regression: `755617/obv` fullres has a
+slightly jagged lower-right edge (background/shadow over-inclusion, no coin
+metal lost); `755654/obv` fullres has a small curl artifact outside the coin
+body (no clipping into the coin).
+
+Worksheet `bar4a_adjudication.csv`, panels `overlays/`.
+
+> **Panel caveat for future readers.** The overlay header burns
+> `off_value`/`on_value` from `threshold_crossing.csv`, measured at fullres
+> half geometry — so on query518 panels those numbers are the wrong geometry.
+> The images are rendered live under each gate and are correct. Judge pixels.
+
+### 5.3 Bar 4b — **PASS** (80/80 identical)
+
+Seeded sample of 40 (seed 20260728) from the 560 value-changed /
+behavior-identical sides, both lanes, mask RGBA buffers compared by sha256.
+
+**80/80 IDENTICAL** — query518 40/40, fullres 40/40, 0 DIFFERS.
+
+**The test is not vacuous, which is the point.** The estimator value changed on
+**80 of 80** rows and the produced mask buffer was byte-identical anyway. The
+inertness claim is therefore no longer an argument from the call site (`avg_bg
+> 110` being the only read) — it is measured at the output. Data
+`bar4b_inert.csv`.
 
 > **Bar 6 (serving regression) — QUEUED**, runs after merge with the gate OFF.
 
@@ -188,13 +268,49 @@ are different decisions:
 - **RE-VISION** — the *detection geometry itself* was wrong. This is the
   modern-CNG over-detection cohort, and **M1 does not address it** (§2.1).
 
-| # | class | population | affected bound | consumer impact | recommended action | rough cost |
+Census: `tools/bg_corner_trust_census.py`, 19 houses × 200 photos (spink: all
+152), n=3,752, seed 20260728, **full-photo ingest geometry**, `crosses_110`
+basis. **0 load_failed, 0 errors.** Data `census.csv` / `census.json`.
+
+| # | class | population | affected bound (point / 95 % upper) | consumer impact | recommended action | rough cost |
 |---|---|---|---|---|---|---|
-| 1 | Served modern-corpus embeddings (per-material features / cluster vectors) | 369,481 coins / 4,787 cards | *pending census* | live search ranking | RE-EMBED at next recluster, scoped to affected houses | *pending* |
-| 2 | Catalog annex vectors (`catalog_ingestion`, old-catalog plates) | Cahn 993 + Hirsch 710 + Helbing 1,177 = 2,880 lots | *pending census* | annex match quality | RE-EMBED at next annex refresh; re-run `append_search_annex.py --execute` after any recluster (standing rule) | *pending* |
-| 3 | Archived screen sheets (KS-17, eLive-93, EA-613) | KS-17 287 photos / 574 sides; EA-613 422 photos | KS-17 measured: **12 sides** (per-side) / **5 photos** (ingest) | archived review artifacts, not live | RE-SCORE only if re-opened — **evidence pending audit join, required before any re-score executes** | low |
-| 4 | Known-pairs scorecard baselines | `analysis/corpus_match/known_pairs/` | *pending census* | held-out validation baseline | RE-SCORE (baseline must be recomputed, never tuned) | low |
+| 1 | Served modern-corpus embeddings (per-material features / cluster vectors) | 371,747 photos ≈ 369,481 coins / 4,787 cards | **4,964 / 13,689** photos (1.3 % / 3.7 %) — **91 % is house `cng` alone** | live search ranking | **RE-EMBED** at next recluster, scoped to `cng` (+ `mashops`, `stacksbowers`) | low — rides the next recluster; ~5 k crops |
+| 2 | Catalog annex vectors (`catalog_ingestion`, old-catalog plates) | Cahn 993 + Hirsch 710 + Helbing 1,177 = 2,880 lots | **261 / 375** lots — Cahn 204 (20.5 %), Hirsch 57 (8.0 %), **Helbing 0** | annex match quality | **RE-EMBED** at next annex refresh; re-run `append_search_annex.py --execute` after any recluster (standing rule) | low — hundreds of plates |
+| 3 | Archived screen sheets (KS-17, eLive-93, EA-613) | KS-17 287 photos / 574 sides; EA-613 422 photos | KS-17 **measured** (not extrapolated): **12 sides** per-side / **5 photos** ingest | archived review artifacts, not live | **RE-SCORE only if re-opened** — evidence **pending audit join**, required before any re-score executes | low |
+| 4 | Known-pairs scorecard baselines | 22 pairs (20 `cng`, 1 `kuenker`, 1 `gorny`) | ~**2** of 20 `cng` modern-side photos at the 10.0 % `cng` rate | held-out validation baseline | **RE-SCORE** — baseline recomputed, **never tuned** (standing prohibition) | trivial |
 | 5 | Query lane | no stored artifacts | n/a | live | **auto-heals at enable, zero re-embed** | none |
+
+**No row of this table is RE-VISION.** M1 changes which pixels get masked, not
+the detection geometry. The modern-CNG over-detection cohort is RE-VISION work
+and M1 does not address it (§2.1) — that separation is the point of keeping the
+two columns apart, and it stays empty here on purpose.
+
+### 6.1 Three census findings the owner should see before signing
+
+**(a) The `crosses_110` basis is vindicated by a single house.** `Otto Helbing
+Nachf.` shows **63/200 photos whose estimator VALUE changes (31.5 %) and ZERO
+threshold crossings.** On an `m1_fires` basis Helbing would enter this table at
+371 lots in scope; the true answer is **0**. Corpus-wide the two bases differ
+3.5× (278 m1_fires vs 79 crossings); on KS-17 they differed 48×. Do not revert
+the basis.
+
+**(b) The point estimates are not tight, and the zero rows are not proven
+zero.** Each house is a 200-photo sample. `leu` (125,929 photos) observed 0/200
+— but 0/200 carries a 95 % upper bound of 1.88 %, i.e. **up to ~2,373 photos**.
+`mashops` point-estimates 417 with a 95 % upper of 2,314. That is why the table
+carries both columns: the served-corpus bound is **4,964 point / 13,689 upper**,
+a ~2.8× spread. If the owner wants a tighter number for a specific house before
+committing spend, raise `--per-house` for that house; the census is 103 s.
+
+**(c) M1 does not touch the modern CNG archive.** `cng_feature` (18,709 photos,
+the post-~2020 `Coin.aspx` lane) shows **0/200 m1_fires** — 189/200 already take
+the pooled corner-trust path, so M1's branch is never reached. The affected CNG
+mass is entirely the **older `cng` / `Lots.aspx` archive** (45,396 photos,
+147/200 m1_fires, 20/200 crossings), which is the same house KS-17 belongs to
+(`docs/ks17_vision_requeue_2026-07-26.md`: "the sale lives on `Lots.aspx` =
+`cng`"). Consistent with the two-archive split: modern CNG studio shots have
+clean corners; the older archive carries the composited backdrop vignette that
+is exactly M1's target.
 
 **Row 3 evidence gap, flagged not filled** (owner ruling): the historical no-op
 audit — *which archived sheets contain raw-pixel embeds* — **does not exist**.
@@ -205,30 +321,40 @@ are generated at execution time from the same queries.
 
 ---
 
-## 7. Recommended enable sequence — a PROPOSAL, every step separately owner-gated
+## 7. ENABLE PROPOSAL — scoped to leg 1 only; every step separately owner-gated
 
-1. **Merge M1 default-OFF** (this branch) and run the standing serving
-   regression with the gate unset — Bar 6. *No behavior change.*
-2. **Owner signs the Bar 5 class table**, choosing per class between re-embed
-   at next recluster and no action.
-3. **Flip `TRIVALAYA_BG_CORNER_LOCAL_TRUST=1`** in the serving service only,
+**This is a proposal. Enable itself is an owner decision and is not taken
+here.** Scope is **leg #1 — the live serving doctrine violation — and nothing
+else.** Leg #2 (CNG ingest detection quality) is measured NOT to be delivered
+by M1 (§2.1) and is excluded from this sequence by design, not by omission.
+
+1. **Merge M1 default-OFF** and run the standing serving regression with the
+   gate unset — Bar 6. *No behavior change; unset is bit-identical.*
+2. **Owner signs the §6 class table**, per class. Note that rows 1 and 2 are
+   the only ones proposing work, and both are RE-EMBED, not RE-VISION.
+3. **Flip `TRIVALAYA_BG_CORNER_LOCAL_TRUST=1` in the serving service only**,
    and re-run the regression with the gate ON. Blast radius at 518 px serving
-   geometry is bounded by the crossing set; expected delta is the healed no-op
-   class.
-4. **Re-embed the affected corpus rows** per the signed table, scoped to the
-   houses the census puts in scope.
-5. **KS-17 re-ingest — DO NOT sequence this behind M1.** The re-ingest was held
-   on the understanding that the repaired estimator would improve CNG detection
-   quality. §2.1 measures that it will not: on the dark stratum M1 changes
-   nothing. Either re-ingest now on its existing merits, or hold it for the new
-   dark-side root-cause ticket — but the M1 dependency is void and should be
-   struck from the KS-17 runbook.
+   geometry is bounded by the crossing set; the expected delta is the healed
+   no-op class and nothing else. Serving is where the doctrine violation lives,
+   so this is the step that actually pays leg 1.
+4. **Re-embed per the signed table**, scoped to `cng` (91 % of the mass) plus
+   `mashops` / `stacksbowers`, and to Cahn / Hirsch on the annex side. Skip
+   Helbing — 0 crossings measured. Budget against the **95 % upper** column,
+   not the point estimate (§6.1b).
+5. ~~**KS-17 re-ingest.**~~ **STRUCK.** The re-ingest was held on the premise
+   that a repaired estimator would improve CNG detection quality; §2.1 measures
+   that it does not — on the dark stratum M1 moves 31 → ~78, both below 110,
+   selecting the same polarity. **The M1 dependency is void and should be
+   struck from the KS-17 runbook.** Re-ingest on its own merits or hold it for
+   the ticket in step 6 — but do not sequence it behind M1.
 6. **Open the dark-side root-cause ticket** (downstream of polarity: Otsu on a
-   non-bimodal histogram). This is where legs #2's value actually lives.
+   non-bimodal histogram). This is where leg #2's value actually lives, and it
+   is unowned today.
 7. **Open the standing-telemetry ticket** — `mask_area_fraction` / `mask_noop`
-   as first-class fields, so every future "mask fallback 0/N" bar means
-   something. Every historical one checked `mask_fallback_reason` only and is
-   blind to this entire class.
+   as first-class fields. Every historical "mask fallback 0/N" bar checked
+   `mask_fallback_reason` only and is **blind to this entire class**; this
+   session had to compute the instrument by hand and validate it by
+   cross-harness agreement (§5.1) precisely because the telemetry is absent.
 
 ---
 
