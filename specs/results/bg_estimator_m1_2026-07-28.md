@@ -1,5 +1,11 @@
 # M1 — background estimator repair: build + measurement
 
+> **▶ MID-MEASUREMENT HANDOFF: `specs/results/m1_handoff_2026-07-28.md`.**
+> The A/B is still running (detached, PID 859552, ETA ~03:45 UTC 2026-07-28).
+> That file carries the running job's PIDs and verification command, the queued
+> order with exact commands for every pending bar, and ten traps a fresh
+> context cannot rediscover cheaply. **Read it before touching this work.**
+
 **Ticket:** `specs/background_estimator_repair.md` (Bar 0 closed by owner ruling
 2026-07-28, "Proceed to M1"). **Branch:** `bg-estimator-m1`.
 **Status of this document:** Bars 1, 2 and the structural finding are MEASURED
