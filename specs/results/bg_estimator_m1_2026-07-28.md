@@ -1,8 +1,9 @@
 # M1 — background estimator repair: build + measurement
 
-> **▶ MEASUREMENT COMPLETE 2026-07-28.** The A/B landed (both arms 1,148
-> tasks) and Bars 1, 2, 3, 4a, 4b, 5 are all measured and PASS. Only **Bar 6
-> (post-merge serving regression)** remains. The mid-measurement handoff
+> **▶ MEASUREMENT COMPLETE 2026-07-28. ALL BARS GREEN (0–6).** M1 is merged
+> to `main` default-OFF and the serving regression is clean. What remains is
+> **not measurement** — it is the owner's call on §6 (sign the class table) and
+> §7 (whether to enable). The mid-measurement handoff
 > `specs/results/m1_handoff_2026-07-28.md` is retained for its ten traps, which
 > are still live for anyone re-running this work; its "running job" and "queued
 > order" sections are now historical.
@@ -10,9 +11,8 @@
 **Ticket:** `specs/background_estimator_repair.md` (Bar 0 closed by owner ruling
 2026-07-28, "Proceed to M1"). **Branch:** `bg-estimator-m1`.
 
-**Status of this document:** every bar below is MEASURED except Bar 6, which is
-marked with its live state. Nothing here is a placeholder that could be
-mistaken for a result.
+**Status of this document:** every bar below is MEASURED. Nothing here is a
+placeholder that could be mistaken for a result.
 
 | bar | verdict | where |
 |---|---|---|
@@ -23,7 +23,7 @@ mistaken for a result.
 | 4a | **PASS** — 12/12 sides adjudicated, **0 REGRESSED** | §5.2 |
 | 4b | **PASS** — 80/80 masks byte-identical | §5.3 |
 | 5 | **PASS** — both lanes measured separately; class table signed-ready | §6 |
-| 6 | **QUEUED** — post-merge, gate OFF | §7 step 1 |
+| 6 | **PASS** — merged, restarted, gate unset; A/B vs frozen pre-M1 golden shows 0 of 230 fixtures differ | §5.4 |
 
 **Production is untouched.** M1 ships behind `TRIVALAYA_BG_CORNER_LOCAL_TRUST`,
 default OFF; env-unset is bit-identical to pre-M1 on every input. No default
@@ -253,7 +253,64 @@ inertness claim is therefore no longer an argument from the call site (`avg_bg
 > 110` being the only read) — it is measured at the output. Data
 `bar4b_inert.csv`.
 
-> **Bar 6 (serving regression) — QUEUED**, runs after merge with the gate OFF.
+### 5.4 Bar 6 — downstream serving regression — **PASS**
+
+Merged to `main` (fast-forward, `a00f502` → `867d6e1`) and
+`trivalaya-search.service` restarted with the gate **unset**. Gate absence
+verified in the systemd unit and `.env` — `TRIVALAYA_BG_CORNER_LOCAL_TRUST` is
+set nowhere.
+
+**Serving-path diff is gate-only.** `a00f502..HEAD` touches exactly one file
+under `src/`: `math_utils.py`. Its only non-gated edit refactors four
+`corners.extend(...)` calls into a `patches` tuple iterated in the same order —
+same values, same order, same `np.median`/`np.std`. That is precisely the
+property Bar 2's frozen-golden test asserts over a 300-image randomized battery.
+
+| check | pre | post | verdict |
+|---|---|---|---|
+| `/stats` scalars | 5,209 clusters / 126,475 coins / **4,139 cards** / 1,556 parent / 2,583 child | identical | **IDENTICAL** |
+| `/stats` materials | 107 | 107, same list | **IDENTICAL** |
+| `routing_bar.py` | PASS 241 (top-1 227, top2-3 14), RED_FLAG **0**, OUT_OF_SCOPE 4 | same | **BYTE-IDENTICAL** (`diff` clean) |
+| `stage2_bar.py` | PASSED, every provider fires/abstains as specified | same | **BYTE-IDENTICAL** (`diff` clean) |
+| per-slice `expected.yaml` sweep | 193 clean / 37 mismatch of 230 graded | 193 / 37 | **IDENTICAL, 0 fixtures differ** |
+
+**The fixture sweep was run as a true A/B, not as an argument from the gate.**
+`routing_bar` and `stage2_bar` had pre-restart baselines captured before the
+merge, so those are literal before/after diffs. The 248-fixture `expected.yaml`
+sweep did not, so the pre-M1 arm was reconstructed *without touching
+production*: the frozen `_golden_pre_m1` from
+`tests/test_bg_corner_local_trust.py` was monkeypatched over
+`src.math_utils.detect_background_histogram` **before** `appv2`/`decode_crop`
+import it, and the identical sweep re-run. Result: **0 of 230 fixtures differ**
+in top-1, failing-field set, or rank-of-expected. Tools `topk_sweep.py` /
+`topk_sweep_preM1.py`, data `bar6_topk_sweep*.json`.
+
+**All 37 mismatches are therefore PRE-EXISTING and none is attributable to M1.**
+Composition, recorded because it is a standing harness-maintenance finding and
+not an M1 result:
+
+- **15 size-only** — card identity (material + `stable_key`) correct, member
+  count drifted. The `expected.yaml` files were captured 2026-06-06…06-27; the
+  cards watermark is 2026-07-07. Size drifts on every recluster by design.
+- **22 non-size** — Greek-civic / Hellenistic-royal routing residuals
+  (`133_euboia_histiaia`, `149_aeolis_aigai`, `207–211_alexander*`,
+  `71/72_corinth*`, …). Most carry the expected key at **rank 2–3**, which is
+  why `routing_bar`'s top-3 accept-spec passes them.
+
+> **Two harness gaps found while running this bar — flagged, NOT fixed here
+> (out of scope for M1).**
+> 1. **16 of 248 `expected.yaml` files do not parse** (`yaml.safe_load`
+>    raises): `176/177/178_tetrarchic_*`, `245/246_sasanian_*`,
+>    `49_rhodos_plinthophoric`, `53/54_antonine_bronze_*`,
+>    `59/60_flavian_bronze_*`, `61/62_mg_bronze_*`, `63/64_nerva_bronze_*`,
+>    `65/66_julio_claudian_bronze_*`. Any comparator that catches exceptions
+>    skips them **silently** — they are invisible to the bar today.
+> 2. **No batch `expected.yaml` comparator existed.** `topk_probe.py` is
+>    per-fixture, `topk_probe_batch.py` prints but does not compare, and
+>    `routing_bar.py` reads its own `routing_bar.yaml`, not `expected.yaml`.
+>    CLAUDE.md's step 3 therefore had no automated implementation.
+>    `topk_sweep.py` is the one written for this bar and is a candidate to
+>    promote into `visual_search/tests/appv2_regression/`.
 
 ---
 

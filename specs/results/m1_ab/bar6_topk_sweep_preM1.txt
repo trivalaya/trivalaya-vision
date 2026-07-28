@@ -1,0 +1,159 @@
+==============================================================================
+fixtures with expected.yaml : 248
+  UNPARSEABLE yaml          : 16  (pre-existing harness gap)
+  no expected_top1 block    : 2
+  no obv/rev image pair     : 0
+  GRADED                    : 230
+    top-1 matches expected  : 193
+    top-1 MISMATCH          : 37
+==============================================================================
+
+  01_geta_caesar_denarius  fails=['size']  expected_at_rank=1
+     want mat=severan key=severan|Geta-as-Caesar|deity standing|denarius
+     got  mat=severan key=severan|Geta-as-Caesar|deity standing|denarius cos=0.936 headline=Geta / deity standing
+
+  02_domitian_augustus_minerva  fails=['size']  expected_at_rank=1
+     want mat=flavian key=flavian|Domitian-as-Augustus|minerva standing|denarius
+     got  mat=flavian key=flavian|Domitian-as-Augustus|minerva standing|denarius cos=0.9282 headline=Domitian (Augustus) / minerva standing
+
+  03_domitian_caesar_altar  fails=['size']  expected_at_rank=1
+     want mat=flavian key=flavian|Flavian|garlanded|denarius
+     got  mat=flavian key=flavian|Flavian|garlanded|denarius cos=0.9137 headline=Flavian / garlanded
+
+  04_antonine_faustina_consecratio  fails=['size']  expected_at_rank=1
+     want mat=antonine key=antonine|antonine_augustae|ceres standing|denarius
+     got  mat=antonine key=antonine|antonine_augustae|ceres standing|denarius cos=0.9635 headline=Antonine / ceres standing
+
+  05_aurelian_sol_captive  fails=['size']  expected_at_rank=1
+     want mat=antoniniani_gallic_window key=antoniniani_gallic_window|authority|sol with captive|antoninianus
+     got  mat=antoniniani_gallic_window key=antoniniani_gallic_window|authority|sol with captive|antoninianus cos=0.937 headline=Crisis era / sol with captive
+
+  08_geta_augustus_victoriae_brit  fails=['size']  expected_at_rank=1
+     want mat=severan key=severan|severan_men_aug|victory advancing|denarius
+     got  mat=severan key=severan|severan_men_aug|victory advancing|denarius cos=0.9223 headline=Severan / victory advancing
+
+  09_titus_caesar_victory  fails=['ext_sig', 'size']  expected_at_rank=None
+     want mat=flavian key=None
+     got  mat=flavian key=flavian|Flavian|victory advancing|denarius cos=0.9386 headline=Flavian / victory advancing
+
+  10_titus_horseman  fails=['size']  expected_at_rank=None
+     want mat=flavian key=None
+     got  mat=flavian key=flavian|Titus-as-Augustus|capricorn|denarius cos=0.8875 headline=Titus (Augustus) / capricorn
+
+  11_vespasian_caesars_facing  fails=['size']  expected_at_rank=None
+     want mat=flavian key=None
+     got  mat=flavian key=flavian|Flavian|turreted|denarius cos=0.9382 headline=Flavian / turreted
+
+  133_euboia_histiaia  fails=['material', 'stable_key']  expected_at_rank=2
+     want mat=euboia key=euboia|eub_histiaia|tetrobol
+     got  mat=pontos_bithynia key=pontos_bithynia|pb_other|drachm cos=0.852 headline=Pontos / Bithynia — Amastris / Tieion & uncertain mint
+
+  134_euboia_chalkis  fails=['material', 'stable_key']  expected_at_rank=2
+     want mat=euboia key=euboia|eub_histiaia|tetrobol
+     got  mat=troas key=troas|troas_abydos|drachm cos=0.7834 headline=Troas, Abydos — Apollo / eagle
+
+  13_vespasian_iudaea  fails=['size']  expected_at_rank=None
+     want mat=flavian key=None
+     got  mat=flavian key=flavian|Flavian|captive trophy scene|denarius cos=0.9317 headline=Flavian / captive trophy scene
+
+  149_aeolis_aigai  fails=['material', 'stable_key']  expected_at_rank=2
+     want mat=aeolis key=aeolis|aeolis_myrina|tetradrachm
+     got  mat=ionia key=ionia|ionia_magnesia|tetradrachm cos=0.8956 headline=Ionia, Magnesia ad Maeandrum — Apollo / Maeander (stephanophoric tet)
+
+  14_macrinus_standing  fails=['size']  expected_at_rank=None
+     want mat=severan key=None
+     got  mat=severan key=severan|unknown|vocab_gap|c212 cos=0.9273 headline=Macrinus / [reverse type not yet catalogued]
+
+  150_lesbos_el  fails=['stable_key']  expected_at_rank=None
+     want mat=mytilene key=mytilene|apollo_hekte|hekte
+     got  mat=mytilene key=mytilene|myt_apollo|hekte cos=0.8856 headline=Mytilene — Apollo (electrum hekte)
+
+  153_ionia_ephesos  fails=['material', 'stable_key']  expected_at_rank=3
+     want mat=ionia key=ionia|ionia_ephesos|drachm
+     got  mat=phoenicia key=phoenicia|phoen_arados|tetradrachm cos=0.8691 headline=Phoenicia, Arados — marine deity / galley & prow
+
+  15_maximinus_pax  fails=['size']  expected_at_rank=1
+     want mat=maximinus_gordian3 key=maximinus_gordian3|authority|pax standing|denarius
+     got  mat=maximinus_gordian3 key=maximinus_gordian3|authority|pax standing|denarius cos=0.9408 headline=Maximinus I - Gordian III (AD 235-244) / pax standing
+
+  17_augustus_capricorn  fails=['size']  expected_at_rank=1
+     want mat=julio_claudian key=julio_claudian|authority|capricorn|denarius
+     got  mat=julio_claudian key=julio_claudian|authority|capricorn|denarius cos=0.8655 headline=Julio-Claudian & Civil War (27 BC-AD 69) / capricorn
+
+  19_republican_apollo_horseman  fails=['size']  expected_at_rank=1
+     want mat=republican_slice1 key=republican_slice1|Apollo|horseman|denarius
+     got  mat=republican_slice1 key=republican_slice1|Apollo|horseman|denarius cos=0.9089 headline=Apollo / horseman
+
+  207_alexander_tetradrachm  fails=['stable_key']  expected_at_rank=None
+     want mat=alexander key=alexander|alexander_silver|tetradrachm
+     got  mat=alexander key=alexander|alexander|tetradrachm cos=0.973 headline=Kings of Macedon — Alexander III & Philip III Arrhidaeus
+
+  208_alexander_gold_stater  fails=['stable_key']  expected_at_rank=None
+     want mat=alexander key=alexander|alexander_gold|stater
+     got  mat=alexander key=alexander|alexander|tetradrachm cos=0.9296 headline=Kings of Macedon — Alexander III & Philip III Arrhidaeus
+
+  209_alexander_drachm  fails=['stable_key']  expected_at_rank=None
+     want mat=alexander key=alexander|alexander_silver|tetradrachm
+     got  mat=alexander key=alexander|alexander|tetradrachm cos=0.9453 headline=Kings of Macedon — Alexander III & Philip III Arrhidaeus
+
+  210_philip_iii  fails=['stable_key']  expected_at_rank=None
+     want mat=alexander key=alexander|philip_iii_silver|tetradrachm
+     got  mat=alexander key=alexander|alexander|tetradrachm cos=0.9582 headline=Kings of Macedon — Alexander III & Philip III Arrhidaeus
+
+  211_alexander_lifetime  fails=['stable_key']  expected_at_rank=None
+     want mat=alexander key=alexander|alexander_lifetime_silver|tetradrachm
+     got  mat=alexander key=alexander|alexander|tetradrachm cos=0.9308 headline=Kings of Macedon — Alexander III & Philip III Arrhidaeus
+
+  228_baktria_antimachos_kausia  fails=['material', 'stable_key']  expected_at_rank=3
+     want mat=baktria_indogreek key=baktria_indogreek|bk_indogreek|drachm
+     got  mat=julio_claudian key=julio_claudian|authority|emperor figure|denarius cos=0.9081 headline=Julio-Claudian & Civil War (27 BC-AD 69) / emperor figure
+
+  243_hadrian_victory_ric400  fails=['material']  expected_at_rank=None
+     want mat=nerva key=None
+     got  mat=flavian key=flavian|Flavian|mars standing|denarius cos=0.8834 headline=Flavian / mars standing
+
+  244_aurelian_vabalathus_alexandria  fails=['material']  expected_at_rank=None
+     want mat=alexandria_tetradrachm key=None
+     got  mat=theodosian key=theodosian|captive_trophy|ae cos=0.8432 headline=Theodosian bronze — trophy / captives
+
+  27_imperatorial_caesar_elephant  fails=['size']  expected_at_rank=1
+     want mat=republican_imperatorial key=republican_imperatorial|(no deity)|elephant|denarius
+     got  mat=republican_imperatorial key=republican_imperatorial|(no deity)|elephant|denarius cos=0.8955 headline=(no deity) / elephant
+
+  28_imperatorial_legionary_standards  fails=['size']  expected_at_rank=1
+     want mat=republican_imperatorial key=republican_imperatorial|(no deity)|standards|denarius
+     got  mat=republican_imperatorial key=republican_imperatorial|(no deity)|standards|denarius cos=0.8932 headline=(no deity) / standards
+
+  32_syracuse_arethusa_quadriga  fails=['material', 'stable_key', 'ext_sig']  expected_at_rank=None
+     want mat=syracuse key=syracuse|syracuse_arethusa|tetradrachm
+     got  mat=republican_slice1 key=republican_slice1|Mars|biga|denarius cos=0.8882 headline=Mars / biga
+
+  43_akragas_later  fails=['material']  expected_at_rank=None
+     want mat=(cross-material — NOT akragas) key=None
+     got  mat=theodosian key=theodosian|legend|ae cos=0.8527 headline=Theodosian bronze — legend reverse (VOT / monogram / inscription in wreath)
+
+  50_severan_bronze_felicitas_standing  fails=['material', 'stable_key']  expected_at_rank=2
+     want mat=severan_bronze key=severan_bronze|standing|ae
+     got  mat=mg_bronze key=mg_bronze|standing|ae cos=0.9408 headline=Maximinus I – Gordian III bronze — standing figure (deity / personification)
+
+  55_knidos_aphrodite_lion  fails=['material', 'stable_key']  expected_at_rank=2
+     want mat=knidos key=knidos|knidos_aphrodite_lion|drachm
+     got  mat=caria_other key=caria_other|caria_other|hemiobol cos=0.8792 headline=Caria — uncertain mint & other (Iasos / Aphrodisias / Kasolaba …)
+
+  68_leukas_pegasos_right  fails=['material', 'stable_key']  expected_at_rank=2
+     want mat=leukas key=leukas|leukas_pegasos_athena|stater
+     got  mat=akarnania key=akarnania|akarnania_pegasos|stater cos=0.8461 headline=Akarnania — Pegasos / Athena (Corinthian-type colt stater)
+
+  71_corinth_pegasos_athena  fails=['material', 'stable_key']  expected_at_rank=2
+     want mat=corinth key=corinth|corinth_pegasos|stater
+     got  mat=akarnania key=akarnania|akarnania_pegasos|stater cos=0.8811 headline=Akarnania — Pegasos / Athena (Corinthian-type colt stater)
+
+  72_corinth_pegasos_aphrodite  fails=['material', 'stable_key']  expected_at_rank=2
+     want mat=corinth key=corinth|corinth_pegasos|stater
+     got  mat=akarnania key=akarnania|akarnania_pegasos|stater cos=0.9202 headline=Akarnania — Pegasos / Athena (Corinthian-type colt stater)
+
+  98_bruttium_terina  fails=['material', 'stable_key']  expected_at_rank=2
+     want mat=bruttium key=bruttium|bru_terina|didrachm
+     got  mat=syracuse key=syracuse|syracuse_persephone|tetradrachm cos=0.8829 headline=Syracuse — Persephone / Kore
+
+-> /home/claudeuser/vision-wt-m1/specs/results/m1_ab/bar6_topk_sweep_preM1.json

@@ -1,0 +1,4565 @@
+{
+ "rows": [
+  {
+   "fixture": "01_geta_caesar_denarius",
+   "checks": [
+    "material",
+    "stable_key",
+    "size"
+   ],
+   "fails": [
+    "size"
+   ],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "severan",
+    "cos": 0.936,
+    "stable_key": "severan|Geta-as-Caesar|deity standing|denarius",
+    "headline": "Geta / deity standing",
+    "ext_sig": "bareheaded / geta / genius",
+    "size": 143
+   },
+   "exp_stable_key": "severan|Geta-as-Caesar|deity standing|denarius",
+   "exp_material": "severan"
+  },
+  {
+   "fixture": "02_domitian_augustus_minerva",
+   "checks": [
+    "material",
+    "stable_key",
+    "size"
+   ],
+   "fails": [
+    "size"
+   ],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "flavian",
+    "cos": 0.9282,
+    "stable_key": "flavian|Domitian-as-Augustus|minerva standing|denarius",
+    "headline": "Domitian (Augustus) / minerva standing",
+    "ext_sig": "draped / domitian / minerva standing",
+    "size": 175
+   },
+   "exp_stable_key": "flavian|Domitian-as-Augustus|minerva standing|denarius",
+   "exp_material": "flavian"
+  },
+  {
+   "fixture": "03_domitian_caesar_altar",
+   "checks": [
+    "material",
+    "stable_key",
+    "size"
+   ],
+   "fails": [
+    "size"
+   ],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "flavian",
+    "cos": 0.9137,
+    "stable_key": "flavian|Flavian|garlanded|denarius",
+    "headline": "Flavian / garlanded",
+    "ext_sig": "laureate / domitian / altar",
+    "size": 26
+   },
+   "exp_stable_key": "flavian|Flavian|garlanded|denarius",
+   "exp_material": "flavian"
+  },
+  {
+   "fixture": "04_antonine_faustina_consecratio",
+   "checks": [
+    "material",
+    "stable_key",
+    "size"
+   ],
+   "fails": [
+    "size"
+   ],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "antonine",
+    "cos": 0.9635,
+    "stable_key": "antonine|antonine_augustae|ceres standing|denarius",
+    "headline": "Antonine / ceres standing",
+    "ext_sig": "draped / Diva Faustina Senior / ceres",
+    "size": 123
+   },
+   "exp_stable_key": "antonine|antonine_augustae|ceres standing|denarius",
+   "exp_material": "antonine"
+  },
+  {
+   "fixture": "05_aurelian_sol_captive",
+   "checks": [
+    "material",
+    "stable_key",
+    "size"
+   ],
+   "fails": [
+    "size"
+   ],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "antoniniani_gallic_window",
+    "cos": 0.937,
+    "stable_key": "antoniniani_gallic_window|authority|sol with captive|antoninianus",
+    "headline": "Crisis era / sol with captive",
+    "ext_sig": "draped / Aurelian / sol with captive",
+    "size": 107
+   },
+   "exp_stable_key": "antoniniani_gallic_window|authority|sol with captive|antoninianus",
+   "exp_material": "antoniniani_gallic_window"
+  },
+  {
+   "fixture": "06_trajan_decius_dacia",
+   "checks": [
+    "material",
+    "stable_key",
+    "size"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "antoniniani_pre_gallic",
+    "cos": 0.9448,
+    "stable_key": "antoniniani_pre_gallic|authority|dacia standing|antoninianus",
+    "headline": "Imperial crisis / dacia standing",
+    "ext_sig": "draped / Trajan Decius / dacia standing",
+    "size": 62
+   },
+   "exp_stable_key": "antoniniani_pre_gallic|authority|dacia standing|antoninianus",
+   "exp_material": "antoniniani_pre_gallic"
+  },
+  {
+   "fixture": "07_domitian_caesar_caduceus",
+   "checks": [
+    "material"
+   ],
+   "fails": [],
+   "rank_of_expected": null,
+   "top1": {
+    "material": "flavian",
+    "cos": 0.9485,
+    "stable_key": "flavian|fungibility_dynasty|vocab_gap|c2",
+    "headline": "Flavian / [reverse type not yet catalogued]",
+    "ext_sig": "laureate / vespasian",
+    "size": 21
+   },
+   "exp_stable_key": null,
+   "exp_material": "flavian"
+  },
+  {
+   "fixture": "08_geta_augustus_victoriae_brit",
+   "checks": [
+    "material",
+    "stable_key",
+    "size"
+   ],
+   "fails": [
+    "size"
+   ],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "severan",
+    "cos": 0.9223,
+    "stable_key": "severan|severan_men_aug|victory advancing|denarius",
+    "headline": "Severan / victory advancing",
+    "ext_sig": "bearded / septimius severus / victory advancing",
+    "size": 157
+   },
+   "exp_stable_key": "severan|severan_men_aug|victory advancing|denarius",
+   "exp_material": "severan"
+  },
+  {
+   "fixture": "09_titus_caesar_victory",
+   "checks": [
+    "material",
+    "ext_sig",
+    "size"
+   ],
+   "fails": [
+    "ext_sig",
+    "size"
+   ],
+   "rank_of_expected": null,
+   "top1": {
+    "material": "flavian",
+    "cos": 0.9386,
+    "stable_key": "flavian|Flavian|victory advancing|denarius",
+    "headline": "Flavian / victory advancing",
+    "ext_sig": "laureate / vespasian / victory advancing",
+    "size": 22
+   },
+   "exp_stable_key": null,
+   "exp_material": "flavian"
+  },
+  {
+   "fixture": "100_sicily_katane_quadriga",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "sicily_other",
+    "cos": 0.8416,
+    "stable_key": "sicily_other|sic_katane|tetradrachm",
+    "headline": "Sicily, Katane \u2014 Apollo / quadriga (facing Silenos)",
+    "ext_sig": "Sicily / Sicily, Katane \u2014 Apollo / quadriga (facing Silenos) / Tetradrachm",
+    "size": 119
+   },
+   "exp_stable_key": "sicily_other|sic_katane|tetradrachm",
+   "exp_material": "sicily_other"
+  },
+  {
+   "fixture": "101_sicily_naxos_dionysos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "sicily_other",
+    "cos": 0.9155,
+    "stable_key": "sicily_other|sic_naxos|tetradrachm",
+    "headline": "Sicily, Naxos \u2014 Dionysos / squatting Silenos",
+    "ext_sig": "Sicily / Sicily, Naxos \u2014 Dionysos / squatting Silenos / Tetradrachm",
+    "size": 50
+   },
+   "exp_stable_key": "sicily_other|sic_naxos|tetradrachm",
+   "exp_material": "sicily_other"
+  },
+  {
+   "fixture": "10_titus_horseman",
+   "checks": [
+    "material",
+    "ext_sig",
+    "size"
+   ],
+   "fails": [
+    "size"
+   ],
+   "rank_of_expected": null,
+   "top1": {
+    "material": "flavian",
+    "cos": 0.8875,
+    "stable_key": "flavian|Titus-as-Augustus|capricorn|denarius",
+    "headline": "Titus (Augustus) / capricorn",
+    "ext_sig": "laureate / vespasian / capricorn",
+    "size": 22
+   },
+   "exp_stable_key": null,
+   "exp_material": "flavian"
+  },
+  {
+   "fixture": "110_flavian_gold_standing",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "flavian_gold",
+    "cos": 0.952,
+    "stable_key": "flavian_gold|standing|av",
+    "headline": "Flavian gold \u2014 standing figure (deity / personification)",
+    "ext_sig": "Flavian / Flavian gold \u2014 standing figure (deity / personification) / Aureus",
+    "size": 70
+   },
+   "exp_stable_key": "flavian_gold|standing|av",
+   "exp_material": "flavian_gold"
+  },
+  {
+   "fixture": "111_flavian_gold_legend",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "flavian_gold",
+    "cos": 0.9431,
+    "stable_key": "flavian_gold|legend|av",
+    "headline": "Flavian gold \u2014 legend reverse (inscription / legend in wreath)",
+    "ext_sig": "Flavian / Flavian gold \u2014 legend reverse (inscription / legend in wreath) / Aureus",
+    "size": 48
+   },
+   "exp_stable_key": "flavian_gold|legend|av",
+   "exp_material": "flavian_gold"
+  },
+  {
+   "fixture": "112_nerva_gold_standing",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "nerva_gold",
+    "cos": 0.9423,
+    "stable_key": "nerva_gold|standing|av",
+    "headline": "Nerva\u2013Trajan\u2013Hadrian gold \u2014 standing figure (deity / personification)",
+    "ext_sig": "Nerva\u2013Trajan\u2013Hadrian / Nerva\u2013Trajan\u2013Hadrian gold \u2014 standing figure (deity / personification) / Aureus",
+    "size": 109
+   },
+   "exp_stable_key": "nerva_gold|standing|av",
+   "exp_material": "nerva_gold"
+  },
+  {
+   "fixture": "113_nerva_gold_seated",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "nerva_gold",
+    "cos": 0.9506,
+    "stable_key": "nerva_gold|seated|av",
+    "headline": "Nerva\u2013Trajan\u2013Hadrian gold \u2014 seated deity",
+    "ext_sig": "Nerva\u2013Trajan\u2013Hadrian / Nerva\u2013Trajan\u2013Hadrian gold \u2014 seated deity / Aureus",
+    "size": 39
+   },
+   "exp_stable_key": "nerva_gold|seated|av",
+   "exp_material": "nerva_gold"
+  },
+  {
+   "fixture": "114_antonine_gold_standing",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "antonine_gold",
+    "cos": 0.942,
+    "stable_key": "antonine_gold|standing|av",
+    "headline": "Antonine gold \u2014 standing figure (deity / personification)",
+    "ext_sig": "Antonine / Antonine gold \u2014 standing figure (deity / personification) / Aureus",
+    "size": 218
+   },
+   "exp_stable_key": "antonine_gold|standing|av",
+   "exp_material": "antonine_gold"
+  },
+  {
+   "fixture": "115_antonine_gold_seated",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "antonine_gold",
+    "cos": 0.9427,
+    "stable_key": "antonine_gold|seated|av",
+    "headline": "Antonine gold \u2014 seated deity",
+    "ext_sig": "Antonine / Antonine gold \u2014 seated deity / Aureus",
+    "size": 40
+   },
+   "exp_stable_key": "antonine_gold|seated|av",
+   "exp_material": "antonine_gold"
+  },
+  {
+   "fixture": "11_vespasian_caesars_facing",
+   "checks": [
+    "material",
+    "ext_sig",
+    "size"
+   ],
+   "fails": [
+    "size"
+   ],
+   "rank_of_expected": null,
+   "top1": {
+    "material": "flavian",
+    "cos": 0.9382,
+    "stable_key": "flavian|Flavian|turreted|denarius",
+    "headline": "Flavian / turreted",
+    "ext_sig": "draped / vespasian / pax",
+    "size": 15
+   },
+   "exp_stable_key": null,
+   "exp_material": "flavian"
+  },
+  {
+   "fixture": "120_late_solidus_seated",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "late_solidus",
+    "cos": 0.9285,
+    "stable_key": "late_solidus|seated|av",
+    "headline": "Late Roman Empire gold \u2014 seated deity",
+    "ext_sig": "Late Roman Empire / Late Roman Empire gold \u2014 seated deity / Solidus",
+    "size": 543
+   },
+   "exp_stable_key": "late_solidus|seated|av",
+   "exp_material": "late_solidus"
+  },
+  {
+   "fixture": "121_late_solidus_standing",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "late_solidus",
+    "cos": 0.9465,
+    "stable_key": "late_solidus|standing|av",
+    "headline": "Late Roman Empire gold \u2014 standing figure (deity / personification)",
+    "ext_sig": "Late Roman Empire / Late Roman Empire gold \u2014 standing figure (deity / personification) / Solidus",
+    "size": 338
+   },
+   "exp_stable_key": "late_solidus|standing|av",
+   "exp_material": "late_solidus"
+  },
+  {
+   "fixture": "122_late_solidus_captive_trophy",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "late_solidus",
+    "cos": 0.952,
+    "stable_key": "late_solidus|captive_trophy|av",
+    "headline": "Late Roman Empire gold \u2014 trophy / captives",
+    "ext_sig": "Late Roman Empire / Late Roman Empire gold \u2014 trophy / captives / Solidus",
+    "size": 145
+   },
+   "exp_stable_key": "late_solidus|captive_trophy|av",
+   "exp_material": "late_solidus"
+  },
+  {
+   "fixture": "123_thessaly_league",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "thessaly_other",
+    "cos": 0.9261,
+    "stable_key": "thessaly_other|thessaly_region|drachm",
+    "headline": "Thessaly \u2014 facing/profile head / horse & horseman (regional silver)",
+    "ext_sig": "Thessaly (region) / Thessaly \u2014 facing/profile head / horse & horseman (regional silver) / Drachm",
+    "size": 1003
+   },
+   "exp_stable_key": "thessaly_other|thessaly_region|drachm",
+   "exp_material": "thessaly_other"
+  },
+  {
+   "fixture": "124_thessaly_pharsalos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "thessaly_other",
+    "cos": 0.9648,
+    "stable_key": "thessaly_other|thessaly_region|drachm",
+    "headline": "Thessaly \u2014 facing/profile head / horse & horseman (regional silver)",
+    "ext_sig": "Thessaly (region) / Thessaly \u2014 facing/profile head / horse & horseman (regional silver) / Drachm",
+    "size": 1003
+   },
+   "exp_stable_key": "thessaly_other|thessaly_region|drachm",
+   "exp_material": "thessaly_other"
+  },
+  {
+   "fixture": "125_boeotia_federal",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "boeotia_other",
+    "cos": 0.9114,
+    "stable_key": "boeotia_other|boe_federal|hemidrachm",
+    "headline": "Boeotia, Federal/koinon \u2014 Boeotian shield / amphora (BOI\u03a9\u03a4\u03a9\u039d)",
+    "ext_sig": "Boeotia (region) / Boeotia, Federal/koinon \u2014 Boeotian shield / amphora (BOI\u03a9\u03a4\u03a9\u039d) / Hemidrachm",
+    "size": 100
+   },
+   "exp_stable_key": "boeotia_other|boe_federal|hemidrachm",
+   "exp_material": "boeotia_other"
+  },
+  {
+   "fixture": "126_boeotia_tanagra",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "boeotia_other",
+    "cos": 0.5797,
+    "stable_key": "boeotia_other|boe_tanagra|obol",
+    "headline": "Boeotia, Tanagra \u2014 shield / forepart of horse",
+    "ext_sig": "Boeotia (region) / Boeotia, Tanagra \u2014 shield / forepart of horse / Obol",
+    "size": 42
+   },
+   "exp_stable_key": "boeotia_other|boe_tanagra|obol",
+   "exp_material": "boeotia_other"
+  },
+  {
+   "fixture": "127_akarnania_anaktorion",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "akarnania",
+    "cos": 0.8825,
+    "stable_key": "akarnania|akarnania_pegasos|stater",
+    "headline": "Akarnania \u2014 Pegasos / Athena (Corinthian-type colt stater)",
+    "ext_sig": "Akarnania / Akarnania \u2014 Pegasos / Athena (Corinthian-type colt stater) / Stater",
+    "size": 364
+   },
+   "exp_stable_key": "akarnania|akarnania_pegasos|stater",
+   "exp_material": "akarnania"
+  },
+  {
+   "fixture": "128_akarnania_thyrrheion",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "akarnania",
+    "cos": 0.9301,
+    "stable_key": "akarnania|akarnania_pegasos|stater",
+    "headline": "Akarnania \u2014 Pegasos / Athena (Corinthian-type colt stater)",
+    "ext_sig": "Akarnania / Akarnania \u2014 Pegasos / Athena (Corinthian-type colt stater) / Stater",
+    "size": 364
+   },
+   "exp_stable_key": "akarnania|akarnania_pegasos|stater",
+   "exp_material": "akarnania"
+  },
+  {
+   "fixture": "129_pelo_sikyon",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "peloponnese_other",
+    "cos": 0.849,
+    "stable_key": "peloponnese_other|pelo_sikyon|triobol",
+    "headline": "Peloponnese, Sikyon \u2014 chimera / dove",
+    "ext_sig": "Peloponnese (region) / Peloponnese, Sikyon \u2014 chimera / dove / Triobol",
+    "size": 109
+   },
+   "exp_stable_key": "peloponnese_other|pelo_sikyon|triobol",
+   "exp_material": "peloponnese_other"
+  },
+  {
+   "fixture": "12_vespasian_caesars_standing",
+   "checks": [
+    "material",
+    "ext_sig",
+    "size"
+   ],
+   "fails": [],
+   "rank_of_expected": null,
+   "top1": {
+    "material": "flavian",
+    "cos": 0.9592,
+    "stable_key": "flavian|fungibility_dynasty|vocab_gap|c24",
+    "headline": "Flavian / [reverse type not yet catalogued]",
+    "ext_sig": "laureate / vespasian",
+    "size": 3
+   },
+   "exp_stable_key": null,
+   "exp_material": "flavian"
+  },
+  {
+   "fixture": "130_pelo_achaian_league",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "peloponnese_other",
+    "cos": 0.9549,
+    "stable_key": "peloponnese_other|pelo_achaian_league|triobol",
+    "headline": "Achaian League \u2014 Zeus Homarios / A\u03a7 monogram (federal)",
+    "ext_sig": "Peloponnese (region) / Achaian League \u2014 Zeus Homarios / A\u03a7 monogram (federal) / Triobol",
+    "size": 147
+   },
+   "exp_stable_key": "peloponnese_other|pelo_achaian_league|triobol",
+   "exp_material": "peloponnese_other"
+  },
+  {
+   "fixture": "131_pelo_elis",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "peloponnese_other",
+    "cos": 0.8121,
+    "stable_key": "peloponnese_other|pelo_elis|stater",
+    "headline": "Peloponnese, Elis (Olympia) \u2014 eagle & thunderbolt / Nike",
+    "ext_sig": "Peloponnese (region) / Peloponnese, Elis (Olympia) \u2014 eagle & thunderbolt / Nike / Stater",
+    "size": 82
+   },
+   "exp_stable_key": "peloponnese_other|pelo_elis|stater",
+   "exp_material": "peloponnese_other"
+  },
+  {
+   "fixture": "132_pelo_argos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "peloponnese_other",
+    "cos": 0.9258,
+    "stable_key": "peloponnese_other|pelo_argos|triobol",
+    "headline": "Peloponnese, Argos \u2014 wolf / Athena, harpa",
+    "ext_sig": "Peloponnese (region) / Peloponnese, Argos \u2014 wolf / Athena, harpa / Triobol",
+    "size": 96
+   },
+   "exp_stable_key": "peloponnese_other|pelo_argos|triobol",
+   "exp_material": "peloponnese_other"
+  },
+  {
+   "fixture": "133_euboia_histiaia",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [
+    "material",
+    "stable_key"
+   ],
+   "rank_of_expected": 2,
+   "top1": {
+    "material": "pontos_bithynia",
+    "cos": 0.852,
+    "stable_key": "pontos_bithynia|pb_other|drachm",
+    "headline": "Pontos / Bithynia \u2014 Amastris / Tieion & uncertain mint",
+    "ext_sig": "Pontos / Bithynia (region) / Pontos / Bithynia \u2014 Amastris / Tieion & uncertain mint / Drachm",
+    "size": 47
+   },
+   "exp_stable_key": "euboia|eub_histiaia|tetrobol",
+   "exp_material": "euboia"
+  },
+  {
+   "fixture": "134_euboia_chalkis",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [
+    "material",
+    "stable_key"
+   ],
+   "rank_of_expected": 2,
+   "top1": {
+    "material": "troas",
+    "cos": 0.7834,
+    "stable_key": "troas|troas_abydos|drachm",
+    "headline": "Troas, Abydos \u2014 Apollo / eagle",
+    "ext_sig": "Troas (region) / Troas, Abydos \u2014 Apollo / eagle / Drachm",
+    "size": 106
+   },
+   "exp_stable_key": "euboia|eub_histiaia|tetrobol",
+   "exp_material": "euboia"
+  },
+  {
+   "fixture": "135_phokis_federal",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "phokis",
+    "cos": 0.8917,
+    "stable_key": "phokis|phokis_federal|triobol",
+    "headline": "Phokis, Phokian League \u2014 bull's head facing / Apollo or Artemis",
+    "ext_sig": "Phokis (Phokian League) / Phokis, Phokian League \u2014 bull's head facing / Apollo or Artemis / Triobol",
+    "size": 157
+   },
+   "exp_stable_key": "phokis|phokis_federal|triobol",
+   "exp_material": "phokis"
+  },
+  {
+   "fixture": "136_illyria_dyrrhachion",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "illyria_epeiros",
+    "cos": 0.8705,
+    "stable_key": "illyria_epeiros|illyr_dyrrhachion|drachm",
+    "headline": "Illyria, Dyrrhachion \u2014 cow suckling calf / double-stellate pattern",
+    "ext_sig": "Illyria & Epeiros (region) / Illyria, Dyrrhachion \u2014 cow suckling calf / double-stellate pattern / Drachm",
+    "size": 217
+   },
+   "exp_stable_key": "illyria_epeiros|illyr_dyrrhachion|drachm",
+   "exp_material": "illyria_epeiros"
+  },
+  {
+   "fixture": "137_illyria_ambrakia",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "illyria_epeiros",
+    "cos": 0.9109,
+    "stable_key": "illyria_epeiros|illyr_ambrakia|stater",
+    "headline": "Epeiros, Ambrakia \u2014 Pegasos / Athena (Corinthian-type stater)",
+    "ext_sig": "Illyria & Epeiros (region) / Epeiros, Ambrakia \u2014 Pegasos / Athena (Corinthian-type stater) / Stater",
+    "size": 142
+   },
+   "exp_stable_key": "illyria_epeiros|illyr_ambrakia|stater",
+   "exp_material": "illyria_epeiros"
+  },
+  {
+   "fixture": "138_illyria_korkyra",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "illyria_epeiros",
+    "cos": 0.8424,
+    "stable_key": "illyria_epeiros|illyr_korkyra|drachm",
+    "headline": "Korkyra \u2014 cow & calf / amphora & stellate (Pegasos staters)",
+    "ext_sig": "Illyria & Epeiros (region) / Korkyra \u2014 cow & calf / amphora & stellate (Pegasos staters) / Drachm",
+    "size": 59
+   },
+   "exp_stable_key": "illyria_epeiros|illyr_korkyra|drachm",
+   "exp_material": "illyria_epeiros"
+  },
+  {
+   "fixture": "139_illyria_apollonia",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "illyria_epeiros",
+    "cos": 0.9164,
+    "stable_key": "illyria_epeiros|illyr_dyrrhachion|drachm",
+    "headline": "Illyria, Dyrrhachion \u2014 cow suckling calf / double-stellate pattern",
+    "ext_sig": "Illyria & Epeiros (region) / Illyria, Dyrrhachion \u2014 cow suckling calf / double-stellate pattern / Drachm",
+    "size": 217
+   },
+   "exp_stable_key": "illyria_epeiros|illyr_dyrrhachion|drachm",
+   "exp_material": "illyria_epeiros"
+  },
+  {
+   "fixture": "13_vespasian_iudaea",
+   "checks": [
+    "material",
+    "ext_sig",
+    "size"
+   ],
+   "fails": [
+    "size"
+   ],
+   "rank_of_expected": null,
+   "top1": {
+    "material": "flavian",
+    "cos": 0.9317,
+    "stable_key": "flavian|Flavian|captive trophy scene|denarius",
+    "headline": "Flavian / captive trophy scene",
+    "ext_sig": "laureate / vespasian / judaea capta",
+    "size": 104
+   },
+   "exp_stable_key": null,
+   "exp_material": "flavian"
+  },
+  {
+   "fixture": "140_gaul_massalia_obol",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "gaul",
+    "cos": 0.905,
+    "stable_key": "gaul|gaul_massalia|obol",
+    "headline": "Gaul, Massalia \u2014 Apollo or Artemis head / lion (obol & drachm)",
+    "ext_sig": "Gaul (Massalia) / Gaul, Massalia \u2014 Apollo or Artemis head / lion (obol & drachm) / Obol",
+    "size": 375
+   },
+   "exp_stable_key": "gaul|gaul_massalia|obol",
+   "exp_material": "gaul"
+  },
+  {
+   "fixture": "141_gaul_massalia_drachm",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "gaul",
+    "cos": 0.9063,
+    "stable_key": "gaul|gaul_massalia|obol",
+    "headline": "Gaul, Massalia \u2014 Apollo or Artemis head / lion (obol & drachm)",
+    "ext_sig": "Gaul (Massalia) / Gaul, Massalia \u2014 Apollo or Artemis head / lion (obol & drachm) / Obol",
+    "size": 375
+   },
+   "exp_stable_key": "gaul|gaul_massalia|obol",
+   "exp_material": "gaul"
+  },
+  {
+   "fixture": "142_cgt_aitolian_league",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "central_greece_tail",
+    "cos": 0.9197,
+    "stable_key": "central_greece_tail|cgt_aitolian_league|triobol",
+    "headline": "Aitolia, Aitolian League \u2014 Athena or Herakles / Aitolia seated on shields",
+    "ext_sig": "Central Greece (Aitolia / Lokris / Megaris) / Aitolia, Aitolian League \u2014 Athena or Herakles / Aitolia seated on shields / Triobol",
+    "size": 61
+   },
+   "exp_stable_key": "central_greece_tail|cgt_aitolian_league|triobol",
+   "exp_material": "central_greece_tail"
+  },
+  {
+   "fixture": "143_cgt_lokris_opuntii",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "central_greece_tail",
+    "cos": 0.8943,
+    "stable_key": "central_greece_tail|cgt_lokris_opuntii|stater",
+    "headline": "Lokris Opuntii \u2014 Demeter-Persephone / Ajax the Lesser",
+    "ext_sig": "Central Greece (Aitolia / Lokris / Megaris) / Lokris Opuntii \u2014 Demeter-Persephone / Ajax the Lesser / Stater",
+    "size": 105
+   },
+   "exp_stable_key": "central_greece_tail|cgt_lokris_opuntii|stater",
+   "exp_material": "central_greece_tail"
+  },
+  {
+   "fixture": "144_troas_tenedos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "troas",
+    "cos": 0.9257,
+    "stable_key": "troas|troas_tenedos|drachm",
+    "headline": "Troas, Tenedos \u2014 janiform head / labrys (double-axe)",
+    "ext_sig": "Troas (region) / Troas, Tenedos \u2014 janiform head / labrys (double-axe) / Drachm",
+    "size": 76
+   },
+   "exp_stable_key": "troas|troas_tenedos|drachm",
+   "exp_material": "troas"
+  },
+  {
+   "fixture": "145_troas_kebren",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "troas",
+    "cos": 0.8427,
+    "stable_key": "troas|troas_kebren|diobol",
+    "headline": "Troas, Kebren \u2014 ram's head / head of Apollo",
+    "ext_sig": "Troas (region) / Troas, Kebren \u2014 ram's head / head of Apollo / Diobol",
+    "size": 181
+   },
+   "exp_stable_key": "troas|troas_kebren|diobol",
+   "exp_material": "troas"
+  },
+  {
+   "fixture": "146_troas_abydos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "troas",
+    "cos": 0.8566,
+    "stable_key": "troas|troas_abydos|drachm",
+    "headline": "Troas, Abydos \u2014 Apollo / eagle",
+    "ext_sig": "Troas (region) / Troas, Abydos \u2014 Apollo / eagle / Drachm",
+    "size": 106
+   },
+   "exp_stable_key": "troas|troas_abydos|drachm",
+   "exp_material": "troas"
+  },
+  {
+   "fixture": "147_aeolis_kyme",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "aeolis",
+    "cos": 0.8315,
+    "stable_key": "aeolis|aeolis_kyme|tetradrachm",
+    "headline": "Aeolis, Kyme \u2014 eagle / one-handled vase; Amazon Kyme / horse (stephanophoric tet)",
+    "ext_sig": "Aeolis (region) / Aeolis, Kyme \u2014 eagle / one-handled vase; Amazon Kyme / horse (stephanophoric tet) / Tetradrachm",
+    "size": 219
+   },
+   "exp_stable_key": "aeolis|aeolis_kyme|tetradrachm",
+   "exp_material": "aeolis"
+  },
+  {
+   "fixture": "148_aeolis_myrina",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "aeolis",
+    "cos": 0.8937,
+    "stable_key": "aeolis|aeolis_myrina|tetradrachm",
+    "headline": "Aeolis, Myrina \u2014 Apollo Gryneios / Apollo standing (stephanophoric tet)",
+    "ext_sig": "Aeolis (region) / Aeolis, Myrina \u2014 Apollo Gryneios / Apollo standing (stephanophoric tet) / Tetradrachm",
+    "size": 137
+   },
+   "exp_stable_key": "aeolis|aeolis_myrina|tetradrachm",
+   "exp_material": "aeolis"
+  },
+  {
+   "fixture": "149_aeolis_aigai",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [
+    "material",
+    "stable_key"
+   ],
+   "rank_of_expected": 2,
+   "top1": {
+    "material": "ionia",
+    "cos": 0.8956,
+    "stable_key": "ionia|ionia_magnesia|tetradrachm",
+    "headline": "Ionia, Magnesia ad Maeandrum \u2014 Apollo / Maeander (stephanophoric tet)",
+    "ext_sig": "Ionia (region) / Ionia, Magnesia ad Maeandrum \u2014 Apollo / Maeander (stephanophoric tet) / Tetradrachm",
+    "size": 96
+   },
+   "exp_stable_key": "aeolis|aeolis_myrina|tetradrachm",
+   "exp_material": "aeolis"
+  },
+  {
+   "fixture": "14_macrinus_standing",
+   "checks": [
+    "material",
+    "size"
+   ],
+   "fails": [
+    "size"
+   ],
+   "rank_of_expected": null,
+   "top1": {
+    "material": "severan",
+    "cos": 0.9273,
+    "stable_key": "severan|unknown|vocab_gap|c212",
+    "headline": "Macrinus / [reverse type not yet catalogued]",
+    "ext_sig": "draped-and-cuirassed / macrinus",
+    "size": 19
+   },
+   "exp_stable_key": null,
+   "exp_material": "severan"
+  },
+  {
+   "fixture": "150_lesbos_el",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [
+    "stable_key"
+   ],
+   "rank_of_expected": null,
+   "top1": {
+    "material": "mytilene",
+    "cos": 0.8856,
+    "stable_key": "mytilene|myt_apollo|hekte",
+    "headline": "Mytilene \u2014 Apollo (electrum hekte)",
+    "ext_sig": "Mytilene / Mytilene \u2014 Apollo (electrum hekte) / Hekte",
+    "size": 260
+   },
+   "exp_stable_key": "mytilene|apollo_hekte|hekte",
+   "exp_material": "mytilene"
+  },
+  {
+   "fixture": "151_lesbos_methymna",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "lesbos_other",
+    "cos": 0.9115,
+    "stable_key": "lesbos_other|lesbos_methymna|drachm",
+    "headline": "Lesbos, Methymna \u2014 Athena / Arion on dolphin; warrior",
+    "ext_sig": "Lesbos (region) / Lesbos, Methymna \u2014 Athena / Arion on dolphin; warrior / Drachm",
+    "size": 78
+   },
+   "exp_stable_key": "lesbos_other|lesbos_methymna|drachm",
+   "exp_material": "lesbos_other"
+  },
+  {
+   "fixture": "152_ionia_miletos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "ionia",
+    "cos": 0.8547,
+    "stable_key": "ionia|ionia_miletos|diobol",
+    "headline": "Ionia, Miletos \u2014 lion / star (floral)",
+    "ext_sig": "Ionia (region) / Ionia, Miletos \u2014 lion / star (floral) / Diobol",
+    "size": 426
+   },
+   "exp_stable_key": "ionia|ionia_miletos|diobol",
+   "exp_material": "ionia"
+  },
+  {
+   "fixture": "153_ionia_ephesos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [
+    "material",
+    "stable_key"
+   ],
+   "rank_of_expected": 3,
+   "top1": {
+    "material": "phoenicia",
+    "cos": 0.8691,
+    "stable_key": "phoenicia|phoen_arados|tetradrachm",
+    "headline": "Phoenicia, Arados \u2014 marine deity / galley & prow",
+    "ext_sig": "Phoenicia (region) / Phoenicia, Arados \u2014 marine deity / galley & prow / Tetradrachm",
+    "size": 300
+   },
+   "exp_stable_key": "ionia|ionia_ephesos|drachm",
+   "exp_material": "ionia"
+  },
+  {
+   "fixture": "154_ionia_magnesia",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "ionia",
+    "cos": 0.9013,
+    "stable_key": "ionia|ionia_magnesia|tetradrachm",
+    "headline": "Ionia, Magnesia ad Maeandrum \u2014 Apollo / Maeander (stephanophoric tet)",
+    "ext_sig": "Ionia (region) / Ionia, Magnesia ad Maeandrum \u2014 Apollo / Maeander (stephanophoric tet) / Tetradrachm",
+    "size": 96
+   },
+   "exp_stable_key": "ionia|ionia_magnesia|tetradrachm",
+   "exp_material": "ionia"
+  },
+  {
+   "fixture": "155_ionia_teos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "ionia",
+    "cos": 0.8527,
+    "stable_key": "ionia|ionia_teos|stater",
+    "headline": "Ionia, Teos \u2014 griffin",
+    "ext_sig": "Ionia (region) / Ionia, Teos \u2014 griffin / Stater",
+    "size": 114
+   },
+   "exp_stable_key": "ionia|ionia_teos|stater",
+   "exp_material": "ionia"
+  },
+  {
+   "fixture": "156_caria_antioch",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "caria_other",
+    "cos": 0.8917,
+    "stable_key": "caria_other|caria_antioch|tetradrachm",
+    "headline": "Caria, Antioch ad Maeandrum \u2014 Apollo / humped bull (stephanophoric)",
+    "ext_sig": "Caria (region) / Caria, Antioch ad Maeandrum \u2014 Apollo / humped bull (stephanophoric) / Tetradrachm",
+    "size": 128
+   },
+   "exp_stable_key": "caria_other|caria_antioch|tetradrachm",
+   "exp_material": "caria_other"
+  },
+  {
+   "fixture": "157_caria_mylasa",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "caria_other",
+    "cos": 0.8616,
+    "stable_key": "caria_other|caria_mylasa|hemiobol",
+    "headline": "Caria, Mylasa \u2014 lion / Zeus Labraundos",
+    "ext_sig": "Caria (region) / Caria, Mylasa \u2014 lion / Zeus Labraundos / Hemiobol",
+    "size": 200
+   },
+   "exp_stable_key": "caria_other|caria_mylasa|hemiobol",
+   "exp_material": "caria_other"
+  },
+  {
+   "fixture": "158_caria_kaunos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "caria_other",
+    "cos": 0.8779,
+    "stable_key": "caria_other|caria_kaunos|stater",
+    "headline": "Caria, Kaunos \u2014 winged figure / baetyl & sphinx",
+    "ext_sig": "Caria (region) / Caria, Kaunos \u2014 winged figure / baetyl & sphinx / Stater",
+    "size": 90
+   },
+   "exp_stable_key": "caria_other|caria_kaunos|stater",
+   "exp_material": "caria_other"
+  },
+  {
+   "fixture": "159_mysia_lampsakos_gold",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "mysia_other",
+    "cos": 0.9481,
+    "stable_key": "mysia_other|mysia_lampsakos|drachm",
+    "headline": "Mysia, Lampsakos \u2014 Apollo / forepart of Pegasos (gold, electrum & silver)",
+    "ext_sig": "Mysia (region) / Mysia, Lampsakos \u2014 Apollo / forepart of Pegasos (gold, electrum & silver) / Drachm",
+    "size": 325
+   },
+   "exp_stable_key": "mysia_other|mysia_lampsakos|drachm",
+   "exp_material": "mysia_other"
+  },
+  {
+   "fixture": "15_maximinus_pax",
+   "checks": [
+    "material",
+    "stable_key",
+    "ext_sig",
+    "size"
+   ],
+   "fails": [
+    "size"
+   ],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "maximinus_gordian3",
+    "cos": 0.9408,
+    "stable_key": "maximinus_gordian3|authority|pax standing|denarius",
+    "headline": "Maximinus I - Gordian III (AD 235-244) / pax standing",
+    "ext_sig": "laureate / Maximinus I / pax standing",
+    "size": 70
+   },
+   "exp_stable_key": "maximinus_gordian3|authority|pax standing|denarius",
+   "exp_material": "maximinus_gordian3"
+  },
+  {
+   "fixture": "160_mysia_parion",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "mysia_other",
+    "cos": 0.8734,
+    "stable_key": "mysia_other|mysia_parion|drachm",
+    "headline": "Mysia, Parion \u2014 facing gorgoneion / bull",
+    "ext_sig": "Mysia (region) / Mysia, Parion \u2014 facing gorgoneion / bull / Drachm",
+    "size": 300
+   },
+   "exp_stable_key": "mysia_other|mysia_parion|drachm",
+   "exp_material": "mysia_other"
+  },
+  {
+   "fixture": "161_mid4c_falling_horseman",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "mid4c",
+    "cos": 0.928,
+    "stable_key": "mid4c|falling_horseman|ae",
+    "headline": "Mid-4th century bronze \u2014 soldier spearing fallen horseman (FEL TEMP REPARATIO)",
+    "ext_sig": "Mid-4th century / Mid-4th century bronze \u2014 soldier spearing fallen horseman (FEL TEMP REPARATIO) / Follis",
+    "size": 20
+   },
+   "exp_stable_key": "mid4c|falling_horseman|ae",
+   "exp_material": "mid4c"
+  },
+  {
+   "fixture": "162_mid4c_two_standards",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "mid4c",
+    "cos": 0.9294,
+    "stable_key": "mid4c|two_standards|ae",
+    "headline": "Mid-4th century bronze \u2014 two figures (soldiers & standards / two Victories)",
+    "ext_sig": "Mid-4th century / Mid-4th century bronze \u2014 two figures (soldiers & standards / two Victories) / Follis",
+    "size": 44
+   },
+   "exp_stable_key": "mid4c|two_standards|ae",
+   "exp_material": "mid4c"
+  },
+  {
+   "fixture": "163_mid4c_standing",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "mid4c",
+    "cos": 0.9179,
+    "stable_key": "mid4c|standing|ae",
+    "headline": "Mid-4th century bronze \u2014 standing figure (deity / personification)",
+    "ext_sig": "Mid-4th century / Mid-4th century bronze \u2014 standing figure (deity / personification) / Maiorina",
+    "size": 156
+   },
+   "exp_stable_key": "mid4c|standing|ae",
+   "exp_material": "mid4c"
+  },
+  {
+   "fixture": "164_cilicia_kelenderis",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "cilicia",
+    "cos": 0.9622,
+    "stable_key": "cilicia|cil_kelenderis|stater",
+    "headline": "Cilicia, Kelenderis \u2014 youth on rearing horse / goat kneeling",
+    "ext_sig": "Cilicia (region) / Cilicia, Kelenderis \u2014 youth on rearing horse / goat kneeling / Stater",
+    "size": 100
+   },
+   "exp_stable_key": "cilicia|cil_kelenderis|stater",
+   "exp_material": "cilicia"
+  },
+  {
+   "fixture": "165_cilicia_nagidos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "cilicia",
+    "cos": 0.8668,
+    "stable_key": "cilicia|cil_nagidos|stater",
+    "headline": "Cilicia, Nagidos \u2014 Aphrodite seated / Dionysos standing",
+    "ext_sig": "Cilicia (region) / Cilicia, Nagidos \u2014 Aphrodite seated / Dionysos standing / Stater",
+    "size": 97
+   },
+   "exp_stable_key": "cilicia|cil_nagidos|stater",
+   "exp_material": "cilicia"
+  },
+  {
+   "fixture": "166_cilicia_mallos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "cilicia",
+    "cos": 0.8388,
+    "stable_key": "cilicia|cil_mallos|stater",
+    "headline": "Cilicia, Mallos \u2014 winged androkephalic figure / swan",
+    "ext_sig": "Cilicia (region) / Cilicia, Mallos \u2014 winged androkephalic figure / swan / Stater",
+    "size": 104
+   },
+   "exp_stable_key": "cilicia|cil_mallos|stater",
+   "exp_material": "cilicia"
+  },
+  {
+   "fixture": "167_pamphylia_aspendos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "pamphylia",
+    "cos": 0.9035,
+    "stable_key": "pamphylia|pam_aspendos|stater",
+    "headline": "Pamphylia, Aspendos \u2014 two wrestlers / slinger & triskeles",
+    "ext_sig": "Pamphylia (region) / Pamphylia, Aspendos \u2014 two wrestlers / slinger & triskeles / Stater",
+    "size": 283
+   },
+   "exp_stable_key": "pamphylia|pam_aspendos|stater",
+   "exp_material": "pamphylia"
+  },
+  {
+   "fixture": "168_pamphylia_side",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "pamphylia",
+    "cos": 0.8412,
+    "stable_key": "pamphylia|pam_side|tetradrachm",
+    "headline": "Pamphylia, Side \u2014 Athena / Nike & pomegranate",
+    "ext_sig": "Pamphylia (region) / Pamphylia, Side \u2014 Athena / Nike & pomegranate / Tetradrachm",
+    "size": 114
+   },
+   "exp_stable_key": "pamphylia|pam_side|tetradrachm",
+   "exp_material": "pamphylia"
+  },
+  {
+   "fixture": "169_pamphylia_perge",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "pamphylia",
+    "cos": 0.7866,
+    "stable_key": "pamphylia|pam_perge|drachm",
+    "headline": "Pamphylia, Perge \u2014 Artemis Pergaia / temple & cult statue",
+    "ext_sig": "Pamphylia (region) / Pamphylia, Perge \u2014 Artemis Pergaia / temple & cult statue / Drachm",
+    "size": 18
+   },
+   "exp_stable_key": "pamphylia|pam_perge|drachm",
+   "exp_material": "pamphylia"
+  },
+  {
+   "fixture": "16_septimius_severus_standing",
+   "checks": [
+    "material",
+    "stable_key",
+    "size"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "severan",
+    "cos": 0.9211,
+    "stable_key": "severan|severan_men_aug|victory standing|denarius",
+    "headline": "Severan / victory standing",
+    "ext_sig": "laureate / caracalla / victory advancing",
+    "size": 38
+   },
+   "exp_stable_key": "severan|severan_men_aug|victory standing|denarius",
+   "exp_material": "severan"
+  },
+  {
+   "fixture": "170_lydia_tralleis",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "lydia",
+    "cos": 0.9254,
+    "stable_key": "lydia|lydia_region|cistophorus",
+    "headline": "Lydia \u2014 cistophoric tetradrachm (cista mystica / bowcase)",
+    "ext_sig": "Lydia (region) / Lydia \u2014 cistophoric tetradrachm (cista mystica / bowcase) / Cistophorus",
+    "size": 138
+   },
+   "exp_stable_key": "lydia|lydia_region|cistophorus",
+   "exp_material": "lydia"
+  },
+  {
+   "fixture": "171_valentinian_captive_trophy",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "valentinian",
+    "cos": 0.9394,
+    "stable_key": "valentinian|captive_trophy|ae",
+    "headline": "Valentinianic dynasty bronze \u2014 trophy / captives",
+    "ext_sig": "Valentinianic dynasty / Valentinianic dynasty bronze \u2014 trophy / captives / Follis",
+    "size": 70
+   },
+   "exp_stable_key": "valentinian|captive_trophy|ae",
+   "exp_material": "valentinian"
+  },
+  {
+   "fixture": "172_theodosian_captive_trophy",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "theodosian",
+    "cos": 0.9075,
+    "stable_key": "theodosian|captive_trophy|ae",
+    "headline": "Theodosian bronze \u2014 trophy / captives",
+    "ext_sig": "Theodosian / Theodosian bronze \u2014 trophy / captives / Follis",
+    "size": 123
+   },
+   "exp_stable_key": "theodosian|captive_trophy|ae",
+   "exp_material": "theodosian"
+  },
+  {
+   "fixture": "173_lydia_kingdom_croeseid_gold",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "lydia_kingdom",
+    "cos": 0.8625,
+    "stable_key": "lydia_kingdom|lydia_kingdom|stater",
+    "headline": "Lydia (Kingdom) \u2014 Croeseid & Alyattes electrum",
+    "ext_sig": "Lydia (Kingdom) / Lydia (Kingdom) \u2014 Croeseid & Alyattes electrum / Stater",
+    "size": 738
+   },
+   "exp_stable_key": "lydia_kingdom|lydia_kingdom|stater",
+   "exp_material": "lydia_kingdom"
+  },
+  {
+   "fixture": "174_lydia_kingdom_croeseid_silver",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "lydia_kingdom",
+    "cos": 0.7386,
+    "stable_key": "lydia_kingdom|lydia_kingdom|stater",
+    "headline": "Lydia (Kingdom) \u2014 Croeseid & Alyattes electrum",
+    "ext_sig": "Lydia (Kingdom) / Lydia (Kingdom) \u2014 Croeseid & Alyattes electrum / Stater",
+    "size": 738
+   },
+   "exp_stable_key": "lydia_kingdom|lydia_kingdom|stater",
+   "exp_material": "lydia_kingdom"
+  },
+  {
+   "fixture": "175_lydia_kingdom_alyattes_electrum",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "lydia_kingdom",
+    "cos": 0.5642,
+    "stable_key": "lydia_kingdom|lydia_kingdom|stater",
+    "headline": "Lydia (Kingdom) \u2014 Croeseid & Alyattes electrum",
+    "ext_sig": "Lydia (Kingdom) / Lydia (Kingdom) \u2014 Croeseid & Alyattes electrum / Stater",
+    "size": 738
+   },
+   "exp_stable_key": "lydia_kingdom|lydia_kingdom|stater",
+   "exp_material": "lydia_kingdom"
+  },
+  {
+   "fixture": "179_licinius_jupiter_standing",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "licinius",
+    "cos": 0.9045,
+    "stable_key": "licinius|standing|ae",
+    "headline": "Licinius bronze \u2014 standing figure (deity / personification)",
+    "ext_sig": "Licinius / Licinius bronze \u2014 standing figure (deity / personification) / Follis",
+    "size": 742
+   },
+   "exp_stable_key": "licinius|standing|ae",
+   "exp_material": "licinius"
+  },
+  {
+   "fixture": "17_augustus_capricorn",
+   "checks": [
+    "material",
+    "stable_key",
+    "size"
+   ],
+   "fails": [
+    "size"
+   ],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "julio_claudian",
+    "cos": 0.8655,
+    "stable_key": "julio_claudian|authority|capricorn|denarius",
+    "headline": "Julio-Claudian & Civil War (27 BC-AD 69) / capricorn",
+    "ext_sig": "laureate / Augustus / capricorn",
+    "size": 49
+   },
+   "exp_stable_key": "julio_claudian|authority|capricorn|denarius",
+   "exp_material": "julio_claudian"
+  },
+  {
+   "fixture": "180_constantinian_house_two_standards",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "constantinian_house",
+    "cos": 0.9179,
+    "stable_key": "constantinian_house|two_standards|ae",
+    "headline": "Constantinian dynasty bronze \u2014 two figures (soldiers & standards / two Victories)",
+    "ext_sig": "Constantinian dynasty / Constantinian dynasty bronze \u2014 two figures (soldiers & standards / two Victories) / Follis",
+    "size": 936
+   },
+   "exp_stable_key": "constantinian_house|two_standards|ae",
+   "exp_material": "constantinian_house"
+  },
+  {
+   "fixture": "181_constantinian_house_camp_gate",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "constantinian_house",
+    "cos": 0.9345,
+    "stable_key": "constantinian_house|camp_gate|ae",
+    "headline": "Constantinian dynasty bronze \u2014 camp gate / city gate",
+    "ext_sig": "Constantinian dynasty / Constantinian dynasty bronze \u2014 camp gate / city gate / Follis",
+    "size": 414
+   },
+   "exp_stable_key": "constantinian_house|camp_gate|ae",
+   "exp_material": "constantinian_house"
+  },
+  {
+   "fixture": "182_constantine_i_sol_standing",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "constantine_i",
+    "cos": 0.8897,
+    "stable_key": "constantine_i|standing|ae",
+    "headline": "Constantine I bronze \u2014 standing figure (deity / personification)",
+    "ext_sig": "Constantine I / Constantine I bronze \u2014 standing figure (deity / personification) / Follis",
+    "size": 1418
+   },
+   "exp_stable_key": "constantine_i|standing|ae",
+   "exp_material": "constantine_i"
+  },
+  {
+   "fixture": "183_constantine_i_wolf_twins",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "constantine_i",
+    "cos": 0.8942,
+    "stable_key": "constantine_i|animal|ae",
+    "headline": "Constantine I bronze \u2014 animal reverse (wolf & twins, etc.)",
+    "ext_sig": "Constantine I / Constantine I bronze \u2014 animal reverse (wolf & twins, etc.) / Follis",
+    "size": 44
+   },
+   "exp_stable_key": "constantine_i|animal|ae",
+   "exp_material": "constantine_i"
+  },
+  {
+   "fixture": "184_thrace_chersonesos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "thrace",
+    "cos": 0.8671,
+    "stable_key": "thrace|thr_chersonesos|hemidrachm",
+    "headline": "Thrace, Chersonesos (Kardia) \u2014 lion forepart looking back",
+    "ext_sig": "Thrace (region) / Thrace, Chersonesos (Kardia) \u2014 lion forepart looking back / Hemidrachm",
+    "size": 139
+   },
+   "exp_stable_key": "thrace|thr_chersonesos|hemidrachm",
+   "exp_material": "thrace"
+  },
+  {
+   "fixture": "185_thrace_byzantion",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "thrace",
+    "cos": 0.868,
+    "stable_key": "thrace|thr_byzantion|drachm",
+    "headline": "Thrace, Byzantion \u2014 cow on dolphin / mill-sail incuse",
+    "ext_sig": "Thrace (region) / Thrace, Byzantion \u2014 cow on dolphin / mill-sail incuse / Drachm",
+    "size": 108
+   },
+   "exp_stable_key": "thrace|thr_byzantion|drachm",
+   "exp_material": "thrace"
+  },
+  {
+   "fixture": "186_thrace_ainos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "thrace",
+    "cos": 0.8826,
+    "stable_key": "thrace|thr_ainos|diobol",
+    "headline": "Thrace, Ainos \u2014 head of Hermes / goat",
+    "ext_sig": "Thrace (region) / Thrace, Ainos \u2014 head of Hermes / goat / Diobol",
+    "size": 62
+   },
+   "exp_stable_key": "thrace|thr_ainos|diobol",
+   "exp_material": "thrace"
+  },
+  {
+   "fixture": "187_thasos_satyr",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "thasos",
+    "cos": 0.8688,
+    "stable_key": "thasos|thas_satyr|stater",
+    "headline": "Thasos \u2014 satyr carrying nymph / incuse square (archaic stater)",
+    "ext_sig": "Islands off Thrace / Thasos \u2014 satyr carrying nymph / incuse square (archaic stater) / Stater",
+    "size": 229
+   },
+   "exp_stable_key": "thasos|thas_satyr|stater",
+   "exp_material": "thasos"
+  },
+  {
+   "fixture": "188_thasos_dionysos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "thasos",
+    "cos": 0.9307,
+    "stable_key": "thasos|thas_dionysos|tetradrachm",
+    "headline": "Thasos \u2014 wreathed Dionysos / Herakles standing (tetradrachm)",
+    "ext_sig": "Islands off Thrace / Thasos \u2014 wreathed Dionysos / Herakles standing (tetradrachm) / Tetradrachm",
+    "size": 51
+   },
+   "exp_stable_key": "thasos|thas_dionysos|tetradrachm",
+   "exp_material": "thasos"
+  },
+  {
+   "fixture": "189_black_sea_istros",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "black_sea",
+    "cos": 0.8982,
+    "stable_key": "black_sea|bs_istros|drachm",
+    "headline": "Black Sea, Istros \u2014 facing twin heads / sea-eagle on dolphin",
+    "ext_sig": "Black Sea (region) / Black Sea, Istros \u2014 facing twin heads / sea-eagle on dolphin / Drachm",
+    "size": 69
+   },
+   "exp_stable_key": "black_sea|bs_istros|drachm",
+   "exp_material": "black_sea"
+  },
+  {
+   "fixture": "18_diocletian_argenteus_campgate",
+   "checks": [
+    "material",
+    "stable_key",
+    "ext_sig",
+    "size"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "late_roman_silver",
+    "cos": 0.9122,
+    "stable_key": "late_roman_silver|authority|camp gate|argenteus",
+    "headline": "Late Roman silver (Tetrarchy - Theodosian, AD 294-450) / camp gate",
+    "ext_sig": "laureate / Diocletian / camp gate",
+    "size": 129
+   },
+   "exp_stable_key": "late_roman_silver|authority|camp gate|argenteus",
+   "exp_material": "late_roman_silver"
+  },
+  {
+   "fixture": "190_black_sea_tauric",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "black_sea",
+    "cos": 0.8799,
+    "stable_key": "black_sea|bs_tauric|drachm",
+    "headline": "Black Sea, Tauric Chersonesos \u2014 Artemis / butting bull",
+    "ext_sig": "Black Sea (region) / Black Sea, Tauric Chersonesos \u2014 Artemis / butting bull / Drachm",
+    "size": 40
+   },
+   "exp_stable_key": "black_sea|bs_tauric|drachm",
+   "exp_material": "black_sea"
+  },
+  {
+   "fixture": "191_crisis_bronze_postumus_galley",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "crisis_bronze",
+    "cos": 0.91,
+    "stable_key": "crisis_bronze|galley|ae",
+    "headline": "3rd-century crisis bronze \u2014 galley / figure on prow",
+    "ext_sig": "3rd-century crisis / 3rd-century crisis bronze \u2014 galley / figure on prow / Double Sestertius",
+    "size": 54
+   },
+   "exp_stable_key": "crisis_bronze|galley|ae",
+   "exp_material": "crisis_bronze"
+  },
+  {
+   "fixture": "192_crisis_bronze_standing",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "crisis_bronze",
+    "cos": 0.9223,
+    "stable_key": "crisis_bronze|standing|ae",
+    "headline": "3rd-century crisis bronze \u2014 standing figure (deity / personification)",
+    "ext_sig": "3rd-century crisis / 3rd-century crisis bronze \u2014 standing figure (deity / personification) / Sestertius",
+    "size": 664
+   },
+   "exp_stable_key": "crisis_bronze|standing|ae",
+   "exp_material": "crisis_bronze"
+  },
+  {
+   "fixture": "193_crisis_bronze_temple",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "crisis_bronze",
+    "cos": 0.9575,
+    "stable_key": "crisis_bronze|temple|ae",
+    "headline": "3rd-century crisis bronze \u2014 temple",
+    "ext_sig": "3rd-century crisis / 3rd-century crisis bronze \u2014 temple / Sestertius",
+    "size": 24
+   },
+   "exp_stable_key": "crisis_bronze|temple|ae",
+   "exp_material": "crisis_bronze"
+  },
+  {
+   "fixture": "194_phoenicia_arados",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "phoenicia",
+    "cos": 0.9269,
+    "stable_key": "phoenicia|phoen_arados|tetradrachm",
+    "headline": "Phoenicia, Arados \u2014 marine deity / galley & prow",
+    "ext_sig": "Phoenicia (region) / Phoenicia, Arados \u2014 marine deity / galley & prow / Tetradrachm",
+    "size": 300
+   },
+   "exp_stable_key": "phoenicia|phoen_arados|tetradrachm",
+   "exp_material": "phoenicia"
+  },
+  {
+   "fixture": "195_phoenicia_tyre",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "phoenicia",
+    "cos": 0.9563,
+    "stable_key": "phoenicia|phoen_tyre|shekel",
+    "headline": "Phoenicia, Tyre \u2014 Melqart / eagle on prow (Tyrian shekel)",
+    "ext_sig": "Phoenicia (region) / Phoenicia, Tyre \u2014 Melqart / eagle on prow (Tyrian shekel) / Shekel",
+    "size": 225
+   },
+   "exp_stable_key": "phoenicia|phoen_tyre|shekel",
+   "exp_material": "phoenicia"
+  },
+  {
+   "fixture": "196_phoenicia_sidon",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "phoenicia",
+    "cos": 0.8823,
+    "stable_key": "phoenicia|phoen_sidon|dishekel",
+    "headline": "Phoenicia, Sidon \u2014 galley / Persian king in chariot (city-kings)",
+    "ext_sig": "Phoenicia (region) / Phoenicia, Sidon \u2014 galley / Persian king in chariot (city-kings) / Dishekel",
+    "size": 74
+   },
+   "exp_stable_key": "phoenicia|phoen_sidon|dishekel",
+   "exp_material": "phoenicia"
+  },
+  {
+   "fixture": "197_judaea_jewish_war",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "judaea",
+    "cos": 0.9184,
+    "stable_key": "judaea|jud_jewish_war|shekel",
+    "headline": "Judaea, First Jewish War \u2014 chalice / three pomegranates",
+    "ext_sig": "Judaea (revolts) / Judaea, First Jewish War \u2014 chalice / three pomegranates / Shekel",
+    "size": 20
+   },
+   "exp_stable_key": "judaea|jud_jewish_war|shekel",
+   "exp_material": "judaea"
+  },
+  {
+   "fixture": "198_judaea_bar_kochba",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "judaea",
+    "cos": 0.9376,
+    "stable_key": "judaea|jud_bar_kochba|sela",
+    "headline": "Judaea, Bar Kochba Revolt \u2014 Temple facade / lulav & etrog",
+    "ext_sig": "Judaea (revolts) / Judaea, Bar Kochba Revolt \u2014 Temple facade / lulav & etrog / Sela",
+    "size": 28
+   },
+   "exp_stable_key": "judaea|jud_bar_kochba|sela",
+   "exp_material": "judaea"
+  },
+  {
+   "fixture": "199_lykia_dynasts",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "lykia",
+    "cos": 0.8549,
+    "stable_key": "lykia|lyk_dynasts|stater",
+    "headline": "Lykia (Dynasts) \u2014 triskeles / facing lion-scalp & boar",
+    "ext_sig": "Lykia (region) / Lykia (Dynasts) \u2014 triskeles / facing lion-scalp & boar / Stater",
+    "size": 202
+   },
+   "exp_stable_key": "lykia|lyk_dynasts|stater",
+   "exp_material": "lykia"
+  },
+  {
+   "fixture": "19_republican_apollo_horseman",
+   "checks": [
+    "material",
+    "stable_key",
+    "size"
+   ],
+   "fails": [
+    "size"
+   ],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "republican_slice1",
+    "cos": 0.9089,
+    "stable_key": "republican_slice1|Apollo|horseman|denarius",
+    "headline": "Apollo / horseman",
+    "ext_sig": "Apollo / L. Calpurnius Piso Frugi / horseman",
+    "size": 183
+   },
+   "exp_stable_key": "republican_slice1|Apollo|horseman|denarius",
+   "exp_material": "republican_slice1"
+  },
+  {
+   "fixture": "200_lykia_phaselis",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "lykia",
+    "cos": 0.8519,
+    "stable_key": "lykia|lyk_phaselis|stater",
+    "headline": "Lykia, Phaselis \u2014 galley & prow / Athena",
+    "ext_sig": "Lykia (region) / Lykia, Phaselis \u2014 galley & prow / Athena / Stater",
+    "size": 59
+   },
+   "exp_stable_key": "lykia|lyk_phaselis|stater",
+   "exp_material": "lykia"
+  },
+  {
+   "fixture": "202_pisidia_selge_obol",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "pisidia",
+    "cos": 0.8706,
+    "stable_key": "pisidia|pisidia_selge|obol",
+    "headline": "Pisidia, Selge \u2014 gorgoneion / Athena & astragalos",
+    "ext_sig": "Pisidia (Selge) / Pisidia, Selge \u2014 gorgoneion / Athena & astragalos / Obol",
+    "size": 269
+   },
+   "exp_stable_key": "pisidia|pisidia_selge|obol",
+   "exp_material": "pisidia"
+  },
+  {
+   "fixture": "203_pontos_sinope",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "pontos_bithynia",
+    "cos": 0.8853,
+    "stable_key": "pontos_bithynia|pb_sinope|drachm",
+    "headline": "Pontos, Sinope \u2014 nymph / sea-eagle on dolphin",
+    "ext_sig": "Pontos / Bithynia (region) / Pontos, Sinope \u2014 nymph / sea-eagle on dolphin / Drachm",
+    "size": 94
+   },
+   "exp_stable_key": "pontos_bithynia|pb_sinope|drachm",
+   "exp_material": "pontos_bithynia"
+  },
+  {
+   "fixture": "204_pontos_kalchedon",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "pontos_bithynia",
+    "cos": 0.883,
+    "stable_key": "pontos_bithynia|pb_kalchedon|drachm",
+    "headline": "Bithynia, Kalchedon \u2014 bull on grain-ear / incuse",
+    "ext_sig": "Pontos / Bithynia (region) / Bithynia, Kalchedon \u2014 bull on grain-ear / incuse / Drachm",
+    "size": 63
+   },
+   "exp_stable_key": "pontos_bithynia|pb_kalchedon|drachm",
+   "exp_material": "pontos_bithynia"
+  },
+  {
+   "fixture": "205_pontos_amisos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "pontos_bithynia",
+    "cos": 0.9114,
+    "stable_key": "pontos_bithynia|pb_amisos|drachm",
+    "headline": "Pontos, Amisos \u2014 Hera / owl (Peiraieos drachms)",
+    "ext_sig": "Pontos / Bithynia (region) / Pontos, Amisos \u2014 Hera / owl (Peiraieos drachms) / Drachm",
+    "size": 56
+   },
+   "exp_stable_key": "pontos_bithynia|pb_amisos|drachm",
+   "exp_material": "pontos_bithynia"
+  },
+  {
+   "fixture": "206_phrygia_laodikeia",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "phrygia",
+    "cos": 0.9043,
+    "stable_key": "phrygia|phrygia_region|cistophorus",
+    "headline": "Phrygia \u2014 cistophorus (cista mystica) & civic silver",
+    "ext_sig": "Phrygia (region) / Phrygia \u2014 cistophorus (cista mystica) & civic silver / Cistophorus",
+    "size": 48
+   },
+   "exp_stable_key": "phrygia|phrygia_region|cistophorus",
+   "exp_material": "phrygia"
+  },
+  {
+   "fixture": "207_alexander_tetradrachm",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [
+    "stable_key"
+   ],
+   "rank_of_expected": null,
+   "top1": {
+    "material": "alexander",
+    "cos": 0.973,
+    "stable_key": "alexander|alexander|tetradrachm",
+    "headline": "Kings of Macedon \u2014 Alexander III & Philip III Arrhidaeus",
+    "ext_sig": "Kings of Macedon (Alexander) / Kings of Macedon \u2014 Alexander III & Philip III Arrhidaeus / Tetradrachm",
+    "size": 5685
+   },
+   "exp_stable_key": "alexander|alexander_silver|tetradrachm",
+   "exp_material": "alexander"
+  },
+  {
+   "fixture": "208_alexander_gold_stater",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [
+    "stable_key"
+   ],
+   "rank_of_expected": null,
+   "top1": {
+    "material": "alexander",
+    "cos": 0.9296,
+    "stable_key": "alexander|alexander|tetradrachm",
+    "headline": "Kings of Macedon \u2014 Alexander III & Philip III Arrhidaeus",
+    "ext_sig": "Kings of Macedon (Alexander) / Kings of Macedon \u2014 Alexander III & Philip III Arrhidaeus / Tetradrachm",
+    "size": 5685
+   },
+   "exp_stable_key": "alexander|alexander_gold|stater",
+   "exp_material": "alexander"
+  },
+  {
+   "fixture": "209_alexander_drachm",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [
+    "stable_key"
+   ],
+   "rank_of_expected": null,
+   "top1": {
+    "material": "alexander",
+    "cos": 0.9453,
+    "stable_key": "alexander|alexander|tetradrachm",
+    "headline": "Kings of Macedon \u2014 Alexander III & Philip III Arrhidaeus",
+    "ext_sig": "Kings of Macedon (Alexander) / Kings of Macedon \u2014 Alexander III & Philip III Arrhidaeus / Tetradrachm",
+    "size": 5685
+   },
+   "exp_stable_key": "alexander|alexander_silver|tetradrachm",
+   "exp_material": "alexander"
+  },
+  {
+   "fixture": "20_republican_juno_bull_animal",
+   "checks": [
+    "material",
+    "stable_key",
+    "size"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "republican_slice1",
+    "cos": 0.9376,
+    "stable_key": "republican_slice1|Juno|animal|denarius",
+    "headline": "Juno / animal",
+    "ext_sig": "Juno / L. Thorius Balbus / animal",
+    "size": 77
+   },
+   "exp_stable_key": "republican_slice1|Juno|animal|denarius",
+   "exp_material": "republican_slice1"
+  },
+  {
+   "fixture": "210_philip_iii",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [
+    "stable_key"
+   ],
+   "rank_of_expected": null,
+   "top1": {
+    "material": "alexander",
+    "cos": 0.9582,
+    "stable_key": "alexander|alexander|tetradrachm",
+    "headline": "Kings of Macedon \u2014 Alexander III & Philip III Arrhidaeus",
+    "ext_sig": "Kings of Macedon (Alexander) / Kings of Macedon \u2014 Alexander III & Philip III Arrhidaeus / Tetradrachm",
+    "size": 5685
+   },
+   "exp_stable_key": "alexander|philip_iii_silver|tetradrachm",
+   "exp_material": "alexander"
+  },
+  {
+   "fixture": "211_alexander_lifetime",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [
+    "stable_key"
+   ],
+   "rank_of_expected": null,
+   "top1": {
+    "material": "alexander",
+    "cos": 0.9308,
+    "stable_key": "alexander|alexander|tetradrachm",
+    "headline": "Kings of Macedon \u2014 Alexander III & Philip III Arrhidaeus",
+    "ext_sig": "Kings of Macedon (Alexander) / Kings of Macedon \u2014 Alexander III & Philip III Arrhidaeus / Tetradrachm",
+    "size": 5685
+   },
+   "exp_stable_key": "alexander|alexander_lifetime_silver|tetradrachm",
+   "exp_material": "alexander"
+  },
+  {
+   "fixture": "212_macedon_philip_ii_tet",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "macedon_kings",
+    "cos": 0.8736,
+    "stable_key": "macedon_kings|mk_philip_ii|tetradrachm",
+    "headline": "Kings of Macedon, Philip II \u2014 Zeus / youth on horseback & Apollo / biga",
+    "ext_sig": "Kings of Macedon / Kings of Macedon, Philip II \u2014 Zeus / youth on horseback & Apollo / biga / Tetradrachm",
+    "size": 79
+   },
+   "exp_stable_key": "macedon_kings|mk_philip_ii|tetradrachm",
+   "exp_material": "macedon_kings"
+  },
+  {
+   "fixture": "213_macedon_philip_ii_gold_stater",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "macedon_kings",
+    "cos": 0.9003,
+    "stable_key": "macedon_kings|mk_philip_ii|tetradrachm",
+    "headline": "Kings of Macedon, Philip II \u2014 Zeus / youth on horseback & Apollo / biga",
+    "ext_sig": "Kings of Macedon / Kings of Macedon, Philip II \u2014 Zeus / youth on horseback & Apollo / biga / Tetradrachm",
+    "size": 79
+   },
+   "exp_stable_key": "macedon_kings|mk_philip_ii|tetradrachm",
+   "exp_material": "macedon_kings"
+  },
+  {
+   "fixture": "214_macedon_demetrios_poliorketes",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "macedon_kings",
+    "cos": 0.8441,
+    "stable_key": "macedon_kings|mk_demetrios_i|tetradrachm",
+    "headline": "Kings of Macedon, Demetrios I Poliorketes \u2014 Nike on prow / Poseidon & portrait",
+    "ext_sig": "Kings of Macedon / Kings of Macedon, Demetrios I Poliorketes \u2014 Nike on prow / Poseidon & portrait / Tetradrachm",
+    "size": 196
+   },
+   "exp_stable_key": "macedon_kings|mk_demetrios_i|tetradrachm",
+   "exp_material": "macedon_kings"
+  },
+  {
+   "fixture": "215_macedon_antigonos_gonatas",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "macedon_kings",
+    "cos": 0.8893,
+    "stable_key": "macedon_kings|mk_antigonos_gonatas|tetradrachm",
+    "headline": "Kings of Macedon, Antigonos II Gonatas \u2014 Pan on Macedonian shield / Athena Alkidemos",
+    "ext_sig": "Kings of Macedon / Kings of Macedon, Antigonos II Gonatas \u2014 Pan on Macedonian shield / Athena Alkidemos / Tetradrachm",
+    "size": 181
+   },
+   "exp_stable_key": "macedon_kings|mk_antigonos_gonatas|tetradrachm",
+   "exp_material": "macedon_kings"
+  },
+  {
+   "fixture": "216_macedon_perseus",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "macedon_kings",
+    "cos": 0.9339,
+    "stable_key": "macedon_kings|mk_perseus|tetradrachm",
+    "headline": "Kings of Macedon, Perseus \u2014 portrait / eagle on thunderbolt in oak-wreath",
+    "ext_sig": "Kings of Macedon / Kings of Macedon, Perseus \u2014 portrait / eagle on thunderbolt in oak-wreath / Tetradrachm",
+    "size": 135
+   },
+   "exp_stable_key": "macedon_kings|mk_perseus|tetradrachm",
+   "exp_material": "macedon_kings"
+  },
+  {
+   "fixture": "217_macedon_philip_v",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "macedon_kings",
+    "cos": 0.8614,
+    "stable_key": "macedon_kings|mk_philip_v|tetradrachm",
+    "headline": "Kings of Macedon, Philip V \u2014 portrait / club in oak-wreath & Athena",
+    "ext_sig": "Kings of Macedon / Kings of Macedon, Philip V \u2014 portrait / club in oak-wreath & Athena / Tetradrachm",
+    "size": 35
+   },
+   "exp_stable_key": "macedon_kings|mk_philip_v|tetradrachm",
+   "exp_material": "macedon_kings"
+  },
+  {
+   "fixture": "218_macedon_antigonos_doson",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "macedon_kings",
+    "cos": 0.9295,
+    "stable_key": "macedon_kings|mk_antigonos_doson|tetradrachm",
+    "headline": "Kings of Macedon, Antigonos III Doson \u2014 Poseidon / Apollo on prow",
+    "ext_sig": "Kings of Macedon / Kings of Macedon, Antigonos III Doson \u2014 Poseidon / Apollo on prow / Tetradrachm",
+    "size": 24
+   },
+   "exp_stable_key": "macedon_kings|mk_antigonos_doson|tetradrachm",
+   "exp_material": "macedon_kings"
+  },
+  {
+   "fixture": "219_lysimachos_tetradrachm",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "lysimachos",
+    "cos": 0.9505,
+    "stable_key": "lysimachos|lysimachos|tetradrachm",
+    "headline": "Kings of Thrace, Lysimachos \u2014 deified Alexander (horn of Ammon) / Athena Nikephoros enthroned",
+    "ext_sig": "Kings of Thrace (Lysimachos) / Kings of Thrace, Lysimachos \u2014 deified Alexander (horn of Ammon) / Athena Nikephoros enthroned / Tetradrachm",
+    "size": 329
+   },
+   "exp_stable_key": "lysimachos|lysimachos|tetradrachm",
+   "exp_material": "lysimachos"
+  },
+  {
+   "fixture": "21_republican_janus_galley",
+   "checks": [
+    "material",
+    "stable_key",
+    "size"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "republican_slice2",
+    "cos": 0.8612,
+    "stable_key": "republican_slice2|Janus|galley/prow|denarius",
+    "headline": "Janus / galley/prow",
+    "ext_sig": "Janus / C. Fonteius / galley / prow",
+    "size": 35
+   },
+   "exp_stable_key": "republican_slice2|Janus|galley/prow|denarius",
+   "exp_material": "republican_slice2"
+  },
+  {
+   "fixture": "220_lysimachos_gold_stater",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "lysimachos",
+    "cos": 0.9438,
+    "stable_key": "lysimachos|lysimachos|tetradrachm",
+    "headline": "Kings of Thrace, Lysimachos \u2014 deified Alexander (horn of Ammon) / Athena Nikephoros enthroned",
+    "ext_sig": "Kings of Thrace (Lysimachos) / Kings of Thrace, Lysimachos \u2014 deified Alexander (horn of Ammon) / Athena Nikephoros enthroned / Tetradrachm",
+    "size": 329
+   },
+   "exp_stable_key": "lysimachos|lysimachos|tetradrachm",
+   "exp_material": "lysimachos"
+  },
+  {
+   "fixture": "221_paeonia_patraos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "paeonia",
+    "cos": 0.924,
+    "stable_key": "paeonia|pk_patraos|tetradrachm",
+    "headline": "Kings of Paeonia, Patraos \u2014 Apollo head / horseman spearing fallen enemy",
+    "ext_sig": "Kings of Paeonia / Kings of Paeonia, Patraos \u2014 Apollo head / horseman spearing fallen enemy / Tetradrachm",
+    "size": 192
+   },
+   "exp_stable_key": "paeonia|pk_patraos|tetradrachm",
+   "exp_material": "paeonia"
+  },
+  {
+   "fixture": "222_paeonia_lykkeios",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "paeonia",
+    "cos": 0.9312,
+    "stable_key": "paeonia|pk_lykkeios|tetradrachm",
+    "headline": "Kings of Paeonia, Lykkeios \u2014 Zeus / Herakles strangling lion",
+    "ext_sig": "Kings of Paeonia / Kings of Paeonia, Lykkeios \u2014 Zeus / Herakles strangling lion / Tetradrachm",
+    "size": 28
+   },
+   "exp_stable_key": "paeonia|pk_lykkeios|tetradrachm",
+   "exp_material": "paeonia"
+  },
+  {
+   "fixture": "223_argead_perdikkas_ii",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "early_argead_macedon",
+    "cos": 0.9366,
+    "stable_key": "early_argead_macedon|ea_perdikkas_ii|tetrobol",
+    "headline": "Kings of Macedon, Perdikkas II \u2014 horseman / lion forepart light tetrobols",
+    "ext_sig": "Kings of Macedon (early Argead) / Kings of Macedon, Perdikkas II \u2014 horseman / lion forepart light tetrobols / Tetrobol",
+    "size": 56
+   },
+   "exp_stable_key": "early_argead_macedon|ea_perdikkas_ii|tetrobol",
+   "exp_material": "early_argead_macedon"
+  },
+  {
+   "fixture": "224_argead_alexander_i",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "early_argead_macedon",
+    "cos": 0.8775,
+    "stable_key": "early_argead_macedon|ea_alexander_i|octadrachm",
+    "headline": "Kings of Macedon, Alexander I \u2014 horseman & horse, Bisaltic heavy silver",
+    "ext_sig": "Kings of Macedon (early Argead) / Kings of Macedon, Alexander I \u2014 horseman & horse, Bisaltic heavy silver / Octadrachm",
+    "size": 30
+   },
+   "exp_stable_key": "early_argead_macedon|ea_alexander_i|octadrachm",
+   "exp_material": "early_argead_macedon"
+  },
+  {
+   "fixture": "225_argead_late_didrachm",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "early_argead_macedon",
+    "cos": 0.888,
+    "stable_key": "early_argead_macedon|ea_late_argead|didrachm",
+    "headline": "Kings of Macedon, late Argeads \u2014 Archelaos to Perdikkas III (head / horse types)",
+    "ext_sig": "Kings of Macedon (early Argead) / Kings of Macedon, late Argeads \u2014 Archelaos to Perdikkas III (head / horse types) / Didrachm",
+    "size": 54
+   },
+   "exp_stable_key": "early_argead_macedon|ea_late_argead|didrachm",
+   "exp_material": "early_argead_macedon"
+  },
+  {
+   "fixture": "226_baktria_eukratides_helmeted",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "baktria_indogreek",
+    "cos": 0.9361,
+    "stable_key": "baktria_indogreek|bk_helmeted|tetradrachm",
+    "headline": "Baktria, Eukratides & the helmeted-bust kings \u2014 heroic bust / Dioskouroi charging",
+    "ext_sig": "Baktria & Indo-Greek Kings / Baktria, Eukratides & the helmeted-bust kings \u2014 heroic bust / Dioskouroi charging / Tetradrachm",
+    "size": 345
+   },
+   "exp_stable_key": "baktria_indogreek|bk_helmeted|tetradrachm",
+   "exp_material": "baktria_indogreek"
+  },
+  {
+   "fixture": "227_baktria_menander",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "baktria_indogreek",
+    "cos": 0.8796,
+    "stable_key": "baktria_indogreek|bk_indogreek|drachm",
+    "headline": "Baktria & Indo-Greek kings \u2014 diademed royal portrait / Zeus, Athena, Herakles",
+    "ext_sig": "Baktria & Indo-Greek Kings / Baktria & Indo-Greek kings \u2014 diademed royal portrait / Zeus, Athena, Herakles / Drachm",
+    "size": 683
+   },
+   "exp_stable_key": "baktria_indogreek|bk_indogreek|drachm",
+   "exp_material": "baktria_indogreek"
+  },
+  {
+   "fixture": "228_baktria_antimachos_kausia",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [
+    "material",
+    "stable_key"
+   ],
+   "rank_of_expected": 3,
+   "top1": {
+    "material": "julio_claudian",
+    "cos": 0.9081,
+    "stable_key": "julio_claudian|authority|emperor figure|denarius",
+    "headline": "Julio-Claudian & Civil War (27 BC-AD 69) / emperor figure",
+    "ext_sig": "bust / Augustus / emperor figure",
+    "size": 505
+   },
+   "exp_stable_key": "baktria_indogreek|bk_indogreek|drachm",
+   "exp_material": "baktria_indogreek"
+  },
+  {
+   "fixture": "229_seleukid_seleukos_i",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "seleukid_early",
+    "cos": 0.9379,
+    "stable_key": "seleukid_early|se_seleukos_i|tetradrachm",
+    "headline": "Seleukid Empire, Seleukos I Nikator \u2014 Zeus / Athena in elephant quadriga, horned horse & elephants",
+    "ext_sig": "Seleukid Empire / Seleukid Empire, Seleukos I Nikator \u2014 Zeus / Athena in elephant quadriga, horned horse & elephants / Tetradrachm",
+    "size": 559
+   },
+   "exp_stable_key": "seleukid_early|se_seleukos_i|tetradrachm",
+   "exp_material": "seleukid_early"
+  },
+  {
+   "fixture": "22_athenian_owl_mass",
+   "checks": [
+    "material",
+    "stable_key",
+    "ext_sig",
+    "size"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "athenian_owls",
+    "cos": 0.9091,
+    "stable_key": "athenian_owls|standard_owl|owl|tetradrachm",
+    "headline": "Standard Owl (Athens)",
+    "ext_sig": "Athens / Standard Owl (Athens) / owl",
+    "size": 2555
+   },
+   "exp_stable_key": "athenian_owls|standard_owl|owl|tetradrachm",
+   "exp_material": "athenian_owls"
+  },
+  {
+   "fixture": "230_seleukid_omphalos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "seleukid_early",
+    "cos": 0.9635,
+    "stable_key": "seleukid_early|se_omphalos|tetradrachm",
+    "headline": "Seleukid Empire, the early Antiochoi \u2014 diademed head / Apollo seated on omphalos (house type)",
+    "ext_sig": "Seleukid Empire / Seleukid Empire, the early Antiochoi \u2014 diademed head / Apollo seated on omphalos (house type) / Tetradrachm",
+    "size": 898
+   },
+   "exp_stable_key": "seleukid_early|se_omphalos|tetradrachm",
+   "exp_material": "seleukid_early"
+  },
+  {
+   "fixture": "231_seleukid_late_zeus",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "seleukid_late",
+    "cos": 0.9307,
+    "stable_key": "seleukid_late|sl_zeus|tetradrachm",
+    "headline": "Seleukid Empire, post-Apamea \u2014 diademed head / Zeus enthroned, Apollo on omphalos & Tyche",
+    "ext_sig": "Seleukid Empire / Seleukid Empire, post-Apamea \u2014 diademed head / Zeus enthroned, Apollo on omphalos & Tyche / Tetradrachm",
+    "size": 1157
+   },
+   "exp_stable_key": "seleukid_late|sl_zeus|tetradrachm",
+   "exp_material": "seleukid_late"
+  },
+  {
+   "fixture": "232_seleukid_eagle",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "seleukid_late",
+    "cos": 0.9111,
+    "stable_key": "seleukid_late|sl_eagle|tetradrachm",
+    "headline": "Seleukid Empire \u2014 Phoenician-standard eagle tetradrachms (Balas & Demetrios II; Tyre / Sidon / Ake)",
+    "ext_sig": "Seleukid Empire / Seleukid Empire \u2014 Phoenician-standard eagle tetradrachms (Balas & Demetrios II; Tyre / Sidon / Ake) / Tetradrachm",
+    "size": 373
+   },
+   "exp_stable_key": "seleukid_late|sl_eagle|tetradrachm",
+   "exp_material": "seleukid_late"
+  },
+  {
+   "fixture": "233_ptolemaic_eagle_tet",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "ptolemaic",
+    "cos": 0.9255,
+    "stable_key": "ptolemaic|pt_eagle|tetradrachm",
+    "headline": "Ptolemaic Kings of Egypt \u2014 diademed Ptolemy I / eagle on thunderbolt (the 250-year tetradrachm)",
+    "ext_sig": "Ptolemaic Kings of Egypt / Ptolemaic Kings of Egypt \u2014 diademed Ptolemy I / eagle on thunderbolt (the 250-year tetradrachm) / Tetradrachm",
+    "size": 685
+   },
+   "exp_stable_key": "ptolemaic|pt_eagle|tetradrachm",
+   "exp_material": "ptolemaic"
+  },
+  {
+   "fixture": "234_ptolemaic_arsinoe_gold",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "ptolemaic",
+    "cos": 0.9306,
+    "stable_key": "ptolemaic|pt_gold|av octadrachm",
+    "headline": "Ptolemaic Kings of Egypt \u2014 dynastic-portrait gold (Arsinoe II mnaieia, Berenike II, Ptolemy IV)",
+    "ext_sig": "Ptolemaic Kings of Egypt / Ptolemaic Kings of Egypt \u2014 dynastic-portrait gold (Arsinoe II mnaieia, Berenike II, Ptolemy IV) / AV Octadrachm",
+    "size": 146
+   },
+   "exp_stable_key": "ptolemaic|pt_gold|av octadrachm",
+   "exp_material": "ptolemaic"
+  },
+  {
+   "fixture": "235_hk_mithradates_vi",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "hellenistic_kingdoms",
+    "cos": 0.9191,
+    "stable_key": "hellenistic_kingdoms|hk_pontos_bosporan|tetradrachm",
+    "headline": "Kings of Pontos & Bosporos \u2014 Mithradates VI (wind-swept portrait / stag & Pegasos) and the Black Sea kings",
+    "ext_sig": "Hellenistic Kingdoms (minor) / Kings of Pontos & Bosporos \u2014 Mithradates VI (wind-swept portrait / stag & Pegasos) and the Black Sea kings / Tetradrachm",
+    "size": 108
+   },
+   "exp_stable_key": "hellenistic_kingdoms|hk_pontos_bosporan|tetradrachm",
+   "exp_material": "hellenistic_kingdoms"
+  },
+  {
+   "fixture": "236_hk_cappadocia_drachm",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "hellenistic_kingdoms",
+    "cos": 0.9304,
+    "stable_key": "hellenistic_kingdoms|hk_cappadocia|drachm",
+    "headline": "Kings of Cappadocia \u2014 Ariarathes & Ariobarzanes / Athena Nikephoros drachms",
+    "ext_sig": "Hellenistic Kingdoms (minor) / Kings of Cappadocia \u2014 Ariarathes & Ariobarzanes / Athena Nikephoros drachms / Drachm",
+    "size": 305
+   },
+   "exp_stable_key": "hellenistic_kingdoms|hk_cappadocia|drachm",
+   "exp_material": "hellenistic_kingdoms"
+  },
+  {
+   "fixture": "237_hk_attalid_philetairos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "hellenistic_kingdoms",
+    "cos": 0.9594,
+    "stable_key": "hellenistic_kingdoms|hk_attalid|tetradrachm",
+    "headline": "Kings of Pergamon \u2014 the fixed Philetairos portrait / Athena enthroned (Eumenes & Attalos issues)",
+    "ext_sig": "Hellenistic Kingdoms (minor) / Kings of Pergamon \u2014 the fixed Philetairos portrait / Athena enthroned (Eumenes & Attalos issues) / Tetradrachm",
+    "size": 170
+   },
+   "exp_stable_key": "hellenistic_kingdoms|hk_attalid|tetradrachm",
+   "exp_material": "hellenistic_kingdoms"
+  },
+  {
+   "fixture": "238_sceatta_e_porcupine",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "sceatta",
+    "cos": 0.9242,
+    "stable_key": "sceatta|series_E|sceatta|sceatta",
+    "headline": "Sceatta Series E \u2014 'porcupine' (Frisian & imitations)",
+    "ext_sig": "Sceatta / Sceatta Series E \u2014 'porcupine' (Frisian & imitations)",
+    "size": 72
+   },
+   "exp_stable_key": "sceatta|series_E|sceatta|sceatta",
+   "exp_material": "sceatta"
+  },
+  {
+   "fixture": "239_sceatta_x_wodan",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "sceatta",
+    "cos": 0.9455,
+    "stable_key": "sceatta|series_X|sceatta|sceatta",
+    "headline": "Sceatta Series X \u2014 'Wodan' head (Danish, Ribe)",
+    "ext_sig": "Sceatta / Sceatta Series X \u2014 'Wodan' head (Danish, Ribe)",
+    "size": 8
+   },
+   "exp_stable_key": "sceatta|series_X|sceatta|sceatta",
+   "exp_material": "sceatta"
+  },
+  {
+   "fixture": "23_athenian_owl_new_style",
+   "checks": [
+    "material",
+    "stable_key",
+    "ext_sig",
+    "size"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "athenian_owls",
+    "cos": 0.8927,
+    "stable_key": "athenian_owls|new_style|owl|tetradrachm",
+    "headline": "New Style Owl (Athens)",
+    "ext_sig": "Athens / New Style Owl (Athens) / owl",
+    "size": 370
+   },
+   "exp_stable_key": "athenian_owls|new_style|owl|tetradrachm",
+   "exp_material": "athenian_owls"
+  },
+  {
+   "fixture": "240_sceatta_k_figural",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "sceatta",
+    "cos": 0.9059,
+    "stable_key": "sceatta|secondary_figural|sceatta|sceatta",
+    "headline": "Secondary Figural Group (Series K & mules)",
+    "ext_sig": "Sceatta / Secondary Figural Group (Series K & mules)",
+    "size": 53
+   },
+   "exp_stable_key": "sceatta|secondary_figural|sceatta|sceatta",
+   "exp_material": "sceatta"
+  },
+  {
+   "fixture": "241_alexandria_eagle",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "alexandria_tetradrachm",
+    "cos": 0.9259,
+    "stable_key": "alexandria_tetradrachm|alexandria_tet|tetradrachm",
+    "headline": "Alexandria \u2014 billon tetradrachm (eagle / Nilus / Serapis / Elpis / Tyche \u2026)",
+    "ext_sig": "Alexandria (Roman Egypt) / Alexandria \u2014 billon tetradrachm (eagle / Nilus / Serapis / Elpis / Tyche \u2026) / Tetradrachm",
+    "size": 1971
+   },
+   "exp_stable_key": "alexandria_tetradrachm|alexandria_tet|tetradrachm",
+   "exp_material": "alexandria_tetradrachm"
+  },
+  {
+   "fixture": "242_alexandria_hadrian_nilus_ry",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "alexandria_tetradrachm",
+    "cos": 0.9013,
+    "stable_key": "alexandria_tetradrachm|alexandria_tet|tetradrachm",
+    "headline": "Alexandria \u2014 billon tetradrachm (eagle / Nilus / Serapis / Elpis / Tyche \u2026)",
+    "ext_sig": "Alexandria (Roman Egypt) / Alexandria \u2014 billon tetradrachm (eagle / Nilus / Serapis / Elpis / Tyche \u2026) / Tetradrachm",
+    "size": 1971
+   },
+   "exp_stable_key": "alexandria_tetradrachm|alexandria_tet|tetradrachm",
+   "exp_material": "alexandria_tetradrachm"
+  },
+  {
+   "fixture": "243_hadrian_victory_ric400",
+   "checks": [
+    "material"
+   ],
+   "fails": [
+    "material"
+   ],
+   "rank_of_expected": null,
+   "top1": {
+    "material": "flavian",
+    "cos": 0.8834,
+    "stable_key": "flavian|Flavian|mars standing|denarius",
+    "headline": "Flavian / mars standing",
+    "ext_sig": "laureate / vespasian / mars standing",
+    "size": 14
+   },
+   "exp_stable_key": null,
+   "exp_material": "nerva"
+  },
+  {
+   "fixture": "244_aurelian_vabalathus_alexandria",
+   "checks": [
+    "material"
+   ],
+   "fails": [
+    "material"
+   ],
+   "rank_of_expected": null,
+   "top1": {
+    "material": "theodosian",
+    "cos": 0.8432,
+    "stable_key": "theodosian|captive_trophy|ae",
+    "headline": "Theodosian bronze \u2014 trophy / captives",
+    "ext_sig": "Theodosian / Theodosian bronze \u2014 trophy / captives / Follis",
+    "size": 123
+   },
+   "exp_stable_key": null,
+   "exp_material": "alexandria_tetradrachm"
+  },
+  {
+   "fixture": "247_sasanian_khusro_ii_crown",
+   "checks": [
+    "material"
+   ],
+   "fails": [],
+   "rank_of_expected": null,
+   "top1": {
+    "material": "sasanian_drachm",
+    "cos": 0.9228,
+    "stable_key": "sasanian_drachm|sasanian_drachm|drachm",
+    "headline": "Sasanian Empire \u2014 silver drachm (crowned bust / fire altar with two attendants)",
+    "ext_sig": "Sasanian Empire / crowned bust / fire altar with two attendants / Drachm",
+    "size": 1236
+   },
+   "exp_stable_key": null,
+   "exp_material": "sasanian_drachm"
+  },
+  {
+   "fixture": "248_sasanian_ardashir_i_crown",
+   "checks": [
+    "material"
+   ],
+   "fails": [],
+   "rank_of_expected": null,
+   "top1": {
+    "material": "sasanian_drachm",
+    "cos": 0.903,
+    "stable_key": "sasanian_drachm|sasanian_drachm|drachm",
+    "headline": "Sasanian Empire \u2014 silver drachm (crowned bust / fire altar with two attendants)",
+    "ext_sig": "Sasanian Empire / crowned bust / fire altar with two attendants / Drachm",
+    "size": 1236
+   },
+   "exp_stable_key": null,
+   "exp_material": "sasanian_drachm"
+  },
+  {
+   "fixture": "249_sasanian_imitation_crown",
+   "checks": [
+    "material"
+   ],
+   "fails": [],
+   "rank_of_expected": null,
+   "top1": {
+    "material": "sasanian_drachm",
+    "cos": 0.9284,
+    "stable_key": "sasanian_drachm|sasanian_drachm|drachm",
+    "headline": "Sasanian Empire \u2014 silver drachm (crowned bust / fire altar with two attendants)",
+    "ext_sig": "Sasanian Empire / crowned bust / fire altar with two attendants / Drachm",
+    "size": 1236
+   },
+   "exp_stable_key": null,
+   "exp_material": "sasanian_drachm"
+  },
+  {
+   "fixture": "24_athenian_owl_imitation",
+   "checks": [
+    "material",
+    "stable_key",
+    "ext_sig",
+    "size"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "athenian_owls",
+    "cos": 0.929,
+    "stable_key": "athenian_owls|standard_owl|owl|tetradrachm",
+    "headline": "Standard Owl (Athens)",
+    "ext_sig": "Athens / Standard Owl (Athens) / owl",
+    "size": 2555
+   },
+   "exp_stable_key": "athenian_owls|standard_owl|owl|tetradrachm",
+   "exp_material": "athenian_owls"
+  },
+  {
+   "fixture": "250_parthian_mithradates_ii",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "parthian_drachm",
+    "cos": 0.8985,
+    "stable_key": "parthian_drachm|parthian_drachm|drachm",
+    "headline": "Parthian Empire \u2014 silver drachm (diademed royal bust / archer seated holding bow)",
+    "ext_sig": "Parthian Empire / diademed bust / archer (Arsakes) seated holding bow / Drachm",
+    "size": 1461
+   },
+   "exp_stable_key": "parthian_drachm|parthian_drachm|drachm",
+   "exp_material": "parthian_drachm"
+  },
+  {
+   "fixture": "251_parthian_vologases_i",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "parthian_drachm",
+    "cos": 0.8829,
+    "stable_key": "parthian_drachm|parthian_drachm|drachm",
+    "headline": "Parthian Empire \u2014 silver drachm (diademed royal bust / archer seated holding bow)",
+    "ext_sig": "Parthian Empire / diademed bust / archer (Arsakes) seated holding bow / Drachm",
+    "size": 1461
+   },
+   "exp_stable_key": "parthian_drachm|parthian_drachm|drachm",
+   "exp_material": "parthian_drachm"
+  },
+  {
+   "fixture": "252_parthian_era_fallback",
+   "checks": [
+    "material"
+   ],
+   "fails": [],
+   "rank_of_expected": null,
+   "top1": {
+    "material": "parthian_drachm",
+    "cos": 0.8728,
+    "stable_key": "parthian_drachm|parthian_drachm|drachm",
+    "headline": "Parthian Empire \u2014 silver drachm (diademed royal bust / archer seated holding bow)",
+    "ext_sig": "Parthian Empire / diademed bust / archer (Arsakes) seated holding bow / Drachm",
+    "size": 1461
+   },
+   "exp_stable_key": null,
+   "exp_material": "parthian_drachm"
+  },
+  {
+   "fixture": "253_cyprus_paphos_bull_eagle",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "cyprus",
+    "cos": 0.8835,
+    "stable_key": "cyprus|cyp_paphos|stater",
+    "headline": "Cyprus, Paphos \u2014 bull standing / eagle & astragalos",
+    "ext_sig": "Cyprus (Kingdoms) / Cyprus, Paphos \u2014 bull standing / eagle & astragalos / Stater",
+    "size": 50
+   },
+   "exp_stable_key": "cyprus|cyp_paphos|stater",
+   "exp_material": "cyprus"
+  },
+  {
+   "fixture": "254_cyprus_salamis_ram",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "cyprus",
+    "cos": 0.9128,
+    "stable_key": "cyprus|cyp_salamis|stater",
+    "headline": "Cyprus, Salamis \u2014 ram recumbent / ankh; Herakles (Evagoras)",
+    "ext_sig": "Cyprus (Kingdoms) / Cyprus, Salamis \u2014 ram recumbent / ankh; Herakles (Evagoras) / Stater",
+    "size": 73
+   },
+   "exp_stable_key": "cyprus|cyp_salamis|stater",
+   "exp_material": "cyprus"
+  },
+  {
+   "fixture": "255_cyprus_kition_herakles",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "cyprus",
+    "cos": 0.8612,
+    "stable_key": "cyprus|cyp_kition|stater",
+    "headline": "Cyprus, Kition \u2014 Herakles / lion attacking stag (Phoenician kings)",
+    "ext_sig": "Cyprus (Kingdoms) / Cyprus, Kition \u2014 Herakles / lion attacking stag (Phoenician kings) / Stater",
+    "size": 41
+   },
+   "exp_stable_key": "cyprus|cyp_kition|stater",
+   "exp_material": "cyprus"
+  },
+  {
+   "fixture": "256_satcil_mazaios",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "satrapal_cilicia",
+    "cos": 0.8994,
+    "stable_key": "satrapal_cilicia|sc_mazaios|stater",
+    "headline": "Cilicia, Tarsos \u2014 Mazaios (Mazday), satrap \u2014 Baaltars enthroned / lion attacking bull",
+    "ext_sig": "Cilicia (satrapal) / Cilicia, Tarsos \u2014 Mazaios (Mazday), satrap \u2014 Baaltars enthroned / lion attacking bull / Stater",
+    "size": 63
+   },
+   "exp_stable_key": "satrapal_cilicia|sc_mazaios|stater",
+   "exp_material": "satrapal_cilicia"
+  },
+  {
+   "fixture": "257_satcil_datames",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "satrapal_cilicia",
+    "cos": 0.9235,
+    "stable_key": "satrapal_cilicia|sc_datames|stater",
+    "headline": "Cilicia, Tarsos \u2014 Tarkumuwa (Datames), satrap \u2014 facing head / Baaltars & Ana",
+    "ext_sig": "Cilicia (satrapal) / Cilicia, Tarsos \u2014 Tarkumuwa (Datames), satrap \u2014 facing head / Baaltars & Ana / Stater",
+    "size": 72
+   },
+   "exp_stable_key": "satrapal_cilicia|sc_datames|stater",
+   "exp_material": "satrapal_cilicia"
+  },
+  {
+   "fixture": "258_satcil_pharnabazos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "satrapal_cilicia",
+    "cos": 0.9411,
+    "stable_key": "satrapal_cilicia|sc_pharnabazos|stater",
+    "headline": "Cilicia, Tarsos \u2014 Pharnabazos, Persian commander \u2014 facing Arethusa head / helmeted head",
+    "ext_sig": "Cilicia (satrapal) / Cilicia, Tarsos \u2014 Pharnabazos, Persian commander \u2014 facing Arethusa head / helmeted head / Stater",
+    "size": 120
+   },
+   "exp_stable_key": "satrapal_cilicia|sc_pharnabazos|stater",
+   "exp_material": "satrapal_cilicia"
+  },
+  {
+   "fixture": "259_cyprus_salamis_evagoras_cabinet",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "cyprus",
+    "cos": 0.9659,
+    "stable_key": "cyprus|cyp_salamis|stater",
+    "headline": "Cyprus, Salamis \u2014 ram recumbent / ankh; Herakles (Evagoras)",
+    "ext_sig": "Cyprus (Kingdoms) / Cyprus, Salamis \u2014 ram recumbent / ankh; Herakles (Evagoras) / Stater",
+    "size": 73
+   },
+   "exp_stable_key": "cyprus|cyp_salamis|stater",
+   "exp_material": "cyprus"
+  },
+  {
+   "fixture": "25_republican_wellhead_attributes",
+   "checks": [
+    "material",
+    "stable_key",
+    "ext_sig",
+    "size"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "republican_slice3",
+    "cos": 0.9204,
+    "stable_key": "republican_slice3|Bonus Eventus|attributes|denarius",
+    "headline": "Bonus Eventus / attributes",
+    "ext_sig": "Bonus Eventus / L. Scribonius Libo / attributes",
+    "size": 132
+   },
+   "exp_stable_key": "republican_slice3|Bonus Eventus|attributes|denarius",
+   "exp_material": "republican_slice3"
+  },
+  {
+   "fixture": "26_republican_villa_temple",
+   "checks": [
+    "material",
+    "stable_key",
+    "ext_sig",
+    "size"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "republican_slice3",
+    "cos": 0.9323,
+    "stable_key": "republican_slice3|Concordia|temple/altar|denarius",
+    "headline": "Concordia / temple/altar",
+    "ext_sig": "Concordia / L. Mussidius Longus / temple / altar",
+    "size": 54
+   },
+   "exp_stable_key": "republican_slice3|Concordia|temple/altar|denarius",
+   "exp_material": "republican_slice3"
+  },
+  {
+   "fixture": "27_imperatorial_caesar_elephant",
+   "checks": [
+    "material",
+    "stable_key",
+    "ext_sig",
+    "size"
+   ],
+   "fails": [
+    "size"
+   ],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "republican_imperatorial",
+    "cos": 0.8955,
+    "stable_key": "republican_imperatorial|(no deity)|elephant|denarius",
+    "headline": "(no deity) / elephant",
+    "ext_sig": "(no deity) / Julius Caesar / elephant",
+    "size": 282
+   },
+   "exp_stable_key": "republican_imperatorial|(no deity)|elephant|denarius",
+   "exp_material": "republican_imperatorial"
+  },
+  {
+   "fixture": "28_imperatorial_legionary_standards",
+   "checks": [
+    "material",
+    "stable_key",
+    "ext_sig",
+    "size"
+   ],
+   "fails": [
+    "size"
+   ],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "republican_imperatorial",
+    "cos": 0.8932,
+    "stable_key": "republican_imperatorial|(no deity)|standards|denarius",
+    "headline": "(no deity) / standards",
+    "ext_sig": "(no deity) / Mark Antony / standards",
+    "size": 528
+   },
+   "exp_stable_key": "republican_imperatorial|(no deity)|standards|denarius",
+   "exp_material": "republican_imperatorial"
+  },
+  {
+   "fixture": "29_tarentum_nomos",
+   "checks": [
+    "material",
+    "stable_key",
+    "ext_sig"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "tarentum",
+    "cos": 0.902,
+    "stable_key": "tarentum|tarentum_nomos|didrachm",
+    "headline": "Tarentum Nomos \u2014 Taras on dolphin / horseman",
+    "ext_sig": "Tarentum / Tarentum Nomos \u2014 Taras on dolphin / horseman / Didrachm",
+    "size": 883
+   },
+   "exp_stable_key": "tarentum|tarentum_nomos|didrachm",
+   "exp_material": "tarentum"
+  },
+  {
+   "fixture": "30_tarentum_diobol",
+   "checks": [
+    "material",
+    "stable_key",
+    "ext_sig"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "tarentum",
+    "cos": 0.8931,
+    "stable_key": "tarentum|tarentum_diobol|diobol",
+    "headline": "Tarentum Diobol \u2014 Athena / Herakles & lion",
+    "ext_sig": "Tarentum / Tarentum Diobol \u2014 Athena / Herakles & lion / Diobol",
+    "size": 85
+   },
+   "exp_stable_key": "tarentum|tarentum_diobol|diobol",
+   "exp_material": "tarentum"
+  },
+  {
+   "fixture": "31_republican_anon_dioscuri",
+   "checks": [
+    "material",
+    "stable_key",
+    "size"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "republican_anon_early",
+    "cos": 0.9263,
+    "stable_key": "republican_anon_early|Roma|Dioscuri|denarius",
+    "headline": "Roma / Dioscuri",
+    "ext_sig": "Roma / Anonymous / dioscuri",
+    "size": 58
+   },
+   "exp_stable_key": "republican_anon_early|Roma|Dioscuri|denarius",
+   "exp_material": "republican_anon_early"
+  },
+  {
+   "fixture": "32_syracuse_arethusa_quadriga",
+   "checks": [
+    "material",
+    "stable_key",
+    "ext_sig"
+   ],
+   "fails": [
+    "material",
+    "stable_key",
+    "ext_sig"
+   ],
+   "rank_of_expected": null,
+   "top1": {
+    "material": "republican_slice1",
+    "cos": 0.8882,
+    "stable_key": "republican_slice1|Mars|biga|denarius",
+    "headline": "Mars / biga",
+    "ext_sig": "Mars / L. Iulius Caesar / biga",
+    "size": 37
+   },
+   "exp_stable_key": "syracuse|syracuse_arethusa|tetradrachm",
+   "exp_material": "syracuse"
+  },
+  {
+   "fixture": "33_syracuse_persephone",
+   "checks": [
+    "material",
+    "stable_key",
+    "ext_sig"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "syracuse",
+    "cos": 0.9218,
+    "stable_key": "syracuse|syracuse_persephone|tetradrachm",
+    "headline": "Syracuse \u2014 Persephone / Kore",
+    "ext_sig": "Syracuse / Syracuse \u2014 Persephone / Kore / Tetradrachm",
+    "size": 26
+   },
+   "exp_stable_key": "syracuse|syracuse_persephone|tetradrachm",
+   "exp_material": "syracuse"
+  },
+  {
+   "fixture": "34_larissa_nymph_horse",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "larissa",
+    "cos": 0.9515,
+    "stable_key": "larissa|larissa_nymph_horse|drachm",
+    "headline": "Larissa \u2014 facing nymph / horse",
+    "ext_sig": "Larissa / Larissa \u2014 facing nymph / horse / Drachm",
+    "size": 343
+   },
+   "exp_stable_key": "larissa|larissa_nymph_horse|drachm",
+   "exp_material": "larissa"
+  },
+  {
+   "fixture": "35_larissa_thessalos_bull",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "larissa",
+    "cos": 0.8985,
+    "stable_key": "larissa|larissa_thessalos_bull|drachm",
+    "headline": "Larissa \u2014 Thessalos taming the bull",
+    "ext_sig": "Larissa / Larissa \u2014 Thessalos taming the bull / Drachm",
+    "size": 92
+   },
+   "exp_stable_key": "larissa|larissa_thessalos_bull|drachm",
+   "exp_material": "larissa"
+  },
+  {
+   "fixture": "36_kyzikos_el_hekte",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "kyzikos",
+    "cos": 0.8548,
+    "stable_key": "kyzikos|kyzikos_el_hekte|hekte",
+    "headline": "Kyzikos \u2014 electrum hekte (1/6 stater)",
+    "ext_sig": "Kyzikos / Kyzikos \u2014 electrum hekte (1/6 stater) / Hekte",
+    "size": 266
+   },
+   "exp_stable_key": "kyzikos|kyzikos_el_hekte|hekte",
+   "exp_material": "kyzikos"
+  },
+  {
+   "fixture": "37_kyzikos_ar_lion",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "kyzikos",
+    "cos": 0.8419,
+    "stable_key": "kyzikos|kyzikos_ar_fraction|obol",
+    "headline": "Kyzikos \u2014 silver fraction",
+    "ext_sig": "Kyzikos / Kyzikos \u2014 silver fraction / Obol",
+    "size": 335
+   },
+   "exp_stable_key": "kyzikos|kyzikos_ar_fraction|obol",
+   "exp_material": "kyzikos"
+  },
+  {
+   "fixture": "38_pantikapaion_lion",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "pantikapaion",
+    "cos": 0.8155,
+    "stable_key": "pantikapaion|panti_lion_head|diobol",
+    "headline": "Pantikapaion \u2014 facing lion head",
+    "ext_sig": "Pantikapaion / Pantikapaion \u2014 facing lion head / Diobol",
+    "size": 156
+   },
+   "exp_stable_key": "pantikapaion|panti_lion_head|diobol",
+   "exp_material": "pantikapaion"
+  },
+  {
+   "fixture": "39_pantikapaion_satyr_griffin",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "pantikapaion",
+    "cos": 0.8677,
+    "stable_key": "pantikapaion|panti_satyr_griffin|drachm",
+    "headline": "Pantikapaion \u2014 Satyr / griffin",
+    "ext_sig": "Pantikapaion / Pantikapaion \u2014 Satyr / griffin / Drachm",
+    "size": 72
+   },
+   "exp_stable_key": "pantikapaion|panti_satyr_griffin|drachm",
+   "exp_material": "pantikapaion"
+  },
+  {
+   "fixture": "40_mytilene_apollo",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "mytilene",
+    "cos": 0.9077,
+    "stable_key": "mytilene|myt_apollo|hekte",
+    "headline": "Mytilene \u2014 Apollo (electrum hekte)",
+    "ext_sig": "Mytilene / Mytilene \u2014 Apollo (electrum hekte) / Hekte",
+    "size": 260
+   },
+   "exp_stable_key": "mytilene|myt_apollo|hekte",
+   "exp_material": "mytilene"
+  },
+  {
+   "fixture": "41_mytilene_dionysos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "mytilene",
+    "cos": 0.9213,
+    "stable_key": "mytilene|myt_dionysos|hekte",
+    "headline": "Mytilene \u2014 Dionysos (electrum hekte)",
+    "ext_sig": "Mytilene / Mytilene \u2014 Dionysos (electrum hekte) / Hekte",
+    "size": 106
+   },
+   "exp_stable_key": "mytilene|myt_dionysos|hekte",
+   "exp_material": "mytilene"
+  },
+  {
+   "fixture": "42_akragas_eagle_crab",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "akragas",
+    "cos": 0.9091,
+    "stable_key": "akragas|akragas_eagle_crab|didrachm",
+    "headline": "Akragas \u2014 eagle / crab",
+    "ext_sig": "Akragas / Akragas \u2014 eagle / crab / Didrachm",
+    "size": 159
+   },
+   "exp_stable_key": "akragas|akragas_eagle_crab|didrachm",
+   "exp_material": "akragas"
+  },
+  {
+   "fixture": "43_akragas_later",
+   "checks": [
+    "material"
+   ],
+   "fails": [
+    "material"
+   ],
+   "rank_of_expected": null,
+   "top1": {
+    "material": "theodosian",
+    "cos": 0.8527,
+    "stable_key": "theodosian|legend|ae",
+    "headline": "Theodosian bronze \u2014 legend reverse (VOT / monogram / inscription in wreath)",
+    "ext_sig": "Theodosian / Theodosian bronze \u2014 legend reverse (VOT / monogram / inscription in wreath) / AE4",
+    "size": 48
+   },
+   "exp_stable_key": null,
+   "exp_material": "(cross-material \u2014 NOT akragas)"
+  },
+  {
+   "fixture": "44_aegina_turtle",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "aegina",
+    "cos": 0.8383,
+    "stable_key": "aegina|aegina_turtle|stater",
+    "headline": "Aegina \u2014 turtle / tortoise (incuse)",
+    "ext_sig": "Aegina / Aegina \u2014 turtle / tortoise (incuse) / Stater",
+    "size": 308
+   },
+   "exp_stable_key": "aegina|aegina_turtle|stater",
+   "exp_material": "aegina"
+  },
+  {
+   "fixture": "45_akragas_eagle_hare",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "akragas",
+    "cos": 0.8551,
+    "stable_key": "akragas|akragas_eagle_crab|didrachm",
+    "headline": "Akragas \u2014 eagle / crab",
+    "ext_sig": "Akragas / Akragas \u2014 eagle / crab / Didrachm",
+    "size": 159
+   },
+   "exp_stable_key": "akragas|akragas_eagle_crab|didrachm",
+   "exp_material": "akragas"
+  },
+  {
+   "fixture": "46_phokaia_el_hekte",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "phokaia",
+    "cos": 0.9129,
+    "stable_key": "phokaia|phokaia_el_hekte|hekte",
+    "headline": "Phokaia \u2014 electrum hekte (1/6 stater)",
+    "ext_sig": "Phokaia / Phokaia \u2014 electrum hekte (1/6 stater) / Hekte",
+    "size": 177
+   },
+   "exp_stable_key": "phokaia|phokaia_el_hekte|hekte",
+   "exp_material": "phokaia"
+  },
+  {
+   "fixture": "47_phokaia_ar_diobol",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "phokaia",
+    "cos": 0.8945,
+    "stable_key": "phokaia|phokaia_ar_diobol|diobol",
+    "headline": "Phokaia \u2014 silver diobol (archaic head)",
+    "ext_sig": "Phokaia / Phokaia \u2014 silver diobol (archaic head) / Diobol",
+    "size": 102
+   },
+   "exp_stable_key": "phokaia|phokaia_ar_diobol|diobol",
+   "exp_material": "phokaia"
+  },
+  {
+   "fixture": "48_rhodos_helios_rose",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "rhodos",
+    "cos": 0.8889,
+    "stable_key": "rhodos|rhodos_helios_rose|drachm",
+    "headline": "Rhodos \u2014 Helios / rose",
+    "ext_sig": "Rhodos / Rhodos \u2014 Helios / rose / Drachm",
+    "size": 764
+   },
+   "exp_stable_key": "rhodos|rhodos_helios_rose|drachm",
+   "exp_material": "rhodos"
+  },
+  {
+   "fixture": "50_severan_bronze_felicitas_standing",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [
+    "material",
+    "stable_key"
+   ],
+   "rank_of_expected": 2,
+   "top1": {
+    "material": "mg_bronze",
+    "cos": 0.9408,
+    "stable_key": "mg_bronze|standing|ae",
+    "headline": "Maximinus I \u2013 Gordian III bronze \u2014 standing figure (deity / personification)",
+    "ext_sig": "Maximinus I \u2013 Gordian III / Maximinus I \u2013 Gordian III bronze \u2014 standing figure (deity / personification) / Sestertius",
+    "size": 685
+   },
+   "exp_stable_key": "severan_bronze|standing|ae",
+   "exp_material": "severan_bronze"
+  },
+  {
+   "fixture": "51_severan_bronze_chariot",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "severan_bronze",
+    "cos": 0.9264,
+    "stable_key": "severan_bronze|chariot|ae",
+    "headline": "Severan bronze \u2014 emperor mounted (chariot / horseback)",
+    "ext_sig": "Severan / Severan bronze \u2014 emperor mounted (chariot / horseback) / As",
+    "size": 61
+   },
+   "exp_stable_key": "severan_bronze|chariot|ae",
+   "exp_material": "severan_bronze"
+  },
+  {
+   "fixture": "52_severan_bronze_victory_standing",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "severan_bronze",
+    "cos": 0.9328,
+    "stable_key": "severan_bronze|standing|ae",
+    "headline": "Severan bronze \u2014 standing figure (deity / personification)",
+    "ext_sig": "Severan / Severan bronze \u2014 standing figure (deity / personification) / Sestertius",
+    "size": 718
+   },
+   "exp_stable_key": "severan_bronze|standing|ae",
+   "exp_material": "severan_bronze"
+  },
+  {
+   "fixture": "55_knidos_aphrodite_lion",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [
+    "material",
+    "stable_key"
+   ],
+   "rank_of_expected": 2,
+   "top1": {
+    "material": "caria_other",
+    "cos": 0.8792,
+    "stable_key": "caria_other|caria_other|hemiobol",
+    "headline": "Caria \u2014 uncertain mint & other (Iasos / Aphrodisias / Kasolaba \u2026)",
+    "ext_sig": "Caria (region) / Caria \u2014 uncertain mint & other (Iasos / Aphrodisias / Kasolaba \u2026) / Hemiobol",
+    "size": 361
+   },
+   "exp_stable_key": "knidos|knidos_aphrodite_lion|drachm",
+   "exp_material": "knidos"
+  },
+  {
+   "fixture": "56_knidos_artemis_tripod",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "knidos",
+    "cos": 0.935,
+    "stable_key": "knidos|knidos_artemis_tripod|tetrobol",
+    "headline": "Knidos \u2014 Artemis / tripod (Hellenistic)",
+    "ext_sig": "Knidos / Knidos \u2014 Artemis / tripod (Hellenistic) / Tetrobol",
+    "size": 20
+   },
+   "exp_stable_key": "knidos|knidos_artemis_tripod|tetrobol",
+   "exp_material": "knidos"
+  },
+  {
+   "fixture": "57_gela_quadriga",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "gela",
+    "cos": 0.7716,
+    "stable_key": "gela|gela_charioteer_bull|tetradrachm",
+    "headline": "Gela \u2014 charioteer / man-headed bull (river-god Gelas)",
+    "ext_sig": "Gela / Gela \u2014 charioteer / man-headed bull (river-god Gelas) / Tetradrachm",
+    "size": 181
+   },
+   "exp_stable_key": "gela|gela_charioteer_bull|tetradrachm",
+   "exp_material": "gela"
+  },
+  {
+   "fixture": "58_gela_horseman",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "gela",
+    "cos": 0.8801,
+    "stable_key": "gela|gela_charioteer_bull|tetradrachm",
+    "headline": "Gela \u2014 charioteer / man-headed bull (river-god Gelas)",
+    "ext_sig": "Gela / Gela \u2014 charioteer / man-headed bull (river-god Gelas) / Tetradrachm",
+    "size": 181
+   },
+   "exp_stable_key": "gela|gela_charioteer_bull|tetradrachm",
+   "exp_material": "gela"
+  },
+  {
+   "fixture": "67_leukas_pegasos_athena",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "leukas",
+    "cos": 0.9283,
+    "stable_key": "leukas|leukas_pegasos_athena|stater",
+    "headline": "Leukas \u2014 Pegasos / Athena (Corinthian-type stater)",
+    "ext_sig": "Leukas / Leukas \u2014 Pegasos / Athena (Corinthian-type stater) / Stater",
+    "size": 214
+   },
+   "exp_stable_key": "leukas|leukas_pegasos_athena|stater",
+   "exp_material": "leukas"
+  },
+  {
+   "fixture": "68_leukas_pegasos_right",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [
+    "material",
+    "stable_key"
+   ],
+   "rank_of_expected": 2,
+   "top1": {
+    "material": "akarnania",
+    "cos": 0.8461,
+    "stable_key": "akarnania|akarnania_pegasos|stater",
+    "headline": "Akarnania \u2014 Pegasos / Athena (Corinthian-type colt stater)",
+    "ext_sig": "Akarnania / Akarnania \u2014 Pegasos / Athena (Corinthian-type colt stater) / Stater",
+    "size": 364
+   },
+   "exp_stable_key": "leukas|leukas_pegasos_athena|stater",
+   "exp_material": "leukas"
+  },
+  {
+   "fixture": "69_velia_athena_lion",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "velia",
+    "cos": 0.9138,
+    "stable_key": "velia|velia_athena_lion|didrachm",
+    "headline": "Velia \u2014 Athena / lion (nomos)",
+    "ext_sig": "Velia / Velia \u2014 Athena / lion (nomos) / Didrachm",
+    "size": 170
+   },
+   "exp_stable_key": "velia|velia_athena_lion|didrachm",
+   "exp_material": "velia"
+  },
+  {
+   "fixture": "70_velia_nymph_owl",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "velia",
+    "cos": 0.8805,
+    "stable_key": "velia|velia_nymph_owl|drachm",
+    "headline": "Velia \u2014 nymph / owl (drachm & fractions)",
+    "ext_sig": "Velia / Velia \u2014 nymph / owl (drachm & fractions) / Drachm",
+    "size": 14
+   },
+   "exp_stable_key": "velia|velia_nymph_owl|drachm",
+   "exp_material": "velia"
+  },
+  {
+   "fixture": "71_corinth_pegasos_athena",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [
+    "material",
+    "stable_key"
+   ],
+   "rank_of_expected": 2,
+   "top1": {
+    "material": "akarnania",
+    "cos": 0.8811,
+    "stable_key": "akarnania|akarnania_pegasos|stater",
+    "headline": "Akarnania \u2014 Pegasos / Athena (Corinthian-type colt stater)",
+    "ext_sig": "Akarnania / Akarnania \u2014 Pegasos / Athena (Corinthian-type colt stater) / Stater",
+    "size": 364
+   },
+   "exp_stable_key": "corinth|corinth_pegasos|stater",
+   "exp_material": "corinth"
+  },
+  {
+   "fixture": "72_corinth_pegasos_aphrodite",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [
+    "material",
+    "stable_key"
+   ],
+   "rank_of_expected": 2,
+   "top1": {
+    "material": "akarnania",
+    "cos": 0.9202,
+    "stable_key": "akarnania|akarnania_pegasos|stater",
+    "headline": "Akarnania \u2014 Pegasos / Athena (Corinthian-type colt stater)",
+    "ext_sig": "Akarnania / Akarnania \u2014 Pegasos / Athena (Corinthian-type colt stater) / Stater",
+    "size": 364
+   },
+   "exp_stable_key": "corinth|corinth_pegasos|stater",
+   "exp_material": "corinth"
+  },
+  {
+   "fixture": "73_metapontion_demeter_barley",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "metapontion",
+    "cos": 0.8355,
+    "stable_key": "metapontion|metapontion_classical_barley|didrachm",
+    "headline": "Metapontion \u2014 head / barley ear (classical nomos)",
+    "ext_sig": "Metapontion / Metapontion \u2014 head / barley ear (classical nomos) / Didrachm",
+    "size": 553
+   },
+   "exp_stable_key": "metapontion|metapontion_classical_barley|didrachm",
+   "exp_material": "metapontion"
+  },
+  {
+   "fixture": "74_metapontion_incuse_barley",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "metapontion",
+    "cos": 0.8465,
+    "stable_key": "metapontion|metapontion_incuse_barley|stater",
+    "headline": "Metapontion \u2014 barley ear (archaic incuse)",
+    "ext_sig": "Metapontion / Metapontion \u2014 barley ear (archaic incuse) / Stater",
+    "size": 133
+   },
+   "exp_stable_key": "metapontion|metapontion_incuse_barley|stater",
+   "exp_material": "metapontion"
+  },
+  {
+   "fixture": "75_kyrene_zeus_ammon_gold_stater",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "kyrene",
+    "cos": 0.9087,
+    "stable_key": "kyrene|kyrene_silphium|stater",
+    "headline": "Kyrene \u2014 silphium civic coinage (Zeus Ammon / Apollo / silphium \u00b7 gold & silver)",
+    "ext_sig": "Kyrene / Kyrene \u2014 silphium civic coinage (Zeus Ammon / Apollo / silphium \u00b7 gold & silver) / Stater",
+    "size": 628
+   },
+   "exp_stable_key": "kyrene|kyrene_silphium|stater",
+   "exp_material": "kyrene"
+  },
+  {
+   "fixture": "76_kyrene_apollo_silver",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "kyrene",
+    "cos": 0.8927,
+    "stable_key": "kyrene|kyrene_silphium|stater",
+    "headline": "Kyrene \u2014 silphium civic coinage (Zeus Ammon / Apollo / silphium \u00b7 gold & silver)",
+    "ext_sig": "Kyrene / Kyrene \u2014 silphium civic coinage (Zeus Ammon / Apollo / silphium \u00b7 gold & silver) / Stater",
+    "size": 628
+   },
+   "exp_stable_key": "kyrene|kyrene_silphium|stater",
+   "exp_material": "kyrene"
+  },
+  {
+   "fixture": "77_crete_gortyna",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "crete",
+    "cos": 0.8825,
+    "stable_key": "crete|crete_gortyna|stater",
+    "headline": "Crete, Gortyna \u2014 Europa / bull",
+    "ext_sig": "Crete / Crete, Gortyna \u2014 Europa / bull / Stater",
+    "size": 36
+   },
+   "exp_stable_key": "crete|crete_gortyna|stater",
+   "exp_material": "crete"
+  },
+  {
+   "fixture": "78_crete_kydonia",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "crete",
+    "cos": 0.8869,
+    "stable_key": "crete|crete_kydonia|drachm",
+    "headline": "Crete, Kydonia \u2014 nymph / archer (Kydon)",
+    "ext_sig": "Crete / Crete, Kydonia \u2014 nymph / archer (Kydon) / Drachm",
+    "size": 17
+   },
+   "exp_stable_key": "crete|crete_kydonia|drachm",
+   "exp_material": "crete"
+  },
+  {
+   "fixture": "79_first_meris_shield",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "first_meris",
+    "cos": 0.9264,
+    "stable_key": "first_meris|first_meris_shield|tetradrachm",
+    "headline": "Macedonian Koinon \u2014 First Meris (Artemis / Macedonian shield, club)",
+    "ext_sig": "Macedonian Koinon (First Meris) / Macedonian Koinon \u2014 First Meris (Artemis / Macedonian shield, club) / Tetradrachm",
+    "size": 302
+   },
+   "exp_stable_key": "first_meris|first_meris_shield|tetradrachm",
+   "exp_material": "first_meris"
+  },
+  {
+   "fixture": "80_first_meris_aesillas",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "first_meris",
+    "cos": 0.9365,
+    "stable_key": "first_meris|first_meris_aesillas|tetradrachm",
+    "headline": "Macedonian Koinon \u2014 Aesillas / Sura quaestor (Alexander / club, chest, chair)",
+    "ext_sig": "Macedonian Koinon (First Meris) / Macedonian Koinon \u2014 Aesillas / Sura quaestor (Alexander / club, chest, chair) / Tetradrachm",
+    "size": 43
+   },
+   "exp_stable_key": "first_meris|first_meris_aesillas|tetradrachm",
+   "exp_material": "first_meris"
+  },
+  {
+   "fixture": "81_chalkidian_apollo_kithara_tet",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "chalkidian_league",
+    "cos": 0.922,
+    "stable_key": "chalkidian_league|chalkidian_apollo_kithara|tetradrachm",
+    "headline": "Chalkidian League \u2014 Apollo / kithara",
+    "ext_sig": "Chalkidian League / Chalkidian League \u2014 Apollo / kithara / Tetradrachm",
+    "size": 178
+   },
+   "exp_stable_key": "chalkidian_league|chalkidian_apollo_kithara|tetradrachm",
+   "exp_material": "chalkidian_league"
+  },
+  {
+   "fixture": "82_chalkidian_apollo_kithara_tetrobol",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "chalkidian_league",
+    "cos": 0.9361,
+    "stable_key": "chalkidian_league|chalkidian_apollo_kithara|tetradrachm",
+    "headline": "Chalkidian League \u2014 Apollo / kithara",
+    "ext_sig": "Chalkidian League / Chalkidian League \u2014 Apollo / kithara / Tetradrachm",
+    "size": 178
+   },
+   "exp_stable_key": "chalkidian_league|chalkidian_apollo_kithara|tetradrachm",
+   "exp_material": "chalkidian_league"
+  },
+  {
+   "fixture": "83_macedon_akanthos_lion_bull",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "macedon_region",
+    "cos": 0.8994,
+    "stable_key": "macedon_region|mac_akanthos|tetradrachm",
+    "headline": "Macedon, Akanthos \u2014 lion attacking bull",
+    "ext_sig": "Macedon (region) / Macedon, Akanthos \u2014 lion attacking bull / Tetradrachm",
+    "size": 160
+   },
+   "exp_stable_key": "macedon_region|mac_akanthos|tetradrachm",
+   "exp_material": "macedon_region"
+  },
+  {
+   "fixture": "84_macedon_neapolis_gorgoneion",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "macedon_region",
+    "cos": 0.9057,
+    "stable_key": "macedon_region|mac_neapolis|drachm",
+    "headline": "Macedon, Neapolis \u2014 Gorgoneion / nymph",
+    "ext_sig": "Macedon (region) / Macedon, Neapolis \u2014 Gorgoneion / nymph / Drachm",
+    "size": 79
+   },
+   "exp_stable_key": "macedon_region|mac_neapolis|drachm",
+   "exp_material": "macedon_region"
+  },
+  {
+   "fixture": "85_macedon_mende_dionysos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "macedon_region",
+    "cos": 0.9106,
+    "stable_key": "macedon_region|mac_mende|tetradrachm",
+    "headline": "Macedon, Mende \u2014 Dionysos on donkey",
+    "ext_sig": "Macedon (region) / Macedon, Mende \u2014 Dionysos on donkey / Tetradrachm",
+    "size": 39
+   },
+   "exp_stable_key": "macedon_region|mac_mende|tetradrachm",
+   "exp_material": "macedon_region"
+  },
+  {
+   "fixture": "86_pergamon_cistophoric",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "pergamon",
+    "cos": 0.8323,
+    "stable_key": "pergamon|pergamon_cistophoric|tetradrachm",
+    "headline": "Pergamon \u2014 cistophoric (cista mystica / bow-case & serpents)",
+    "ext_sig": "Pergamon / Pergamon \u2014 cistophoric (cista mystica / bow-case & serpents) / Tetradrachm",
+    "size": 219
+   },
+   "exp_stable_key": "pergamon|pergamon_cistophoric|tetradrachm",
+   "exp_material": "pergamon"
+  },
+  {
+   "fixture": "87_pergamon_herakles_diobol",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "pergamon",
+    "cos": 0.8626,
+    "stable_key": "pergamon|pergamon_herakles|diobol",
+    "headline": "Pergamon \u2014 autonomous (Herakles / Athena diobol)",
+    "ext_sig": "Pergamon / Pergamon \u2014 autonomous (Herakles / Athena diobol) / Diobol",
+    "size": 37
+   },
+   "exp_stable_key": "pergamon|pergamon_herakles|diobol",
+   "exp_material": "pergamon"
+  },
+  {
+   "fixture": "88_thebes_shield_amphora",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "thebes",
+    "cos": 0.921,
+    "stable_key": "thebes|thebes_shield_amphora|stater",
+    "headline": "Thebes \u2014 Boeotian shield / amphora (stater)",
+    "ext_sig": "Thebes / Thebes \u2014 Boeotian shield / amphora (stater) / Stater",
+    "size": 184
+   },
+   "exp_stable_key": "thebes|thebes_shield_amphora|stater",
+   "exp_material": "thebes"
+  },
+  {
+   "fixture": "89_thebes_dionysos",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "thebes",
+    "cos": 0.9142,
+    "stable_key": "thebes|thebes_dionysos|stater",
+    "headline": "Thebes \u2014 Dionysos / kantharos & club (Hellenistic)",
+    "ext_sig": "Thebes / Thebes \u2014 Dionysos / kantharos & club (Hellenistic) / Stater",
+    "size": 22
+   },
+   "exp_stable_key": "thebes|thebes_dionysos|stater",
+   "exp_material": "thebes"
+  },
+  {
+   "fixture": "90_julio_claudian_gold_seated_deity",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "julio_claudian_gold",
+    "cos": 0.9373,
+    "stable_key": "julio_claudian_gold|seated|av",
+    "headline": "Julio-Claudian gold \u2014 seated deity",
+    "ext_sig": "Julio-Claudian / Julio-Claudian gold \u2014 seated deity / Aureus",
+    "size": 159
+   },
+   "exp_stable_key": "julio_claudian_gold|seated|av",
+   "exp_material": "julio_claudian_gold"
+  },
+  {
+   "fixture": "91_julio_claudian_gold_legend_wreath",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "julio_claudian_gold",
+    "cos": 0.9314,
+    "stable_key": "julio_claudian_gold|legend|av",
+    "headline": "Julio-Claudian gold \u2014 legend reverse (inscription / legend in wreath)",
+    "ext_sig": "Julio-Claudian / Julio-Claudian gold \u2014 legend reverse (inscription / legend in wreath) / Aureus",
+    "size": 118
+   },
+   "exp_stable_key": "julio_claudian_gold|legend|av",
+   "exp_material": "julio_claudian_gold"
+  },
+  {
+   "fixture": "92_julio_claudian_gold_standing",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "julio_claudian_gold",
+    "cos": 0.9245,
+    "stable_key": "julio_claudian_gold|standing|av",
+    "headline": "Julio-Claudian gold \u2014 standing figure (deity / personification)",
+    "ext_sig": "Julio-Claudian / Julio-Claudian gold \u2014 standing figure (deity / personification) / Aureus",
+    "size": 67
+   },
+   "exp_stable_key": "julio_claudian_gold|standing|av",
+   "exp_material": "julio_claudian_gold"
+  },
+  {
+   "fixture": "93_campania_neapolis",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "campania",
+    "cos": 0.8491,
+    "stable_key": "campania|camp_neapolis|didrachm",
+    "headline": "Campania, Neapolis \u2014 nymph / man-headed bull (Acheloos)",
+    "ext_sig": "Campania / Campania, Neapolis \u2014 nymph / man-headed bull (Acheloos) / Didrachm",
+    "size": 98
+   },
+   "exp_stable_key": "campania|camp_neapolis|didrachm",
+   "exp_material": "campania"
+  },
+  {
+   "fixture": "94_campania_phistelia",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "campania",
+    "cos": 0.9186,
+    "stable_key": "campania|camp_phistelia|obol",
+    "headline": "Campania, Phistelia \u2014 head / barley & dolphin",
+    "ext_sig": "Campania / Campania, Phistelia \u2014 head / barley & dolphin / Obol",
+    "size": 34
+   },
+   "exp_stable_key": "campania|camp_phistelia|obol",
+   "exp_material": "campania"
+  },
+  {
+   "fixture": "95_lucania_thourioi",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "lucania_other",
+    "cos": 0.9,
+    "stable_key": "lucania_other|luc_thourioi|didrachm",
+    "headline": "Lucania, Thourioi \u2014 Athena (Skylla helmet) / butting bull",
+    "ext_sig": "Lucania / Lucania, Thourioi \u2014 Athena (Skylla helmet) / butting bull / Didrachm",
+    "size": 151
+   },
+   "exp_stable_key": "lucania_other|luc_thourioi|didrachm",
+   "exp_material": "lucania_other"
+  },
+  {
+   "fixture": "96_lucania_poseidonia",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "lucania_other",
+    "cos": 0.895,
+    "stable_key": "lucania_other|luc_poseidonia|didrachm",
+    "headline": "Lucania, Poseidonia \u2014 Poseidon striding with trident",
+    "ext_sig": "Lucania / Lucania, Poseidonia \u2014 Poseidon striding with trident / Didrachm",
+    "size": 41
+   },
+   "exp_stable_key": "lucania_other|luc_poseidonia|didrachm",
+   "exp_material": "lucania_other"
+  },
+  {
+   "fixture": "97_bruttium_kroton",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "bruttium",
+    "cos": 0.8808,
+    "stable_key": "bruttium|bru_kroton|didrachm",
+    "headline": "Bruttium, Kroton \u2014 tripod",
+    "ext_sig": "Bruttium / Bruttium, Kroton \u2014 tripod / Didrachm",
+    "size": 246
+   },
+   "exp_stable_key": "bruttium|bru_kroton|didrachm",
+   "exp_material": "bruttium"
+  },
+  {
+   "fixture": "98_bruttium_terina",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [
+    "material",
+    "stable_key"
+   ],
+   "rank_of_expected": 2,
+   "top1": {
+    "material": "syracuse",
+    "cos": 0.8829,
+    "stable_key": "syracuse|syracuse_persephone|tetradrachm",
+    "headline": "Syracuse \u2014 Persephone / Kore",
+    "ext_sig": "Syracuse / Syracuse \u2014 Persephone / Kore / Tetradrachm",
+    "size": 26
+   },
+   "exp_stable_key": "bruttium|bru_terina|didrachm",
+   "exp_material": "bruttium"
+  },
+  {
+   "fixture": "99_sicily_messana_hare",
+   "checks": [
+    "material",
+    "stable_key"
+   ],
+   "fails": [],
+   "rank_of_expected": 1,
+   "top1": {
+    "material": "sicily_other",
+    "cos": 0.8845,
+    "stable_key": "sicily_other|sic_messana|tetradrachm",
+    "headline": "Sicily, Messana \u2014 biga of mules / hare",
+    "ext_sig": "Sicily / Sicily, Messana \u2014 biga of mules / hare / Tetradrachm",
+    "size": 137
+   },
+   "exp_stable_key": "sicily_other|sic_messana|tetradrachm",
+   "exp_material": "sicily_other"
+  }
+ ],
+ "unparseable": [
+  [
+   "176_tetrarchic_genius_standing",
+   "ParserError"
+  ],
+  [
+   "177_tetrarchic_temple",
+   "ParserError"
+  ],
+  [
+   "178_tetrarchic_camp_gate",
+   "ParserError"
+  ],
+  [
+   "245_sasanian_khusro_ii",
+   "ParserError"
+  ],
+  [
+   "246_sasanian_ardashir_i",
+   "ParserError"
+  ],
+  [
+   "49_rhodos_plinthophoric",
+   "ParserError"
+  ],
+  [
+   "53_antonine_bronze_vesta_standing",
+   "ParserError"
+  ],
+  [
+   "54_antonine_bronze_salus_seated",
+   "ParserError"
+  ],
+  [
+   "59_flavian_bronze_spes_standing",
+   "ParserError"
+  ],
+  [
+   "60_flavian_bronze_vesta_seated",
+   "ParserError"
+  ],
+  [
+   "61_mg_bronze_laetitia_standing",
+   "ParserError"
+  ],
+  [
+   "62_mg_bronze_salus_seated",
+   "ParserError"
+  ],
+  [
+   "63_nerva_bronze_fortuna_standing",
+   "ParserError"
+  ],
+  [
+   "64_nerva_bronze_salus_seated",
+   "ParserError"
+  ],
+  [
+   "65_julio_claudian_bronze_neptune_standing",
+   "ParserError"
+  ],
+  [
+   "66_julio_claudian_bronze_temple_janus",
+   "ParserError"
+  ]
+ ],
+ "no_expected_top1": [
+  "201_pisidia_selge_stater",
+  "226_imperatorial_caesar_portrait"
+ ],
+ "no_image_pair": []
+}
