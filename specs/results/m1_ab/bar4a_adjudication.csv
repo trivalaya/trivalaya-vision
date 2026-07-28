@@ -1,0 +1,25 @@
+id,side,mode,panel,off_value,on_value,ring_truth,off_thresh,on_thresh,masked_off,masked_on,area_off,area_on,adjudication,reader,note
+755397,rev,query518,755397_rev_query518.png,218.119,75.0,78.952,INV,BINARY,True,True,0.344525,0.344525,NEUTRAL,A,
+755397,rev,fullres,755397_rev_fullres.png,218.119,75.0,78.952,INV,BINARY,True,True,0.998639,0.353437,IMPROVED,A,
+755613,rev,query518,755613_rev_query518.png,214.724,75.0,78.952,INV,BINARY,True,True,0.996061,0.362734,IMPROVED,A,
+755613,rev,fullres,755613_rev_fullres.png,214.724,75.0,78.952,INV,BINARY,True,True,0.998639,0.357125,IMPROVED,A,
+755614,obv,query518,755614_obv_query518.png,213.709,75.0,78.944,INV,BINARY,True,True,0.996061,0.366992,IMPROVED,A,
+755614,obv,fullres,755614_obv_fullres.png,213.709,75.0,78.944,INV,BINARY,True,True,0.998639,0.36838,IMPROVED,A,
+755614,rev,query518,755614_rev_query518.png,214.544,75.0,78.952,INV,BINARY,True,True,0.996061,0.358603,IMPROVED,B,
+755614,rev,fullres,755614_rev_fullres.png,214.544,75.0,78.952,INV,BINARY,True,True,0.998639,0.360788,IMPROVED,B,
+755617,obv,query518,755617_obv_query518.png,215.775,75.0,78.944,INV,BINARY,True,True,0.996061,0.348865,IMPROVED,B,
+755617,obv,fullres,755617_obv_fullres.png,215.775,75.0,78.944,INV,BINARY,True,True,0.998639,0.349568,IMPROVED,B,"reader B: lower-right edge slightly jagged, minor over-inclusion of background/shadow texture; no coin metal lost"
+755617,rev,query518,755617_rev_query518.png,218.501,75.0,78.952,INV,BINARY,True,True,0.996061,0.348667,IMPROVED,B,
+755617,rev,fullres,755617_rev_fullres.png,218.501,75.0,78.952,INV,BINARY,True,True,0.998639,0.349038,IMPROVED,B,
+755618,obv,query518,755618_obv_query518.png,213.977,75.0,78.944,INV,BINARY,True,True,0.996061,0.33822,IMPROVED,C,
+755618,obv,fullres,755618_obv_fullres.png,213.977,75.0,78.944,INV,BINARY,True,True,0.998639,0.339889,IMPROVED,C,
+755618,rev,query518,755618_rev_query518.png,213.361,75.0,78.952,INV,BINARY,True,True,0.996061,0.339677,IMPROVED,C,
+755618,rev,fullres,755618_rev_fullres.png,213.361,75.0,78.952,INV,BINARY,True,True,0.998639,0.341322,IMPROVED,C,
+755619,obv,query518,755619_obv_query518.png,225.77,75.0,78.944,INV,BINARY,True,True,0.385924,0.385924,NEUTRAL,C,
+755619,obv,fullres,755619_obv_fullres.png,225.77,75.0,78.944,INV,BINARY,True,True,0.998639,0.387455,IMPROVED,C,reader C returned NEUTRAL; OVERRIDDEN to IMPROVED by direct inspection (OFF tile is the source frame incl. slate backdrop; ON is coin on flat grey128). Instrument concurs: area 0.998639 -> 0.387455.
+755619,rev,query518,755619_rev_query518.png,224.06,75.0,78.952,INV,BINARY,True,True,0.374642,0.374642,NEUTRAL,D,
+755619,rev,fullres,755619_rev_fullres.png,224.06,75.0,78.952,INV,BINARY,True,True,0.998639,0.35947,IMPROVED,D,
+755654,obv,query518,755654_obv_query518.png,215.014,75.0,78.944,INV,BINARY,True,True,0.336921,0.336921,NEUTRAL,D,
+755654,obv,fullres,755654_obv_fullres.png,215.014,75.0,78.944,INV,BINARY,True,True,0.998639,0.332117,IMPROVED,D,"reader D: minor extraneous curl artifact off bottom-right, outside coin body; no clipping into coin"
+755654,rev,query518,755654_rev_query518.png,214.205,75.0,78.952,INV,BINARY,True,True,0.33219,0.33219,NEUTRAL,D,
+755654,rev,fullres,755654_rev_fullres.png,214.205,75.0,78.952,INV,BINARY,True,True,0.998639,0.332533,IMPROVED,D,
