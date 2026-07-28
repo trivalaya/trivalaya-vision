@@ -1,0 +1,3 @@
+{"_meta": true, "gate": "off", "gate_env": "TRIVALAYA_BG_CORNER_LOCAL_TRUST", "vision_root": "/home/claudeuser/vision-wt-m1", "sample_source": "side-list:specs/results/m1_ab/timeout_sides.csv", "n_sides": 2, "n_tasks": 2, "modes": "fullres", "timeout_s": 900.0, "workers": 1, "scan": "/home/claudeuser/vision-wt-m1/specs/results/rim_stall_taxonomy_ks17_scan.json", "images": "/home/claudeuser/trivalaya-pipeline/analysis/incoming_screen/KS-17/incoming_images", "started": "2026-07-28T05:29:52Z"}
+[2/2] 345s elapsed, ETA 0.0m
+done -> specs/results/m1_ab/timeout_probe_off.jsonl  (345s, gate=off, worker spawns=[1])

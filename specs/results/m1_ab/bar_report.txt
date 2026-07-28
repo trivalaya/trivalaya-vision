@@ -1,0 +1,70 @@
+==============================================================================
+M1 BAR REPORT -- background estimator repair
+==============================================================================
+OFF gate=off sides=574 tasks=1148 rows=1148 non-ok=1 vision_root=/home/claudeuser/vision-wt-m1
+     non-ok statuses: Counter({'timeout': 1})
+ON  gate=on  sides=574 tasks=1148 rows=1148 non-ok=2 vision_root=/home/claudeuser/vision-wt-m1
+     non-ok statuses: Counter({'timeout': 2})
+shared (id,side,mode) tasks: 1148
+both-ok tasks: 1146
+
+------------------------------------------------------------------------------
+BAR 1 -- estimator within +/-8 of outer-ring truth on >=95% of sides
+------------------------------------------------------------------------------
+  fullres   OFF (today)  n= 572 within+/-8    0 (  0.0%)
+            err dist: median -47.78  p05 -50.25  p95 +17.06  min -52.15  max +146.83
+  fullres   ON  (M1)     n= 572 within+/-8  570 ( 99.7%)  <= PASS
+            err dist: median -3.95  p05 -3.95  p95 -3.94  min -3.95  max +49.62
+  query518  OFF (today)  n= 574 within+/-8    0 (  0.0%)
+            err dist: median -47.38  p05 -50.10  p95 +18.09  min -52.13  max +138.24
+  query518  ON  (M1)     n= 574 within+/-8  572 ( 99.7%)  <= PASS
+            err dist: median -3.89  p05 -3.91  p95 -3.89  min -3.91  max +49.40
+  => Bar 1 PASS
+
+------------------------------------------------------------------------------
+BAR 3 -- silent no-op class eliminated, none created
+------------------------------------------------------------------------------
+  fullres   n= 572  no-ops OFF  12 -> ON   0   fixed  12   NEW   0  <= PASS
+  query518  n= 574  no-ops OFF   7 -> ON   0   fixed   7   NEW   0  <= PASS
+
+  Bar 0 fixture no-op sides: 19 (Counter({'fullres': 12, 'query518': 7}))
+  fixture sides resolved under M1: 19/19  (still no-op 0, not covered 0)
+
+  mask_fallback_reason transitions: none (no side changed reason)
+  => Bar 3 PASS
+
+------------------------------------------------------------------------------
+CHANGED SIDES (input to Bars 4 and 5)
+------------------------------------------------------------------------------
+  fullres   n= 572  estimator changed  570 ( 99.7%)   MASK OUTCOME changed   12 (  2.1%)
+  query518  n= 574  estimator changed  572 ( 99.7%)   MASK OUTCOME changed    7 (  1.2%)
+  changed-sides CSV -> specs/results/m1_ab/changed_sides.csv
+
+------------------------------------------------------------------------------
+BAR 4 -- seeded stratified sample of 40 changed sides (seed 20260728)
+------------------------------------------------------------------------------
+  unclassified                 changed   19   sampled  19
+  total sampled: 19
+  Bar 4 worksheet -> specs/results/m1_ab/bar4a_worksheet.csv
+
+------------------------------------------------------------------------------
+BAR 5 -- both lanes measured at their own geometry
+------------------------------------------------------------------------------
+  fullres   n= 572  width median 1500px (range 529-1500)
+  query518  n= 574  width median 518px (range 247-518)
+  lanes present: ['fullres', 'query518']  -> OK
+
+------------------------------------------------------------------------------
+REPORTED (not gated) -- detection-count and cost preview
+------------------------------------------------------------------------------
+  fullres   OFF dets/side mean 2.51  >=5 dets  135 ( 23.6%)  mask secs median 63.962 total 507.1m
+  fullres   ON  dets/side mean 2.51  >=5 dets  135 ( 23.6%)  mask secs median 66.790 total 536.5m
+  query518  OFF dets/side mean 1.26  >=5 dets    5 (  0.9%)  mask secs median 0.110 total 4.0m
+  query518  ON  dets/side mean 1.26  >=5 dets    5 (  0.9%)  mask secs median 0.112 total 4.2m
+
+==============================================================================
+  Bar 1: PASS
+  Bar 3: PASS
+  Bar 2: see tests/test_bg_corner_local_trust.py (asserted) + census (corpus bound); vacuous within KS-17 (pooled corner-trust fires 0/574)
+  Bar 4: sample drawn above; adjudication is a separate pass
+==============================================================================
