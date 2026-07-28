@@ -333,7 +333,7 @@ basis. **0 load_failed, 0 errors.** Data `census.csv` / `census.json`.
 |---|---|---|---|---|---|---|
 | 1 | Served modern-corpus embeddings (per-material features / cluster vectors) | 371,747 photos ≈ 369,481 coins / 4,787 cards | **4,964 / 13,689** photos (1.3 % / 3.7 %) — **91 % is house `cng` alone** | live search ranking | **RE-EMBED** at next recluster, scoped to `cng` (+ `mashops`, `stacksbowers`) | low — rides the next recluster; ~5 k crops |
 | 2 | Catalog annex vectors (`catalog_ingestion`, old-catalog plates) | Cahn 993 + Hirsch 710 + Helbing 1,177 = 2,880 lots | **261 / 375** lots — Cahn 204 (20.5 %), Hirsch 57 (8.0 %), **Helbing 0** | annex match quality | **RE-EMBED** at next annex refresh; re-run `append_search_annex.py --execute` after any recluster (standing rule) | low — hundreds of plates |
-| 3 | Archived screen sheets (KS-17, eLive-93, EA-613) | KS-17 287 photos / 574 sides; EA-613 422 photos | KS-17 **measured** (not extrapolated): **12 sides** per-side / **5 photos** ingest | archived review artifacts, not live | **RE-SCORE only if re-opened** — evidence **pending audit join**, required before any re-score executes | low |
+| 3 | Archived screen sheets (KS-17, eLive-93, EA-613) | KS-17 287 photos / 574 sides; EA-613 422 photos | KS-17 **measured** (not extrapolated): **12 sides** per-side / **5 photos** ingest | archived review artifacts, not live | **RE-SCORE only if re-opened** — KS-17 evidence **DELIVERED §6.2** (12 sides / 7 of 287 photos, join not estimate); eLive-93 + EA-613 still **UNMEASURED** | low |
 | 4 | Known-pairs scorecard baselines | 22 pairs (20 `cng`, 1 `kuenker`, 1 `gorny`) | ~**2** of 20 `cng` modern-side photos at the 10.0 % `cng` rate | held-out validation baseline | **RE-SCORE** — baseline recomputed, **never tuned** (standing prohibition) | trivial |
 | 5 | Query lane | no stored artifacts | n/a | live | **auto-heals at enable, zero re-embed** | none |
 
@@ -369,14 +369,141 @@ mass is entirely the **older `cng` / `Lots.aspx` archive** (45,396 photos,
 clean corners; the older archive carries the composited backdrop vignette that
 is exactly M1's target.
 
-**Row 3 evidence gap, flagged not filled** (owner ruling): the historical no-op
-audit — *which archived sheets contain raw-pixel embeds* — **does not exist**.
-This table is complete for sign-off without it; **execution of row 3 is not.**
+**Row 3 evidence gap — CLOSED FOR KS-17, still open for the other two sheets**
+(2026-07-28, §6.2). The historical no-op audit now exists: KS-17 is audited by
+join (12 no-op sides / 7 of 287 photos, 573 of 574 sides decidable); eLive-93
+and EA-613 persisted no area fraction and are NOT AUDITABLE WITHOUT RECOMPUTE
+(~5 h each, bounded in §6.2). Execution of row 3 is unblocked for KS-17 only.
 
 **Not done here, by instruction:** nothing executed, no per-coin lists. Those
 are generated at execution time from the same queries.
 
 ---
+
+---
+
+## 6.2 Historical no-op audit — row 3's pending join, FILLED (2026-07-28)
+
+**Status: row 3 of the §6 class table is no longer evidence-pending for KS-17;
+it remains unmeasured for eLive-93 and EA-613.** Read-only sweep, **no
+re-scores executed**, no artifact modified. Companion to the standing
+`mask_area_fraction` / `mask_noop` telemetry shipped the same day
+(trivalaya-pipeline `cf7e6dd`), which is what makes every FUTURE run
+self-auditing.
+
+### What was being looked for
+
+A *no-op* is `masked:true` + `mask_fallback_reason:null` over a whole-frame
+contour — the composite is pixel-for-pixel the raw photo, so the stored vector
+is a **raw-photo embedding in violation of the grey128 doctrine**. It sets no
+fallback reason, so **every historical "mask fallback 0/N" bar is structurally
+blind to it** and none of those claims may be read as evidence of absence.
+
+### The audit table
+
+Auditable = the artifact (or a measurement joinable to it at the **same
+geometry**) persists enough to decide no-op status without re-running the mask.
+
+| # | artifact | photos | sides | auditable w/o recompute? | no-ops |
+|---|---|---|---|---|---|
+| 1 | Screen sheet **KS-17** (`analysis/incoming_screen/KS-17`) | 287 | 574 | **YES — 573/574**, join to `m1_ab/ab_off.jsonl` `mode=fullres` | **12 sides / 7 photos** |
+| 2 | Screen sheet **eLive-93** | 437 | 874 | **NO** | not auditable |
+| 3 | Screen sheet **EA-613** | 422 | 844 | **NO** | not auditable |
+| 4 | Annex embed records (`search_annex/cache/mask_meta.jsonl`) | 2,417 coins | 4,834 | **NO** | not auditable |
+| 5 | Corpus-match caches (`queries.csv`, 10 runs) | 9,448 queries | 18,896 | **NO** | not auditable |
+| 6 | Known-pairs `scorecard.json` (2026-07-20) | 22 pairs | 44 modern | **NO** | not auditable |
+| 7 | Known-pairs `scorecard_cahn_round2.json` (2026-07-13) | 22 pairs | 44 | **NO** — no embed telemetry at all | not auditable |
+| 8 | `cahn_r2_embeddings.npz` × 3 screen dirs | 1,096 vectors | — | **NO** — `ids`+`vecs` only | not auditable |
+| 9 | `logs/identify_shadow.jsonl` before `cf7e6dd` | 290 records | 580 | **NO** (auditable from `cf7e6dd` onward) | not auditable |
+| 10 | Query lane (live) | — | — | **N/A** — no stored artifact | auto-heals at flip |
+
+**Audited: 573 sides. NOT AUDITABLE WITHOUT RECOMPUTE: ~26,100 sides.**
+
+### Row 1 — the one artifact that could be audited, and why
+
+KS-17's screen sheet embeds each lot's **combined 3000×1440 photo split at the
+midpoint** (`corpus_match_report.load_sides` → `embed_query`; no thumbnail on
+this path), i.e. 1500×1440 per side. That is **exactly** the geometry and
+exactly the population the M1 A/B measured in its `fullres` arm, and the
+gate-OFF arm **is** current production behavior (M1 is merged default-OFF). All
+287 sheet ids are present in the measurement — so this is a join, not an
+estimate.
+
+**Result: 12 no-op sides, concentrated in 7 of 287 photos** — coins 755397 rev,
+755613 rev, 755614 obv+rev, 755617 obv+rev, 755618 obv+rev, 755619 obv+rev,
+755654 obv+rev, all at area fraction 0.998639. Those 7 lots' screen vectors are
+raw-photo embeddings on at least one side.
+
+Two caveats, stated rather than smoothed:
+
+- **One side is NOT auditable**: `755632 obv` timed out in the A/B's fullres arm
+  (`status:timeout`), so 573 of 574. It is not known-clean; it is unmeasured.
+- **This is not the same number as row 3's "5 photos"**, and neither is wrong:
+  12 sides / 7 photos is the **per-side** geometry (what the screen sheet
+  actually embedded); the 5 is the **full-photo ingest** geometry. Per the
+  standing trap "per-side ≠ full-photo geometry — measure each, never derive",
+  the sheet must be read against the per-side number.
+
+### Rows 2–9 — why not auditable, and what that costs
+
+None of these persisted an area fraction, because it did not exist until
+`cf7e6dd`. Two are worth calling out:
+
+- **Row 4 (annex) is the cleanest demonstration of the blind spot.** Its
+  `mask_meta.jsonl` records **4,834/4,834 sides `masked:true`, 0 fallbacks, 0
+  area fractions.** The historical "annex mask fallback 0/N" bar is therefore
+  true and uninformative: it could not have detected a single no-op. Nothing
+  about the annex's no-op rate is known.
+- **Row 2 (eLive-93) has no source images left** — `incoming_images/` is empty —
+  so its recompute carries a re-fetch before any masking.
+
+**Recompute cost — bounded, not run.** An audit needs only the **mask step**,
+not the DINOv2 forward. Measured on this box with `cv2.setNumThreads(1)`,
+single process, service live:
+
+| geometry | population | measured mask cost/side |
+|---|---|---|
+| small crop ~220–340 px | annex crops | median **0.011 s** (n=5, tight) |
+| fullres half 1500×1440 | screen sheets, modern-photo queries | **strongly bimodal** — median **0.20 s**, mean **21.6 s**, max **92.5 s** (n=8) |
+
+The fullres lane is **not** characterized by its median. ~3 of 4 sides mask in
+~0.2 s; the rest take 80–90 s and dominate the total, so extrapolate on the
+**mean**. (A 9th side was still running past 4 minutes when the probe was
+stopped — the tail is at least that long, so these totals are floors, not
+ceilings. n=8 is a coarse sample; treat the fullres rows as order-of-magnitude.)
+
+| artifact | sides | bounded recompute (mask only) |
+|---|---|---|
+| Annex (row 4) | 4,834 | **≈ 1 minute** |
+| EA-613 (row 3) | 844 | **≈ 5 hours** |
+| eLive-93 (row 2) | 874 | **≈ 5 hours** + image re-fetch |
+| Corpus-match (row 5) | 18,896 | **≈ 4.7 days** at the fullres mean — loose upper bound; catalog-plate queries run at the small-crop rate, so the real figure depends on each run's mix |
+
+**Do not substitute the cheap geometry for the expensive one.** Masking at 518 px
+costs ~0.02 s/side, but Bar 0 measured **7 no-ops at 518 vs 12 at fullres on the
+same KS-17 sides** — the geometry is part of the measurement, and a 518 px sweep
+would under-report a fullres artifact by ~40 %.
+
+**Worth a look before anyone funds row 5:** the slow tail is plausibly the same
+dark-background/large-frame population as the no-op class itself. If that
+correlation holds, the expensive sides *are* the suspicious ones and a cheap
+pre-filter could cut the sweep by ~4×. Untested — it was not measured here.
+
+### Reading, not recommendations (execution stays owner-gated)
+
+1. **Row 4 is ~1 minute of compute.** It is the only not-auditable artifact
+   whose recompute is trivially affordable, and it is the largest unmeasured
+   population with a *live* consumer (annex KNN). Cheapest way to convert a
+   large "unknown" into a number.
+2. **The fullres artifacts are not worth a wholesale sweep at these costs.**
+   The KS-17 row shows the cheaper route: no-op status is a property of the
+   (photo, geometry) pair, so a sale already covered by a vision-side census can
+   be **joined** instead of recomputed. Prefer extending a census over sweeping
+   an archive.
+3. **Row 3's re-score gate can now be evaluated for KS-17** — 7 of 287 lots
+   affected — and remains blocked on evidence for eLive-93 and EA-613.
+4. **"0 fallbacks" claims in older write-ups should not be restated as clean.**
+   The correct phrasing for any pre-`cf7e6dd` artifact is *UNMEASURED*.
 
 ## 7. ENABLE PROPOSAL — scoped to leg 1 only; every step separately owner-gated
 
