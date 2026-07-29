@@ -596,6 +596,74 @@ table above, not Bar 6, that licenses the expectation.
 4. If a fixture in the six does **not** move, that is also a finding — the flip
    did not take effect where it was measured to.
 
+### 7.2 STAMP — measured on the serving corpus immediately before the flip (2026-07-29)
+
+Two corrections to §7.1, both measured pre-flip, both owner-recorded before the
+enable proceeded. The expectation is now **three-part**, not two-part.
+
+**(a) The set-equality claim is FALSIFIED. The crossing set is a strict SUBSET
+of the no-op set.** §7.1 states "the crossing set is *identical* to the current
+no-op set." On the serving fixture corpus it is not: the live no-op set is
+**13 sides / 8 fixtures**, against a crossing set of 10 sides / 6 fixtures.
+Measured twice, agreeing exactly — in-process over all 248 fixtures, and through
+the real service via `/identify` + the cf7e6dd shadow-log tripwire.
+
+| fixture | side | `mask_area_fraction` | crosses 110? | expectation |
+|---|---|---|---|---|
+| `121_late_solidus_standing` | obv | 0.991095 | **no** | **HOLD STILL** |
+| `121_late_solidus_standing` | rev | 0.995914 | **no** | **HOLD STILL** |
+| `122_late_solidus_captive_trophy` | rev | 0.995325 | **no** | **HOLD STILL** |
+
+These three sides are no-ops that M1 **does not heal** — they carry a background
+the estimator already reads below 110, so the gate selects the same polarity and
+the mask is unchanged. That is §2.1's dark-stratum finding (31 → ~78, both below
+110) reappearing on the serving corpus, and it is the reason M1 is scoped to
+leg 1 only. **The flip therefore leaves three raw-photo embeds standing in
+serving** — a residual doctrine violation, correctly out of M1's scope, and
+input to the detection-quality root-cause ticket as its second measured symptom
+family (segmentation-proper no-op) alongside the taxonomy's 84 % rim-trip class.
+
+**(b) The "empty band" does not hold on this corpus.** §7.1/cf7e6dd rest the
+0.99 threshold on real coins topping out at 0.8133 and no-ops flooring at
+0.9961. On the serving fixtures `122_late_solidus_captive_trophy` **obv reads
+0.987505** — under the line by 0.0025, classified `ok`. The threshold still
+selects correctly here, but the band it sits in is ~0.0035 wide, not ~0.18.
+Not a defect today; a knob that is closer to its edge than the record claims.
+
+**So, as amended — three-part expectation:**
+1. **The SIX heal** — drift expected, either cosine direction; top-1 must not move.
+2. **The THREE hold still** — `121` obv+rev and `122` rev must be *byte-identical*
+   (same masked-image sha256), same top-1, same cosine. They are no-ops before
+   and after; M1 does not reach them. Movement here = REAL FAILURE.
+3. **Everything else byte-still** — unchanged from §7.1 clause 2.
+
+**(c) `/proc/<pid>/environ` verification is RETIRED as a method.** `appv2.py:43-49`
+`os.environ.setdefault`s every key of `.env` at import time, so the service's
+*effective* env differs from its *exec* env; `/proc/<pid>/environ` is exec-frozen
+and cannot see the difference. A "verify ABSENT in /proc" check is therefore
+quiet by construction — it reports ABSENT whether or not the variable is active,
+which is precisely the suppression-rule failure mode the 2026-07-27 doctrine
+forbids. Verified by replaying the service's exact exec environment: the two
+`.env`-only flags read `None` at exec and `auto` / `1` after `import appv2`.
+Enable verification is **behavioral** instead — a Bar-0 no-op side through the
+live service, plus the fixture sweep as the effective-env check. Query-lane k=7
+is held by **membership gating** (no house → untabled → k=7), not by env absence.
+
+⚠ **Consequence for scope discipline:** the drop-in mechanism is the only correct
+enable, because `.env` does not contain the M1 flag and `setdefault` never
+overrides an exec-set variable. **Never put `TRIVALAYA_BG_CORNER_LOCAL_TRUST`
+in `.env`** while leg-1-only stands — `trivalaya-runner` reads `.env` via
+`EnvironmentFile` and would silently enable M1 for **ingest** at its next
+restart, which is not approved.
+
+**Pre-flip OFF-arm baseline** (service lane, `/identify`): geta 0.935991, owl
+0.892690, pergamon 0.832296, cyprus 0.861207, macedon 0.844133 — reproducing
+§7.1's OFF column to 4 dp. `235_hk_mithradates_vi` reads 0.918231 against
+§7.1's 0.9191; noted, unexplained, and within neither arm's decision boundary.
+The in-process sweep independently reproduces Bar 6's grading exactly:
+**193 clean / 37 mismatch of 230 graded**, 248 fixtures swept, 0 fallbacks,
+0 UNMEASURED.
+
 ---
 
 ## 8. Reproduction
