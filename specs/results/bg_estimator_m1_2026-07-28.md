@@ -664,6 +664,104 @@ The in-process sweep independently reproduces Bar 6's grading exactly:
 **193 clean / 37 mismatch of 230 graded**, 248 fixtures swept, 0 fallbacks,
 0 UNMEASURED.
 
+### 7.3 ENABLE RECORD — step 3 EXECUTED, **2026-07-29 01:47 UTC**, leg 1 only
+
+`TRIVALAYA_BG_CORNER_LOCAL_TRUST=1` is **LIVE in `trivalaya-search.service`.**
+Mechanism: systemd drop-in
+`/etc/systemd/system/trivalaya-search.service.d/m1-bg-corner-local-trust.conf`
+(copy committed alongside this doc), `daemon-reload`, restart. Exactly one
+variable; no `EnvironmentFile`. Evidence: the flag is present in
+`/proc/<pid>/environ` — the *positive* half of the check, which is valid because
+systemd sets it at exec. The *absent* half is retired per §7.2(c). `/stats` after
+restart: 5,209 clusters / 126,475 coins / **4,139 cards** / 107 materials,
+watermark `2026-07-07T17:34:03` — unchanged.
+
+**Verification 1 — behavioral, the fix itself (§7.2(c)(a)).** A committed Bar-0
+no-op side through the **live service**, before and after:
+
+| | `masked` | `mask_noop` | `mask_area_fraction` |
+|---|---|---|---|
+| pre-flip | true | **true** | 0.996061 |
+| post-flip | true | **false** | **0.366949** (obv) / **0.338232** (rev) |
+
+The doctrine violation is closed on this class: `masked:true` now means the
+background actually went away. 0.996061 reproduces Bar 0 to six decimals.
+
+**Verification 2 — the three-part expectation, on the SERVICE lane.** All ten
+fixtures probed through `/identify`, dispositions read off the shadow-log
+tripwire:
+
+| group | result |
+|---|---|
+| the SIX | all 10 crossing sides `mask_noop` true→false; **top-1 card identical 6/6** |
+| the THREE (`121` obv+rev, `122` rev) | `mask_noop` stays true, area **bit-identical**, cosine identical |
+| controls (`02_domitian`, `100_katane`) | bit-identical |
+
+ON-arm cosines reproduce §7.1's predicted table to 4 dp — geta 0.9360→**0.9567**,
+owl 0.8927→**0.9145**, pergamon 0.8323→**0.8707**, cyprus 0.8612→**0.8243**
+(down, as pre-registered), macedon 0.8441→**0.8414**. Note the two *non*-crossing
+sides inside the six (`214` obv, `235` rev) held byte-still, as they must.
+
+**Verification 3 — full 248-fixture sweep, clause (d).** `m1_flip_sweep.py`
+(new; see below) both arms, L1 lane held constant and recorded:
+
+| | OFF | ON |
+|---|---|---|
+| fixtures swept | 248 | 248 |
+| `expected.yaml` graded / clean / mismatch | 230 / 193 / 37 | 230 / 193 / 37 **identical** |
+| no-op sides | **13** | **3** (healed 10; residual = exactly the §7.2 HOLD set) |
+| mask fallbacks / UNMEASURED | 0 / 0 | 0 / 0 |
+
+`m1_flip_adjudicate.py`: **PASS — 0 REAL FAILURES, 0 findings, 240 fixtures
+byte-still** (masked-image sha256, top-1, and cosine all identical). The OFF arm
+independently reproduces Bar 6's 193/37 of 230.
+
+**Verification 4 — standing bars, gate ON.** `routing_bar` **PASS 241 (top-1
+227, top2-3 14), RED_FLAG 0**, OUT_OF_SCOPE 4. Against the OFF baseline it
+differs on **exactly the six fixtures and only in the margin column** (geta
+0.0195→0.0246, owl 0.0534→0.0495, pergamon 0.0055→0.0021, macedon
+0.0927→0.0987, mithradates 0.1211→0.1336, cyprus 0.0447→0.0404) — every one
+still rank-1 on the same card. `stage2_bar` **PASSED**, byte-identical to the
+OFF arm: its assertions are fired/abstain + surfaced grain + `winners[0]`, none
+of which the healing moves.
+
+**Two process notes, recorded because both were nearly missed.**
+1. The first `routing_bar` / `stage2_bar` runs of this session were **mislabeled
+   ON**. `PYTHONPATH` was exported but the gate was not, so they executed the
+   OFF arm; they came back byte-identical to Bar 6, which is what exposed the
+   error — cyprus's margin cannot hold still when its cosine moves 0.037. Both
+   bars were re-run with the gate verified in-process before use. The
+   near-miss is the general hazard of an env-var gate read at call time: a
+   green bar proves nothing until the arm is asserted, not assumed.
+2. `235_hk_mithradates_vi` is the one fixture whose cosine differs between the
+   in-process lane (0.919134→0.928153, matching §7.1 exactly) and the service
+   lane (0.918231→0.927357). Cause: it is the **only** one of the six whose
+   images exceed `UPLOAD_MAX_DIM=518` (1127×1089 / 1141×1092), so it is the
+   only one that takes `_normalize_upload_bytes`' resize instead of the
+   harness's LANCZOS `cap()`. The other five are ≤518 and agree to 6 dp across
+   lanes. Benign, but it means harness cosines are not service cosines for
+   any oversized fixture.
+
+**Accepted transient, per the signed §6 table.** The **query lane is corrected
+now**; corpus vectors embedded through the old no-op path are *not*, and heal at
+their next scheduled recluster / annex cycle (`cng` + `mashops` /
+`stacksbowers`, Cahn / Hirsch on the annex side; **Helbing excluded**, 0
+crossings measured). Until then a healed query is compared against some
+unhealed corpus vectors — the direction the six cosines moved (4 up, 2 down) is
+that asymmetry, not instability. No re-embed was run in this session by design.
+
+**Queued, NOT performed:** re-capture of the six fixtures at the new truth
+(their stored `expected.yaml` sizes and any cosine-derived fixture data now
+describe the pre-flip mask). Also queued: promoting `m1_flip_sweep.py` into
+`visual_search/tests/appv2_regression/` — it is the batch `expected.yaml`
+comparator Bar 6 found missing (§5.4 gap 2), and unlike `topk_sweep.py` it
+sweeps all 248 fixtures instead of silently skipping the 16 unparseable ones
+(gap 1), which is what made clause (d) enforceable here.
+
+**Artifacts:** `specs/results/m1_flip/` — both sweeps, both live probes,
+`adjudication.txt`, `routing_on.txt`, `stage2_on.txt`,
+`routing_bar_on_vs_off.diff`, the three tools, and the drop-in as installed.
+
 ---
 
 ## 8. Reproduction

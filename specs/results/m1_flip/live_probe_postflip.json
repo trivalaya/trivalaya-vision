@@ -1,0 +1,462 @@
+[
+{
+ "fixture": "01_geta_caesar_denarius",
+ "img": {
+  "obv": {
+   "sha": "106f3ffecad29a35687e9a0405807dcac700822c97e4dbdeaa5851756b471639",
+   "w": 407,
+   "h": 418,
+   "masked": true,
+   "mask_fallback_reason": null,
+   "n_detections": 1,
+   "mask_area_fraction": 0.519139,
+   "mask_noop": false
+  },
+  "rev": {
+   "sha": "d8bda0019fbedfe2cbbb414b55ec844381206633be155cb2e630252649ef2cb2",
+   "w": 413,
+   "h": 410,
+   "masked": true,
+   "mask_fallback_reason": null,
+   "n_detections": 1,
+   "mask_area_fraction": 0.531436,
+   "mask_noop": false
+  }
+ },
+ "topk": [
+  {
+   "material": "severan",
+   "card_id": 13312,
+   "stable_key": "severan|Geta-as-Caesar|deity standing|denarius",
+   "cos": 0.956681
+  },
+  {
+   "material": "severan",
+   "card_id": 13346,
+   "stable_key": "severan|severan_men_aug|deity standing|denarius",
+   "cos": 0.932115
+  },
+  {
+   "material": "severan",
+   "card_id": 13332,
+   "stable_key": "severan|Severus Alexander|spes advancing|denarius",
+   "cos": 0.930451
+  }
+ ],
+ "margin": 0.024566
+},
+{
+ "fixture": "23_athenian_owl_new_style",
+ "img": {
+  "obv": {
+   "sha": "bceb22e28f7c76a399c870a71731782a54526f7efebf9b341b6b1cc06f804b40",
+   "w": 224,
+   "h": 224,
+   "masked": true,
+   "mask_fallback_reason": null,
+   "n_detections": 1,
+   "mask_area_fraction": 0.625937,
+   "mask_noop": false
+  },
+  "rev": {
+   "sha": "e02c1c463ef5f3f80868d4f645aa62c3ed2a458a54261a4e31772a894b3fa5bb",
+   "w": 224,
+   "h": 224,
+   "masked": true,
+   "mask_fallback_reason": null,
+   "n_detections": 1,
+   "mask_area_fraction": 0.725357,
+   "mask_noop": false
+  }
+ },
+ "topk": [
+  {
+   "material": "athenian_owls",
+   "card_id": 11739,
+   "stable_key": "athenian_owls|new_style|owl|tetradrachm",
+   "cos": 0.914518
+  },
+  {
+   "material": "baktria_indogreek",
+   "card_id": 14747,
+   "stable_key": "baktria_indogreek|bk_indogreek|drachm",
+   "cos": 0.865001
+  },
+  {
+   "material": "velia",
+   "card_id": 12501,
+   "stable_key": "velia|velia_nymph_owl|drachm",
+   "cos": 0.824837
+  }
+ ],
+ "margin": 0.049517
+},
+{
+ "fixture": "86_pergamon_cistophoric",
+ "img": {
+  "obv": {
+   "sha": "2d15776c50ad4633d5ece4de5feff2c16228fa6e7145ab9ae7697843f190cc46",
+   "w": 224,
+   "h": 224,
+   "masked": true,
+   "mask_fallback_reason": null,
+   "n_detections": 1,
+   "mask_area_fraction": 0.356326,
+   "mask_noop": false
+  },
+  "rev": {
+   "sha": "d5080dfefe153549012a2f7bcc1073f66b3bb3f9c42e1cb700d2332492e7730d",
+   "w": 224,
+   "h": 224,
+   "masked": true,
+   "mask_fallback_reason": null,
+   "n_detections": 1,
+   "mask_area_fraction": 0.351911,
+   "mask_noop": false
+  }
+ },
+ "topk": [
+  {
+   "material": "pergamon",
+   "card_id": 12590,
+   "stable_key": "pergamon|pergamon_cistophoric|tetradrachm",
+   "cos": 0.870727
+  },
+  {
+   "material": "ionia",
+   "card_id": 12786,
+   "stable_key": "ionia|ionia_ephesos|drachm",
+   "cos": 0.868612
+  },
+  {
+   "material": "phrygia",
+   "card_id": 13004,
+   "stable_key": "phrygia|phrygia_region|cistophorus",
+   "cos": 0.853717
+  }
+ ],
+ "margin": 0.002115
+},
+{
+ "fixture": "255_cyprus_kition_herakles",
+ "img": {
+  "obv": {
+   "sha": "4ecdf727f231cb7335d1ef7158966ef9996ac425a613f4030d6942c9a192614d",
+   "w": 224,
+   "h": 224,
+   "masked": true,
+   "mask_fallback_reason": null,
+   "n_detections": 1,
+   "mask_area_fraction": 0.309152,
+   "mask_noop": false
+  },
+  "rev": {
+   "sha": "587398a5351c2f4d3d9b3cc44c8f323b81324b5f9e0fc1d6ad8c5c231c793188",
+   "w": 224,
+   "h": 224,
+   "masked": true,
+   "mask_fallback_reason": null,
+   "n_detections": 1,
+   "mask_area_fraction": 0.31243,
+   "mask_noop": false
+  }
+ },
+ "topk": [
+  {
+   "material": "cyprus",
+   "card_id": 15978,
+   "stable_key": "cyprus|cyp_kition|stater",
+   "cos": 0.824279
+  },
+  {
+   "material": "satrapal_cilicia",
+   "card_id": 15987,
+   "stable_key": "satrapal_cilicia|sc_pharnabazos|stater",
+   "cos": 0.782807
+  },
+  {
+   "material": "satrapal_cilicia",
+   "card_id": 15988,
+   "stable_key": "satrapal_cilicia|sc_mazaios|stater",
+   "cos": 0.749097
+  }
+ ],
+ "margin": 0.041472
+},
+{
+ "fixture": "214_macedon_demetrios_poliorketes",
+ "img": {
+  "obv": {
+   "sha": "ff749302836993426cc8cb1729874027396b567c04d527a1b2869b5d43ec6250",
+   "w": 224,
+   "h": 224,
+   "masked": true,
+   "mask_fallback_reason": null,
+   "n_detections": 1,
+   "mask_area_fraction": 0.633331,
+   "mask_noop": false
+  },
+  "rev": {
+   "sha": "34b8e24c3201cc33bfdfd297615e0eab0681beabdf59e2ee6d2e74b8ac8db30d",
+   "w": 224,
+   "h": 224,
+   "masked": true,
+   "mask_fallback_reason": null,
+   "n_detections": 1,
+   "mask_area_fraction": 0.513502,
+   "mask_noop": false
+  }
+ },
+ "topk": [
+  {
+   "material": "macedon_kings",
+   "card_id": 14933,
+   "stable_key": "macedon_kings|mk_demetrios_i|tetradrachm",
+   "cos": 0.841394
+  },
+  {
+   "material": "pamphylia",
+   "card_id": 12831,
+   "stable_key": "pamphylia|pam_aspendos|stater",
+   "cos": 0.742694
+  },
+  {
+   "material": "phoenicia",
+   "card_id": 14942,
+   "stable_key": "phoenicia|phoen_sidon|dishekel",
+   "cos": 0.742584
+  }
+ ],
+ "margin": 0.0987
+},
+{
+ "fixture": "235_hk_mithradates_vi",
+ "img": {
+  "obv": {
+   "sha": "605f44f24c1b03f7d21dc6766bbde04514ea9bb9e852938e83421eb146c34f3b",
+   "w": 518,
+   "h": 501,
+   "masked": true,
+   "mask_fallback_reason": null,
+   "n_detections": 1,
+   "mask_area_fraction": 0.624201,
+   "mask_noop": false
+  },
+  "rev": {
+   "sha": "247baa7f0b3d1650ed7083c616a46efd8bcea67dbbf1038114353a33d90413db",
+   "w": 518,
+   "h": 495,
+   "masked": true,
+   "mask_fallback_reason": null,
+   "n_detections": 1,
+   "mask_area_fraction": 0.623568,
+   "mask_noop": false
+  }
+ },
+ "topk": [
+  {
+   "material": "hellenistic_kingdoms",
+   "card_id": 14993,
+   "stable_key": "hellenistic_kingdoms|hk_pontos_bosporan|tetradrachm",
+   "cos": 0.927357
+  },
+  {
+   "material": "aeolis",
+   "card_id": 12770,
+   "stable_key": "aeolis|aeolis_kyme|tetradrachm",
+   "cos": 0.794754
+  },
+  {
+   "material": "troas",
+   "card_id": 12762,
+   "stable_key": "troas|troas_neandria|obol",
+   "cos": 0.790862
+  }
+ ],
+ "margin": 0.132603
+},
+{
+ "fixture": "121_late_solidus_standing",
+ "img": {
+  "obv": {
+   "sha": "e8668196e0f81adf3cf46df149c82561d9a76fc73f6787f6e1948804aeb21fb5",
+   "w": 512,
+   "h": 454,
+   "masked": true,
+   "mask_fallback_reason": null,
+   "n_detections": 1,
+   "mask_area_fraction": 0.991095,
+   "mask_noop": true
+  },
+  "rev": {
+   "sha": "8dff3bf393b06153eb60818d15f77d718a5df693f214156d9b2b237b942178e1",
+   "w": 512,
+   "h": 468,
+   "masked": true,
+   "mask_fallback_reason": null,
+   "n_detections": 1,
+   "mask_area_fraction": 0.995914,
+   "mask_noop": true
+  }
+ },
+ "topk": [
+  {
+   "material": "late_solidus",
+   "card_id": 12673,
+   "stable_key": "late_solidus|standing|av",
+   "cos": 0.946518
+  },
+  {
+   "material": "late_solidus",
+   "card_id": 12674,
+   "stable_key": "late_solidus|seated|av",
+   "cos": 0.928075
+  },
+  {
+   "material": "late_solidus",
+   "card_id": 12675,
+   "stable_key": "late_solidus|captive_trophy|av",
+   "cos": 0.883323
+  }
+ ],
+ "margin": 0.018443
+},
+{
+ "fixture": "122_late_solidus_captive_trophy",
+ "img": {
+  "obv": {
+   "sha": "4c5b0b2d2a3f0d9bfdaf0c101ee5d30d65f16f40b0b03d43ec42b7cc44efc97d",
+   "w": 451,
+   "h": 406,
+   "masked": true,
+   "mask_fallback_reason": null,
+   "n_detections": 1,
+   "mask_area_fraction": 0.987505,
+   "mask_noop": false
+  },
+  "rev": {
+   "sha": "96db080fb3bbf8c608dedb6ac58924ebefec3e3e7b8284f43a801bdddaaaded2",
+   "w": 451,
+   "h": 406,
+   "masked": true,
+   "mask_fallback_reason": null,
+   "n_detections": 1,
+   "mask_area_fraction": 0.995325,
+   "mask_noop": true
+  }
+ },
+ "topk": [
+  {
+   "material": "late_solidus",
+   "card_id": 12675,
+   "stable_key": "late_solidus|captive_trophy|av",
+   "cos": 0.952031
+  },
+  {
+   "material": "late_solidus",
+   "card_id": 12674,
+   "stable_key": "late_solidus|seated|av",
+   "cos": 0.927585
+  },
+  {
+   "material": "late_solidus",
+   "card_id": 12673,
+   "stable_key": "late_solidus|standing|av",
+   "cos": 0.926855
+  }
+ ],
+ "margin": 0.024446
+},
+{
+ "fixture": "02_domitian_augustus_minerva",
+ "img": {
+  "obv": {
+   "sha": "c5cb127359019de7a41bfe2186586f5a7cf8d556c2d29bf2244a8677a1bf805f",
+   "w": 483,
+   "h": 518,
+   "masked": true,
+   "mask_fallback_reason": null,
+   "n_detections": 1,
+   "mask_area_fraction": 0.654052,
+   "mask_noop": false
+  },
+  "rev": {
+   "sha": "c918d37d73a32b6351df8f048aae50167f6a15b918f876e11cc3cefd87b368bd",
+   "w": 490,
+   "h": 518,
+   "masked": true,
+   "mask_fallback_reason": null,
+   "n_detections": 1,
+   "mask_area_fraction": 0.676206,
+   "mask_noop": false
+  }
+ },
+ "topk": [
+  {
+   "material": "flavian",
+   "card_id": 13788,
+   "stable_key": "flavian|Domitian-as-Augustus|minerva standing|denarius",
+   "cos": 0.928935
+  },
+  {
+   "material": "severan",
+   "card_id": 13338,
+   "stable_key": "severan|severan_empress|deity standing|denarius",
+   "cos": 0.916219
+  },
+  {
+   "material": "severan",
+   "card_id": 13327,
+   "stable_key": "severan|Severus Alexander|deity standing|denarius",
+   "cos": 0.915379
+  }
+ ],
+ "margin": 0.012716
+},
+{
+ "fixture": "100_sicily_katane_quadriga",
+ "img": {
+  "obv": {
+   "sha": "083fd129e8dbfb543cc1cd2333c2e93312a06556e1340b08c0ea98c3b31529c2",
+   "w": 224,
+   "h": 224,
+   "masked": true,
+   "mask_fallback_reason": null,
+   "n_detections": 1,
+   "mask_area_fraction": 0.644731,
+   "mask_noop": false
+  },
+  "rev": {
+   "sha": "fe86721c4f27215eb40b0e8a6874bbda90cbe66d47b514e313f2376f2a582da0",
+   "w": 224,
+   "h": 224,
+   "masked": true,
+   "mask_fallback_reason": null,
+   "n_detections": 2,
+   "mask_area_fraction": 0.634337,
+   "mask_noop": false
+  }
+ },
+ "topk": [
+  {
+   "material": "sicily_other",
+   "card_id": 12614,
+   "stable_key": "sicily_other|sic_katane|tetradrachm",
+   "cos": 0.841567
+  },
+  {
+   "material": "peloponnese_other",
+   "card_id": 12727,
+   "stable_key": "peloponnese_other|pelo_messene|triobol",
+   "cos": 0.799255
+  },
+  {
+   "material": "antonine",
+   "card_id": 14082,
+   "stable_key": "antonine|antonine_men|club|denarius",
+   "cos": 0.791952
+  }
+ ],
+ "margin": 0.042312
+}
+]

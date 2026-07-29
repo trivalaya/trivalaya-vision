@@ -1,0 +1,452 @@
+Using cache found in /home/claudeuser/.cache/torch/hub/facebookresearch_dinov2_main
+/home/claudeuser/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/swiglu_ffn.py:51: UserWarning: xFormers is not available (SwiGLU)
+  warnings.warn("xFormers is not available (SwiGLU)")
+/home/claudeuser/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/attention.py:33: UserWarning: xFormers is not available (Attention)
+  warnings.warn("xFormers is not available (Attention)")
+/home/claudeuser/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py:40: UserWarning: xFormers is not available (Block)
+  warnings.warn("xFormers is not available (Block)")
+[appv2] loading DINOv2 dinov2_vitb14 on cpu...
+[appv2] aegina: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_aegina.npy
+[appv2] aegina:   features shape=(317, 1536)
+[appv2] aegina:   csv rows=317
+[appv2] aegina:   built 4 centroids, 0 s10 rows
+[appv2] aeolis: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_aeolis.npy
+[appv2] aeolis:   features shape=(579, 1536)
+[appv2] aeolis:   csv rows=579
+[appv2] aeolis:   built 9 centroids, 0 s10 rows
+[appv2] akarnania: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_akarnania.npy
+[appv2] akarnania:   features shape=(420, 1536)
+[appv2] akarnania:   csv rows=420
+[appv2] akarnania:   built 5 centroids, 0 s10 rows
+[appv2] akragas: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_akragas.npy
+[appv2] akragas:   features shape=(195, 1536)
+[appv2] akragas:   csv rows=195
+[appv2] akragas:   built 2 centroids, 0 s10 rows
+[appv2] alexander: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_alexander.npy
+[appv2] alexander:   features shape=(5713, 1536)
+[appv2] alexander:   csv rows=5713
+[appv2] alexander:   built 910 centroids, 0 s10 rows
+[appv2] alexandria_tetradrachm: loading features /home/claudeuser/trivalaya-pipeline/analysis/provincial_onboarding/features_masked_alexandria_tetradrachm.npy
+[appv2] alexandria_tetradrachm:   features shape=(2040, 1536)
+[appv2] alexandria_tetradrachm:   csv rows=2040
+[appv2] alexandria_tetradrachm:   built 64 centroids, 0 s10 rows
+[appv2] antonine: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_antonine_dena_inc/features.npy
+[appv2] antonine:   features shape=(3643, 1536)
+[appv2] antonine:   csv rows=3643
+[appv2] antonine:   built 103 centroids, 0 s10 rows
+[appv2] antonine_bronze: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_antonine_bronze/features.npy
+[appv2] antonine_bronze:   features shape=(2833, 1536)
+[appv2] antonine_bronze:   csv rows=2833
+[appv2] antonine_bronze:   built 124 centroids, 0 s10 rows
+[appv2] antonine_gold: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_antonine_gold/features.npy
+[appv2] antonine_gold:   features shape=(341, 1536)
+[appv2] antonine_gold:   csv rows=341
+[appv2] antonine_gold:   built 21 centroids, 0 s10 rows
+[appv2] antoniniani_gallic_window: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_antoniniani_gallic_window_A_raw_6_3_v3/features.npy
+[appv2] antoniniani_gallic_window:   features shape=(3844, 1536)
+[appv2] antoniniani_gallic_window:   csv rows=3844
+[appv2] antoniniani_gallic_window:   built 135 centroids, 0 s10 rows
+[appv2] antoniniani_post_gallic: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_antoniniani_post_gallic_A_raw_6_3_v3/features.npy
+[appv2] antoniniani_post_gallic:   features shape=(3404, 1536)
+[appv2] antoniniani_post_gallic:   csv rows=3404
+[appv2] antoniniani_post_gallic:   built 106 centroids, 0 s10 rows
+[appv2] antoniniani_pre_gallic: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_antoniniani_pre_gallic_A_raw_6_3_v3/features.npy
+[appv2] antoniniani_pre_gallic:   features shape=(5421, 1536)
+[appv2] antoniniani_pre_gallic:   csv rows=5421
+[appv2] antoniniani_pre_gallic:   built 151 centroids, 0 s10 rows
+[appv2] athenian_owls: loading features /home/claudeuser/trivalaya-pipeline/analysis/owl_onboarding/features_masked_1536.npy
+[appv2] athenian_owls:   features shape=(3055, 1536)
+[appv2] athenian_owls:   csv rows=3055
+[appv2] athenian_owls:   built 6 centroids, 0 s10 rows
+[appv2] baktria_indogreek: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_baktria_indogreek.npy
+[appv2] baktria_indogreek:   features shape=(1028, 1536)
+[appv2] baktria_indogreek:   csv rows=1028
+[appv2] baktria_indogreek:   built 11 centroids, 0 s10 rows
+[appv2] black_sea: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_black_sea.npy
+[appv2] black_sea:   features shape=(186, 1536)
+[appv2] black_sea:   csv rows=186
+[appv2] black_sea:   built 15 centroids, 0 s10 rows
+[appv2] boeotia_other: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_boeotia_other.npy
+[appv2] boeotia_other:   features shape=(285, 1536)
+[appv2] boeotia_other:   csv rows=285
+[appv2] boeotia_other:   built 6 centroids, 0 s10 rows
+[appv2] bruttium: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_bruttium.npy
+[appv2] bruttium:   features shape=(465, 1536)
+[appv2] bruttium:   csv rows=465
+[appv2] bruttium:   built 27 centroids, 0 s10 rows
+[appv2] campania: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_campania.npy
+[appv2] campania:   features shape=(149, 1536)
+[appv2] campania:   csv rows=149
+[appv2] campania:   built 3 centroids, 0 s10 rows
+[appv2] caria_other: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_caria_other.npy
+[appv2] caria_other:   features shape=(932, 1536)
+[appv2] caria_other:   csv rows=932
+[appv2] caria_other:   built 45 centroids, 0 s10 rows
+[appv2] central_greece_tail: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_central_greece_tail.npy
+[appv2] central_greece_tail:   features shape=(183, 1536)
+[appv2] central_greece_tail:   csv rows=183
+[appv2] central_greece_tail:   built 5 centroids, 0 s10 rows
+[appv2] chalkidian_league: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_chalkidian_league.npy
+[appv2] chalkidian_league:   features shape=(182, 1536)
+[appv2] chalkidian_league:   csv rows=182
+[appv2] chalkidian_league:   built 10 centroids, 0 s10 rows
+[appv2] cilicia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_cilicia.npy
+[appv2] cilicia:   features shape=(870, 1536)
+[appv2] cilicia:   csv rows=870
+[appv2] cilicia:   built 36 centroids, 0 s10 rows
+[appv2] constantine_i: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_constantine_i/features.npy
+[appv2] constantine_i:   features shape=(4242, 1536)
+[appv2] constantine_i:   csv rows=4242
+[appv2] constantine_i:   built 126 centroids, 0 s10 rows
+[appv2] constantinian_house: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_constantinian_house/features.npy
+[appv2] constantinian_house:   features shape=(4679, 1536)
+[appv2] constantinian_house:   csv rows=4679
+[appv2] constantinian_house:   built 149 centroids, 0 s10 rows
+[appv2] corinth: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_corinth.npy
+[appv2] corinth:   features shape=(804, 1536)
+[appv2] corinth:   csv rows=804
+[appv2] corinth:   built 4 centroids, 0 s10 rows
+[appv2] crete: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_crete.npy
+[appv2] crete:   features shape=(117, 1536)
+[appv2] crete:   csv rows=117
+[appv2] crete:   built 8 centroids, 0 s10 rows
+[appv2] crisis_bronze: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_crisis_bronze/features.npy
+[appv2] crisis_bronze:   features shape=(1218, 1536)
+[appv2] crisis_bronze:   csv rows=1218
+[appv2] crisis_bronze:   built 65 centroids, 0 s10 rows
+[appv2] cyprus: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_cyprus.npy
+[appv2] cyprus:   features shape=(255, 1536)
+[appv2] cyprus:   csv rows=255
+[appv2] cyprus:   built 50 centroids, 0 s10 rows
+[appv2] early_argead_macedon: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_early_argead_macedon.npy
+[appv2] early_argead_macedon:   features shape=(141, 1536)
+[appv2] early_argead_macedon:   csv rows=141
+[appv2] early_argead_macedon:   built 5 centroids, 0 s10 rows
+[appv2] euboia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_euboia.npy
+[appv2] euboia:   features shape=(305, 1536)
+[appv2] euboia:   csv rows=305
+[appv2] euboia:   built 3 centroids, 0 s10 rows
+[appv2] first_meris: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_first_meris.npy
+[appv2] first_meris:   features shape=(347, 1536)
+[appv2] first_meris:   csv rows=347
+[appv2] first_meris:   built 2 centroids, 0 s10 rows
+[appv2] flavian: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_flavian_dena_inc/features.npy
+[appv2] flavian:   features shape=(1983, 1536)
+[appv2] flavian:   csv rows=1983
+[appv2] flavian:   built 50 centroids, 0 s10 rows
+[appv2] flavian_bronze: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_flavian_bronze/features.npy
+[appv2] flavian_bronze:   features shape=(786, 1536)
+[appv2] flavian_bronze:   csv rows=786
+[appv2] flavian_bronze:   built 46 centroids, 0 s10 rows
+[appv2] flavian_gold: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_flavian_gold/features.npy
+[appv2] flavian_gold:   features shape=(196, 1536)
+[appv2] flavian_gold:   csv rows=196
+[appv2] flavian_gold:   built 11 centroids, 0 s10 rows
+[appv2] gaul: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_gaul.npy
+[appv2] gaul:   features shape=(385, 1536)
+[appv2] gaul:   csv rows=385
+[appv2] gaul:   built 8 centroids, 0 s10 rows
+[appv2] gela: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_gela.npy
+[appv2] gela:   features shape=(187, 1536)
+[appv2] gela:   csv rows=187
+[appv2] gela:   built 2 centroids, 0 s10 rows
+[appv2] hellenistic_kingdoms: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_hellenistic_kingdoms.npy
+[appv2] hellenistic_kingdoms:   features shape=(648, 1536)
+[appv2] hellenistic_kingdoms:   csv rows=648
+[appv2] hellenistic_kingdoms:   built 38 centroids, 0 s10 rows
+[appv2] illyria_epeiros: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_illyria_epeiros.npy
+[appv2] illyria_epeiros:   features shape=(539, 1536)
+[appv2] illyria_epeiros:   csv rows=539
+[appv2] illyria_epeiros:   built 8 centroids, 0 s10 rows
+[appv2] ionia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_ionia.npy
+[appv2] ionia:   features shape=(1613, 1536)
+[appv2] ionia:   csv rows=1613
+[appv2] ionia:   built 60 centroids, 0 s10 rows
+[appv2] judaea: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_judaea.npy
+[appv2] judaea:   features shape=(50, 1536)
+[appv2] judaea:   csv rows=50
+[appv2] judaea:   built 3 centroids, 0 s10 rows
+[appv2] julio_claudian: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_julio_claudian_dena_inc/features.npy
+[appv2] julio_claudian:   features shape=(2958, 1536)
+[appv2] julio_claudian:   csv rows=2958
+[appv2] julio_claudian:   built 62 centroids, 0 s10 rows
+[appv2] julio_claudian_bronze: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_julio_claudian_bronze/features.npy
+[appv2] julio_claudian_bronze:   features shape=(2281, 1536)
+[appv2] julio_claudian_bronze:   csv rows=2281
+[appv2] julio_claudian_bronze:   built 91 centroids, 0 s10 rows
+[appv2] julio_claudian_gold: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_julio_claudian_gold/features.npy
+[appv2] julio_claudian_gold:   features shape=(550, 1536)
+[appv2] julio_claudian_gold:   csv rows=550
+[appv2] julio_claudian_gold:   built 22 centroids, 0 s10 rows
+[appv2] knidos: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_knidos.npy
+[appv2] knidos:   features shape=(142, 1536)
+[appv2] knidos:   csv rows=142
+[appv2] knidos:   built 4 centroids, 0 s10 rows
+[appv2] kyrene: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_kyrene.npy
+[appv2] kyrene:   features shape=(645, 1536)
+[appv2] kyrene:   csv rows=645
+[appv2] kyrene:   built 24 centroids, 0 s10 rows
+[appv2] kyzikos: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_kyzikos.npy
+[appv2] kyzikos:   features shape=(1059, 1536)
+[appv2] kyzikos:   csv rows=1059
+[appv2] kyzikos:   built 5 centroids, 0 s10 rows
+[appv2] larissa: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_larissa.npy
+[appv2] larissa:   features shape=(519, 1536)
+[appv2] larissa:   csv rows=519
+[appv2] larissa:   built 9 centroids, 0 s10 rows
+[appv2] late_roman_silver: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_late_roman_silver_A_raw_6_3_v3/features.npy
+[appv2] late_roman_silver:   features shape=(1321, 1536)
+[appv2] late_roman_silver:   csv rows=1321
+[appv2] late_roman_silver:   built 32 centroids, 0 s10 rows
+[appv2] late_solidus: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_late_solidus/features.npy
+[appv2] late_solidus:   features shape=(1158, 1536)
+[appv2] late_solidus:   csv rows=1158
+[appv2] late_solidus:   built 57 centroids, 0 s10 rows
+[appv2] lesbos_other: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_lesbos_other.npy
+[appv2] lesbos_other:   features shape=(347, 1536)
+[appv2] lesbos_other:   csv rows=347
+[appv2] lesbos_other:   built 4 centroids, 0 s10 rows
+[appv2] leukas: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_leukas.npy
+[appv2] leukas:   features shape=(236, 1536)
+[appv2] leukas:   csv rows=236
+[appv2] leukas:   built 2 centroids, 0 s10 rows
+[appv2] licinius: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_licinius/features.npy
+[appv2] licinius:   features shape=(1725, 1536)
+[appv2] licinius:   csv rows=1725
+[appv2] licinius:   built 74 centroids, 0 s10 rows
+[appv2] lucania_other: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_lucania_other.npy
+[appv2] lucania_other:   features shape=(352, 1536)
+[appv2] lucania_other:   csv rows=352
+[appv2] lucania_other:   built 5 centroids, 0 s10 rows
+[appv2] lydia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_lydia.npy
+[appv2] lydia:   features shape=(140, 1536)
+[appv2] lydia:   csv rows=140
+[appv2] lydia:   built 24 centroids, 0 s10 rows
+[appv2] lydia_kingdom: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_lydia_kingdom.npy
+[appv2] lydia_kingdom:   features shape=(745, 1536)
+[appv2] lydia_kingdom:   csv rows=745
+[appv2] lydia_kingdom:   built 102 centroids, 0 s10 rows
+[appv2] lykia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_lykia.npy
+[appv2] lykia:   features shape=(352, 1536)
+[appv2] lykia:   csv rows=352
+[appv2] lykia:   built 12 centroids, 0 s10 rows
+[appv2] lysimachos: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_lysimachos.npy
+[appv2] lysimachos:   features shape=(329, 1536)
+[appv2] lysimachos:   csv rows=329
+[appv2] lysimachos:   built 3 centroids, 0 s10 rows
+[appv2] macedon_kings: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_macedon_kings.npy
+[appv2] macedon_kings:   features shape=(650, 1536)
+[appv2] macedon_kings:   csv rows=650
+[appv2] macedon_kings:   built 10 centroids, 0 s10 rows
+[appv2] macedon_region: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_macedon_region.npy
+[appv2] macedon_region:   features shape=(494, 1536)
+[appv2] macedon_region:   csv rows=494
+[appv2] macedon_region:   built 43 centroids, 0 s10 rows
+[appv2] maximinus_gordian3: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_maximinus_gordian3_dena_inc/features.npy
+[appv2] maximinus_gordian3:   features shape=(1339, 1536)
+[appv2] maximinus_gordian3:   csv rows=1339
+[appv2] maximinus_gordian3:   built 25 centroids, 0 s10 rows
+[appv2] metapontion: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_metapontion.npy
+[appv2] metapontion:   features shape=(703, 1536)
+[appv2] metapontion:   csv rows=703
+[appv2] metapontion:   built 2 centroids, 0 s10 rows
+[appv2] mg_bronze: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_mg_bronze/features.npy
+[appv2] mg_bronze:   features shape=(1173, 1536)
+[appv2] mg_bronze:   csv rows=1173
+[appv2] mg_bronze:   built 59 centroids, 0 s10 rows
+[appv2] mid4c: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_mid4c/features.npy
+[appv2] mid4c:   features shape=(366, 1536)
+[appv2] mid4c:   csv rows=366
+[appv2] mid4c:   built 15 centroids, 0 s10 rows
+[appv2] mysia_other: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_mysia_other.npy
+[appv2] mysia_other:   features shape=(1098, 1536)
+[appv2] mysia_other:   csv rows=1098
+[appv2] mysia_other:   built 27 centroids, 0 s10 rows
+[appv2] mytilene: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_mytilene.npy
+[appv2] mytilene:   features shape=(1053, 1536)
+[appv2] mytilene:   csv rows=1053
+[appv2] mytilene:   built 18 centroids, 0 s10 rows
+[appv2] nerva: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_nerva_dena_inc/features.npy
+[appv2] nerva:   features shape=(4136, 1536)
+[appv2] nerva:   csv rows=4136
+[appv2] nerva:   built 97 centroids, 0 s10 rows
+[appv2] nerva_bronze: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_nerva_bronze/features.npy
+[appv2] nerva_bronze:   features shape=(2173, 1536)
+[appv2] nerva_bronze:   csv rows=2173
+[appv2] nerva_bronze:   built 96 centroids, 0 s10 rows
+[appv2] nerva_gold: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_nerva_gold/features.npy
+[appv2] nerva_gold:   features shape=(277, 1536)
+[appv2] nerva_gold:   csv rows=277
+[appv2] nerva_gold:   built 16 centroids, 0 s10 rows
+[appv2] paeonia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_paeonia.npy
+[appv2] paeonia:   features shape=(255, 1536)
+[appv2] paeonia:   csv rows=255
+[appv2] paeonia:   built 4 centroids, 0 s10 rows
+[appv2] pamphylia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_pamphylia.npy
+[appv2] pamphylia:   features shape=(416, 1536)
+[appv2] pamphylia:   csv rows=416
+[appv2] pamphylia:   built 10 centroids, 0 s10 rows
+[appv2] pantikapaion: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_pantikapaion.npy
+[appv2] pantikapaion:   features shape=(282, 1536)
+[appv2] pantikapaion:   csv rows=282
+[appv2] pantikapaion:   built 6 centroids, 0 s10 rows
+[appv2] parthian_drachm: loading features /home/claudeuser/trivalaya-pipeline/analysis/parthian_onboarding/features_masked_parthian.npy
+[appv2] parthian_drachm:   features shape=(1502, 1536)
+[appv2] parthian_drachm:   csv rows=1502
+[appv2] parthian_drachm:   built 44 centroids, 0 s10 rows
+[appv2] peloponnese_other: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_peloponnese_other.npy
+[appv2] peloponnese_other:   features shape=(731, 1536)
+[appv2] peloponnese_other:   csv rows=731
+[appv2] peloponnese_other:   built 131 centroids, 0 s10 rows
+[appv2] pergamon: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_pergamon.npy
+[appv2] pergamon:   features shape=(268, 1536)
+[appv2] pergamon:   csv rows=268
+[appv2] pergamon:   built 3 centroids, 0 s10 rows
+[appv2] phoenicia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_phoenicia.npy
+[appv2] phoenicia:   features shape=(679, 1536)
+[appv2] phoenicia:   csv rows=679
+[appv2] phoenicia:   built 111 centroids, 0 s10 rows
+[appv2] phokaia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_phokaia.npy
+[appv2] phokaia:   features shape=(397, 1536)
+[appv2] phokaia:   csv rows=397
+[appv2] phokaia:   built 3 centroids, 0 s10 rows
+[appv2] phokis: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_phokis.npy
+[appv2] phokis:   features shape=(157, 1536)
+[appv2] phokis:   csv rows=157
+[appv2] phokis:   built 4 centroids, 0 s10 rows
+[appv2] phrygia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_phrygia.npy
+[appv2] phrygia:   features shape=(48, 1536)
+[appv2] phrygia:   csv rows=48
+[appv2] phrygia:   built 3 centroids, 0 s10 rows
+[appv2] pisidia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_pisidia.npy
+[appv2] pisidia:   features shape=(269, 1536)
+[appv2] pisidia:   csv rows=269
+[appv2] pisidia:   built 4 centroids, 0 s10 rows
+[appv2] pontos_bithynia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_pontos_bithynia.npy
+[appv2] pontos_bithynia:   features shape=(309, 1536)
+[appv2] pontos_bithynia:   csv rows=309
+[appv2] pontos_bithynia:   built 40 centroids, 0 s10 rows
+[appv2] ptolemaic: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_ptolemaic.npy
+[appv2] ptolemaic:   features shape=(833, 1536)
+[appv2] ptolemaic:   csv rows=833
+[appv2] ptolemaic:   built 8 centroids, 0 s10 rows
+[appv2] republican_anon_early: loading features /home/claudeuser/trivalaya-pipeline/analysis/republican_anon_early/phase1_masked/paired_feats.npy
+[appv2] republican_anon_early:   features shape=(95, 1536)
+[appv2] republican_anon_early:   csv rows=95
+[appv2] republican_anon_early:   built 4 centroids, 0 s10 rows
+[appv2] republican_imp_portrait: loading features /home/claudeuser/trivalaya-pipeline/analysis/republican_imp_portrait/phase1_masked_rrinc/paired_feats.npy
+[appv2] republican_imp_portrait:   features shape=(797, 1536)
+[appv2] republican_imp_portrait:   csv rows=797
+[appv2] republican_imp_portrait:   built 22 centroids, 0 s10 rows
+[appv2] republican_imperatorial: loading features /home/claudeuser/trivalaya-pipeline/analysis/republican_imperatorial/phase1_masked_rrinc/paired_feats.npy
+[appv2] republican_imperatorial:   features shape=(1562, 1536)
+[appv2] republican_imperatorial:   csv rows=1562
+[appv2] republican_imperatorial:   built 32 centroids, 0 s10 rows
+[appv2] republican_slice1: loading features /home/claudeuser/trivalaya-pipeline/analysis/republican_slice1/phase1_masked_rrinc/paired_feats.npy
+[appv2] republican_slice1:   features shape=(2563, 1536)
+[appv2] republican_slice1:   csv rows=2563
+[appv2] republican_slice1:   built 132 centroids, 0 s10 rows
+[appv2] republican_slice2: loading features /home/claudeuser/trivalaya-pipeline/analysis/republican_slice2/phase1_masked/paired_feats.npy
+[appv2] republican_slice2:   features shape=(1430, 1536)
+[appv2] republican_slice2:   csv rows=1430
+[appv2] republican_slice2:   built 54 centroids, 0 s10 rows
+[appv2] republican_slice3: loading features /home/claudeuser/trivalaya-pipeline/analysis/republican_slice3/phase1_masked_rrinc/paired_feats.npy
+[appv2] republican_slice3:   features shape=(3006, 1536)
+[appv2] republican_slice3:   csv rows=3006
+[appv2] republican_slice3:   built 134 centroids, 0 s10 rows
+[appv2] rhodos: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_rhodos.npy
+[appv2] rhodos:   features shape=(765, 1536)
+[appv2] rhodos:   csv rows=765
+[appv2] rhodos:   built 2 centroids, 0 s10 rows
+[appv2] sasanian_drachm: loading features /home/claudeuser/trivalaya-pipeline/analysis/sasanian_onboarding/features_masked_sasanian_drachm.npy
+[appv2] sasanian_drachm:   features shape=(1251, 1536)
+[appv2] sasanian_drachm:   csv rows=1251
+[appv2] sasanian_drachm:   built 40 centroids, 0 s10 rows
+[appv2] satrapal_cilicia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_satrapal_cilicia.npy
+[appv2] satrapal_cilicia:   features shape=(308, 1536)
+[appv2] satrapal_cilicia:   csv rows=308
+[appv2] satrapal_cilicia:   built 50 centroids, 0 s10 rows
+[appv2] sceatta: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_sceatta.npy
+[appv2] sceatta:   features shape=(562, 1536)
+[appv2] sceatta:   csv rows=562
+[appv2] sceatta:   built 26 centroids, 0 s10 rows
+[appv2] seleukid_early: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_seleukid_early.npy
+[appv2] seleukid_early:   features shape=(1459, 1536)
+[appv2] seleukid_early:   csv rows=1459
+[appv2] seleukid_early:   built 90 centroids, 0 s10 rows
+[appv2] seleukid_late: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_seleukid_late.npy
+[appv2] seleukid_late:   features shape=(1545, 1536)
+[appv2] seleukid_late:   csv rows=1545
+[appv2] seleukid_late:   built 25 centroids, 0 s10 rows
+[appv2] severan: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_severan_dena_inc/features.npy
+[appv2] severan:   features shape=(9273, 1536)
+[appv2] severan:   csv rows=9273
+[appv2] severan:   built 227 centroids, 0 s10 rows
+[appv2] severan_bronze: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_severan_bronze/features.npy
+[appv2] severan_bronze:   features shape=(1733, 1536)
+[appv2] severan_bronze:   csv rows=1733
+[appv2] severan_bronze:   built 82 centroids, 0 s10 rows
+[appv2] sicily_other: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_sicily_other.npy
+[appv2] sicily_other:   features shape=(803, 1536)
+[appv2] sicily_other:   csv rows=803
+[appv2] sicily_other:   built 50 centroids, 0 s10 rows
+[appv2] syracuse: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_syracuse.npy
+[appv2] syracuse:   features shape=(806, 1536)
+[appv2] syracuse:   csv rows=806
+[appv2] syracuse:   built 14 centroids, 0 s10 rows
+[appv2] tarentum: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_1536.npy
+[appv2] tarentum:   features shape=(1133, 1536)
+[appv2] tarentum:   csv rows=1133
+[appv2] tarentum:   built 10 centroids, 0 s10 rows
+[appv2] tetrarchic: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_tetrarchic/features.npy
+[appv2] tetrarchic:   features shape=(4004, 1536)
+[appv2] tetrarchic:   csv rows=4004
+[appv2] tetrarchic:   built 132 centroids, 0 s10 rows
+[appv2] thasos: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_thasos.npy
+[appv2] thasos:   features shape=(282, 1536)
+[appv2] thasos:   csv rows=282
+[appv2] thasos:   built 4 centroids, 0 s10 rows
+[appv2] thebes: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_thebes.npy
+[appv2] thebes:   features shape=(206, 1536)
+[appv2] thebes:   csv rows=206
+[appv2] thebes:   built 3 centroids, 0 s10 rows
+[appv2] theodosian: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_theodosian/features.npy
+[appv2] theodosian:   features shape=(623, 1536)
+[appv2] theodosian:   csv rows=623
+[appv2] theodosian:   built 30 centroids, 0 s10 rows
+[appv2] thessaly_other: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_thessaly_other.npy
+[appv2] thessaly_other:   features shape=(1018, 1536)
+[appv2] thessaly_other:   csv rows=1018
+[appv2] thessaly_other:   built 209 centroids, 0 s10 rows
+[appv2] thrace: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_thrace.npy
+[appv2] thrace:   features shape=(636, 1536)
+[appv2] thrace:   csv rows=636
+[appv2] thrace:   built 23 centroids, 0 s10 rows
+[appv2] troas: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_troas.npy
+[appv2] troas:   features shape=(957, 1536)
+[appv2] troas:   csv rows=957
+[appv2] troas:   built 43 centroids, 0 s10 rows
+[appv2] valentinian: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_valentinian/features.npy
+[appv2] valentinian:   features shape=(420, 1536)
+[appv2] valentinian:   csv rows=420
+[appv2] valentinian:   built 21 centroids, 0 s10 rows
+[appv2] velia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_velia.npy
+[appv2] velia:   features shape=(191, 1536)
+[appv2] velia:   csv rows=191
+[appv2] velia:   built 3 centroids, 0 s10 rows
+[appv2] mention tokens: 34232 citations across 22830 coins
+[appv2] rerank reachable index: 1080 reachable parents; ghosts 476/1556 (31%)
+
+fixture                           provider        result                        verdict
+--------------------------------------------------------------------------------------------
+245_sasanian_khusro_ii            crown_head      fired=True reason=ok grain=cohort n_win=2PASS
+02_domitian_augustus_minerva      crown_head      fired=False reason=None       PASS
+01_geta_caesar_denarius           legend_rerank   fired=True reason=override grain=pool n_win=5 winner_mat_hit=TruePASS
+01_geta_caesar_denarius           legend_rerank   fired=False reason=confirm    PASS
+251_parthian_vologases_i          portrait_head   fired=True reason=king grain=child n_win=1PASS
+252_parthian_era_fallback         portrait_head   fired=True reason=era_fallback grain=cohort n_win=15PASS
+245_sasanian_khusro_ii            portrait_head   fired=False reason=None       PASS
+--------------------------------------------------------------------------------------------
+01_geta (decode=None)             legend_rerank   fired=False                   PASS
+--------------------------------------------------------------------------------------------
+STAGE2 BAR PASSED — every provider fires/abstains + surfaces as specified.

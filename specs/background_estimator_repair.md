@@ -276,6 +276,39 @@ this change; unexplained drift blocks.
 
 ## Results
 
+### ENABLE — LEG 1 SHIPPED, 2026-07-29 01:47 UTC
+
+`TRIVALAYA_BG_CORNER_LOCAL_TRUST=1` is **live in `trivalaya-search.service`**
+via systemd drop-in (one variable, no `EnvironmentFile`). All bars green with
+the gate ON: full 248-fixture sweep **0 real failures / 240 byte-still**,
+`routing_bar` PASS 241 / RED_FLAG 0 differing on exactly the six pre-registered
+fixtures (margin column only, all still rank-1 same card), `stage2_bar` PASSED.
+**Serving no-op sides 13 → 3.** Live witness: a Bar-0 no-op side now returns
+`masked:true, mask_noop:false, area 0.367` where it returned `area 0.996061,
+mask_noop:true` an hour earlier. **The leg-1 doctrine violation is closed for
+the light_fallback class.** Full record:
+`specs/results/bg_estimator_m1_2026-07-28.md` §7.3; evidence in
+`specs/results/m1_flip/`.
+
+**This ticket is CLOSED for leg 1.** Three things survive it and are NOT closed:
+
+1. **Leg 2 (CNG ingest detection quality) is measured NOT delivered** (§2.1) —
+   the dark stratum moves 31 → ~78, both below 110, same polarity selected. The
+   detection-quality root-cause ticket (Otsu on a non-bimodal histogram) is
+   where that value lives and is still unowned.
+2. **A residual no-op class survives the flip in serving: 3 sides / 2
+   fixtures** — `121_late_solidus_standing` (obv 0.991095, rev 0.995914) and
+   `122_late_solidus_captive_trophy` (rev 0.995325). These are segmentation-
+   proper failures, not background-estimator failures; M1 does not reach them
+   and was never measured to. They are three raw-photo embeds still standing in
+   the query lane. **This is the detection-quality ticket's second measured
+   symptom family**, alongside the taxonomy's 84 % rim-trip / over-detection
+   class — and unlike that class it comes with named, committed, reproducible
+   fixtures.
+3. **Re-embed (step 4) has not run.** The query lane is corrected; corpus
+   vectors are not, and heal at their next scheduled recluster / annex cycle
+   per the signed §6 table (Helbing excluded).
+
 ### Bar 0 — RULING STAMP (owner, 2026-07-28)
 
 Verbatim, as dictated:

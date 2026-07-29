@@ -1,0 +1,24 @@
+441c441
+< 01_geta_caesar_denarius            PASS       1     0.0195  severan/Geta/Geta / deity standing
+---
+> 01_geta_caesar_denarius            PASS       1     0.0246  severan/Geta/Geta / deity standing
+463c463
+< 23_athenian_owl_new_style          PASS       1     0.0534  athenian_owls/Athens/New Style Owl (Athens)
+---
+> 23_athenian_owl_new_style          PASS       1     0.0495  athenian_owls/Athens/New Style Owl (Athens)
+526c526
+< 86_pergamon_cistophoric            PASS       1     0.0055  pergamon/Pergamon/Pergamon — cistophoric (cista mystica / bow-case & serpents)
+---
+> 86_pergamon_cistophoric            PASS       1     0.0021  pergamon/Pergamon/Pergamon — cistophoric (cista mystica / bow-case & serpents)
+642c642
+< 214_macedon_demetrios_poliorketes  PASS       1     0.0927  macedon_kings/Kings of Macedon/Kings of Macedon, Demetrios I Poliorketes — Nike on prow / Poseidon & portrait
+---
+> 214_macedon_demetrios_poliorketes  PASS       1     0.0987  macedon_kings/Kings of Macedon/Kings of Macedon, Demetrios I Poliorketes — Nike on prow / Poseidon & portrait
+664c664
+< 235_hk_mithradates_vi              PASS       1     0.1211  hellenistic_kingdoms/Hellenistic Kingdoms (minor)/Kings of Pontos & Bosporos — Mithradates VI (wind-swept portrait / stag & Pegasos) and the Black Sea kings
+---
+> 235_hk_mithradates_vi              PASS       1     0.1336  hellenistic_kingdoms/Hellenistic Kingdoms (minor)/Kings of Pontos & Bosporos — Mithradates VI (wind-swept portrait / stag & Pegasos) and the Black Sea kings
+681c681
+< 255_cyprus_kition_herakles         PASS       1     0.0447  cyprus/Cyprus (Kingdoms)/Cyprus, Kition — Herakles / lion attacking stag (Phoenician kings)
+---
+> 255_cyprus_kition_herakles         PASS       1     0.0404  cyprus/Cyprus (Kingdoms)/Cyprus, Kition — Herakles / lion attacking stag (Phoenician kings)

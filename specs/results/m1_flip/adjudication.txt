@@ -1,0 +1,30 @@
+OFF arm=off  lane={'TRIVALAYA_CLOSE_KERNEL_FRAC': 'auto', 'TRIVALAYA_RIM_NEIGHBOR_GUARD': '1'}
+ON  arm=on  lane={'TRIVALAYA_CLOSE_KERNEL_FRAC': 'auto', 'TRIVALAYA_RIM_NEIGHBOR_GUARD': '1'}
+
+expected.yaml grading  OFF graded/clean/mismatch = (230, 193, 37)
+                       ON  graded/clean/mismatch = (230, 193, 37)   IDENTICAL
+no-op sides            OFF 13  ->  ON 3   (healed 10, residual 3)
+
+--- EXPECTED CHANGE (16 lines, the six healing) ---
+  01_geta_caesar_denarius [obv] noop True->False area 0.995157->0.519139
+  01_geta_caesar_denarius [rev] noop True->False area 0.995146->0.531436
+  01_geta_caesar_denarius cos 0.935991 -> 0.956681 (card held)
+  214_macedon_demetrios_poliorketes [rev] noop True->False area 0.991091->0.513502
+  214_macedon_demetrios_poliorketes cos 0.844133 -> 0.841394 (card held)
+  235_hk_mithradates_vi [obv] noop True->False area 0.996077->0.625429
+  235_hk_mithradates_vi cos 0.919134 -> 0.928153 (card held)
+  23_athenian_owl_new_style [obv] noop True->False area 0.991091->0.625937
+  23_athenian_owl_new_style [rev] noop True->False area 0.991091->0.725357
+  23_athenian_owl_new_style cos 0.89269 -> 0.914518 (card held)
+  255_cyprus_kition_herakles [obv] noop True->False area 0.991091->0.309152
+  255_cyprus_kition_herakles [rev] noop True->False area 0.991091->0.31243
+  255_cyprus_kition_herakles cos 0.861207 -> 0.824279 (card held)
+  86_pergamon_cistophoric [obv] noop True->False area 0.991091->0.356326
+  86_pergamon_cistophoric [rev] noop True->False area 0.991091->0.351911
+  86_pergamon_cistophoric cos 0.832296 -> 0.870727 (card held)
+
+--- FINDINGS (0) ---
+
+--- REAL FAILURES (0) ---
+
+fixtures required byte-still: 240   verdict: PASS

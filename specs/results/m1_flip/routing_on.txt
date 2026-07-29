@@ -1,0 +1,688 @@
+Using cache found in /home/claudeuser/.cache/torch/hub/facebookresearch_dinov2_main
+/home/claudeuser/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/swiglu_ffn.py:51: UserWarning: xFormers is not available (SwiGLU)
+  warnings.warn("xFormers is not available (SwiGLU)")
+/home/claudeuser/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/attention.py:33: UserWarning: xFormers is not available (Attention)
+  warnings.warn("xFormers is not available (Attention)")
+/home/claudeuser/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py:40: UserWarning: xFormers is not available (Block)
+  warnings.warn("xFormers is not available (Block)")
+[appv2] loading DINOv2 dinov2_vitb14 on cpu...
+[appv2] aegina: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_aegina.npy
+[appv2] aegina:   features shape=(317, 1536)
+[appv2] aegina:   csv rows=317
+[appv2] aegina:   built 4 centroids, 0 s10 rows
+[appv2] aeolis: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_aeolis.npy
+[appv2] aeolis:   features shape=(579, 1536)
+[appv2] aeolis:   csv rows=579
+[appv2] aeolis:   built 9 centroids, 0 s10 rows
+[appv2] akarnania: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_akarnania.npy
+[appv2] akarnania:   features shape=(420, 1536)
+[appv2] akarnania:   csv rows=420
+[appv2] akarnania:   built 5 centroids, 0 s10 rows
+[appv2] akragas: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_akragas.npy
+[appv2] akragas:   features shape=(195, 1536)
+[appv2] akragas:   csv rows=195
+[appv2] akragas:   built 2 centroids, 0 s10 rows
+[appv2] alexander: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_alexander.npy
+[appv2] alexander:   features shape=(5713, 1536)
+[appv2] alexander:   csv rows=5713
+[appv2] alexander:   built 910 centroids, 0 s10 rows
+[appv2] alexandria_tetradrachm: loading features /home/claudeuser/trivalaya-pipeline/analysis/provincial_onboarding/features_masked_alexandria_tetradrachm.npy
+[appv2] alexandria_tetradrachm:   features shape=(2040, 1536)
+[appv2] alexandria_tetradrachm:   csv rows=2040
+[appv2] alexandria_tetradrachm:   built 64 centroids, 0 s10 rows
+[appv2] antonine: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_antonine_dena_inc/features.npy
+[appv2] antonine:   features shape=(3643, 1536)
+[appv2] antonine:   csv rows=3643
+[appv2] antonine:   built 103 centroids, 0 s10 rows
+[appv2] antonine_bronze: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_antonine_bronze/features.npy
+[appv2] antonine_bronze:   features shape=(2833, 1536)
+[appv2] antonine_bronze:   csv rows=2833
+[appv2] antonine_bronze:   built 124 centroids, 0 s10 rows
+[appv2] antonine_gold: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_antonine_gold/features.npy
+[appv2] antonine_gold:   features shape=(341, 1536)
+[appv2] antonine_gold:   csv rows=341
+[appv2] antonine_gold:   built 21 centroids, 0 s10 rows
+[appv2] antoniniani_gallic_window: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_antoniniani_gallic_window_A_raw_6_3_v3/features.npy
+[appv2] antoniniani_gallic_window:   features shape=(3844, 1536)
+[appv2] antoniniani_gallic_window:   csv rows=3844
+[appv2] antoniniani_gallic_window:   built 135 centroids, 0 s10 rows
+[appv2] antoniniani_post_gallic: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_antoniniani_post_gallic_A_raw_6_3_v3/features.npy
+[appv2] antoniniani_post_gallic:   features shape=(3404, 1536)
+[appv2] antoniniani_post_gallic:   csv rows=3404
+[appv2] antoniniani_post_gallic:   built 106 centroids, 0 s10 rows
+[appv2] antoniniani_pre_gallic: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_antoniniani_pre_gallic_A_raw_6_3_v3/features.npy
+[appv2] antoniniani_pre_gallic:   features shape=(5421, 1536)
+[appv2] antoniniani_pre_gallic:   csv rows=5421
+[appv2] antoniniani_pre_gallic:   built 151 centroids, 0 s10 rows
+[appv2] athenian_owls: loading features /home/claudeuser/trivalaya-pipeline/analysis/owl_onboarding/features_masked_1536.npy
+[appv2] athenian_owls:   features shape=(3055, 1536)
+[appv2] athenian_owls:   csv rows=3055
+[appv2] athenian_owls:   built 6 centroids, 0 s10 rows
+[appv2] baktria_indogreek: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_baktria_indogreek.npy
+[appv2] baktria_indogreek:   features shape=(1028, 1536)
+[appv2] baktria_indogreek:   csv rows=1028
+[appv2] baktria_indogreek:   built 11 centroids, 0 s10 rows
+[appv2] black_sea: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_black_sea.npy
+[appv2] black_sea:   features shape=(186, 1536)
+[appv2] black_sea:   csv rows=186
+[appv2] black_sea:   built 15 centroids, 0 s10 rows
+[appv2] boeotia_other: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_boeotia_other.npy
+[appv2] boeotia_other:   features shape=(285, 1536)
+[appv2] boeotia_other:   csv rows=285
+[appv2] boeotia_other:   built 6 centroids, 0 s10 rows
+[appv2] bruttium: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_bruttium.npy
+[appv2] bruttium:   features shape=(465, 1536)
+[appv2] bruttium:   csv rows=465
+[appv2] bruttium:   built 27 centroids, 0 s10 rows
+[appv2] campania: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_campania.npy
+[appv2] campania:   features shape=(149, 1536)
+[appv2] campania:   csv rows=149
+[appv2] campania:   built 3 centroids, 0 s10 rows
+[appv2] caria_other: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_caria_other.npy
+[appv2] caria_other:   features shape=(932, 1536)
+[appv2] caria_other:   csv rows=932
+[appv2] caria_other:   built 45 centroids, 0 s10 rows
+[appv2] central_greece_tail: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_central_greece_tail.npy
+[appv2] central_greece_tail:   features shape=(183, 1536)
+[appv2] central_greece_tail:   csv rows=183
+[appv2] central_greece_tail:   built 5 centroids, 0 s10 rows
+[appv2] chalkidian_league: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_chalkidian_league.npy
+[appv2] chalkidian_league:   features shape=(182, 1536)
+[appv2] chalkidian_league:   csv rows=182
+[appv2] chalkidian_league:   built 10 centroids, 0 s10 rows
+[appv2] cilicia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_cilicia.npy
+[appv2] cilicia:   features shape=(870, 1536)
+[appv2] cilicia:   csv rows=870
+[appv2] cilicia:   built 36 centroids, 0 s10 rows
+[appv2] constantine_i: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_constantine_i/features.npy
+[appv2] constantine_i:   features shape=(4242, 1536)
+[appv2] constantine_i:   csv rows=4242
+[appv2] constantine_i:   built 126 centroids, 0 s10 rows
+[appv2] constantinian_house: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_constantinian_house/features.npy
+[appv2] constantinian_house:   features shape=(4679, 1536)
+[appv2] constantinian_house:   csv rows=4679
+[appv2] constantinian_house:   built 149 centroids, 0 s10 rows
+[appv2] corinth: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_corinth.npy
+[appv2] corinth:   features shape=(804, 1536)
+[appv2] corinth:   csv rows=804
+[appv2] corinth:   built 4 centroids, 0 s10 rows
+[appv2] crete: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_crete.npy
+[appv2] crete:   features shape=(117, 1536)
+[appv2] crete:   csv rows=117
+[appv2] crete:   built 8 centroids, 0 s10 rows
+[appv2] crisis_bronze: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_crisis_bronze/features.npy
+[appv2] crisis_bronze:   features shape=(1218, 1536)
+[appv2] crisis_bronze:   csv rows=1218
+[appv2] crisis_bronze:   built 65 centroids, 0 s10 rows
+[appv2] cyprus: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_cyprus.npy
+[appv2] cyprus:   features shape=(255, 1536)
+[appv2] cyprus:   csv rows=255
+[appv2] cyprus:   built 50 centroids, 0 s10 rows
+[appv2] early_argead_macedon: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_early_argead_macedon.npy
+[appv2] early_argead_macedon:   features shape=(141, 1536)
+[appv2] early_argead_macedon:   csv rows=141
+[appv2] early_argead_macedon:   built 5 centroids, 0 s10 rows
+[appv2] euboia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_euboia.npy
+[appv2] euboia:   features shape=(305, 1536)
+[appv2] euboia:   csv rows=305
+[appv2] euboia:   built 3 centroids, 0 s10 rows
+[appv2] first_meris: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_first_meris.npy
+[appv2] first_meris:   features shape=(347, 1536)
+[appv2] first_meris:   csv rows=347
+[appv2] first_meris:   built 2 centroids, 0 s10 rows
+[appv2] flavian: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_flavian_dena_inc/features.npy
+[appv2] flavian:   features shape=(1983, 1536)
+[appv2] flavian:   csv rows=1983
+[appv2] flavian:   built 50 centroids, 0 s10 rows
+[appv2] flavian_bronze: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_flavian_bronze/features.npy
+[appv2] flavian_bronze:   features shape=(786, 1536)
+[appv2] flavian_bronze:   csv rows=786
+[appv2] flavian_bronze:   built 46 centroids, 0 s10 rows
+[appv2] flavian_gold: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_flavian_gold/features.npy
+[appv2] flavian_gold:   features shape=(196, 1536)
+[appv2] flavian_gold:   csv rows=196
+[appv2] flavian_gold:   built 11 centroids, 0 s10 rows
+[appv2] gaul: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_gaul.npy
+[appv2] gaul:   features shape=(385, 1536)
+[appv2] gaul:   csv rows=385
+[appv2] gaul:   built 8 centroids, 0 s10 rows
+[appv2] gela: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_gela.npy
+[appv2] gela:   features shape=(187, 1536)
+[appv2] gela:   csv rows=187
+[appv2] gela:   built 2 centroids, 0 s10 rows
+[appv2] hellenistic_kingdoms: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_hellenistic_kingdoms.npy
+[appv2] hellenistic_kingdoms:   features shape=(648, 1536)
+[appv2] hellenistic_kingdoms:   csv rows=648
+[appv2] hellenistic_kingdoms:   built 38 centroids, 0 s10 rows
+[appv2] illyria_epeiros: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_illyria_epeiros.npy
+[appv2] illyria_epeiros:   features shape=(539, 1536)
+[appv2] illyria_epeiros:   csv rows=539
+[appv2] illyria_epeiros:   built 8 centroids, 0 s10 rows
+[appv2] ionia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_ionia.npy
+[appv2] ionia:   features shape=(1613, 1536)
+[appv2] ionia:   csv rows=1613
+[appv2] ionia:   built 60 centroids, 0 s10 rows
+[appv2] judaea: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_judaea.npy
+[appv2] judaea:   features shape=(50, 1536)
+[appv2] judaea:   csv rows=50
+[appv2] judaea:   built 3 centroids, 0 s10 rows
+[appv2] julio_claudian: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_julio_claudian_dena_inc/features.npy
+[appv2] julio_claudian:   features shape=(2958, 1536)
+[appv2] julio_claudian:   csv rows=2958
+[appv2] julio_claudian:   built 62 centroids, 0 s10 rows
+[appv2] julio_claudian_bronze: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_julio_claudian_bronze/features.npy
+[appv2] julio_claudian_bronze:   features shape=(2281, 1536)
+[appv2] julio_claudian_bronze:   csv rows=2281
+[appv2] julio_claudian_bronze:   built 91 centroids, 0 s10 rows
+[appv2] julio_claudian_gold: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_julio_claudian_gold/features.npy
+[appv2] julio_claudian_gold:   features shape=(550, 1536)
+[appv2] julio_claudian_gold:   csv rows=550
+[appv2] julio_claudian_gold:   built 22 centroids, 0 s10 rows
+[appv2] knidos: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_knidos.npy
+[appv2] knidos:   features shape=(142, 1536)
+[appv2] knidos:   csv rows=142
+[appv2] knidos:   built 4 centroids, 0 s10 rows
+[appv2] kyrene: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_kyrene.npy
+[appv2] kyrene:   features shape=(645, 1536)
+[appv2] kyrene:   csv rows=645
+[appv2] kyrene:   built 24 centroids, 0 s10 rows
+[appv2] kyzikos: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_kyzikos.npy
+[appv2] kyzikos:   features shape=(1059, 1536)
+[appv2] kyzikos:   csv rows=1059
+[appv2] kyzikos:   built 5 centroids, 0 s10 rows
+[appv2] larissa: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_larissa.npy
+[appv2] larissa:   features shape=(519, 1536)
+[appv2] larissa:   csv rows=519
+[appv2] larissa:   built 9 centroids, 0 s10 rows
+[appv2] late_roman_silver: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_late_roman_silver_A_raw_6_3_v3/features.npy
+[appv2] late_roman_silver:   features shape=(1321, 1536)
+[appv2] late_roman_silver:   csv rows=1321
+[appv2] late_roman_silver:   built 32 centroids, 0 s10 rows
+[appv2] late_solidus: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_late_solidus/features.npy
+[appv2] late_solidus:   features shape=(1158, 1536)
+[appv2] late_solidus:   csv rows=1158
+[appv2] late_solidus:   built 57 centroids, 0 s10 rows
+[appv2] lesbos_other: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_lesbos_other.npy
+[appv2] lesbos_other:   features shape=(347, 1536)
+[appv2] lesbos_other:   csv rows=347
+[appv2] lesbos_other:   built 4 centroids, 0 s10 rows
+[appv2] leukas: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_leukas.npy
+[appv2] leukas:   features shape=(236, 1536)
+[appv2] leukas:   csv rows=236
+[appv2] leukas:   built 2 centroids, 0 s10 rows
+[appv2] licinius: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_licinius/features.npy
+[appv2] licinius:   features shape=(1725, 1536)
+[appv2] licinius:   csv rows=1725
+[appv2] licinius:   built 74 centroids, 0 s10 rows
+[appv2] lucania_other: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_lucania_other.npy
+[appv2] lucania_other:   features shape=(352, 1536)
+[appv2] lucania_other:   csv rows=352
+[appv2] lucania_other:   built 5 centroids, 0 s10 rows
+[appv2] lydia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_lydia.npy
+[appv2] lydia:   features shape=(140, 1536)
+[appv2] lydia:   csv rows=140
+[appv2] lydia:   built 24 centroids, 0 s10 rows
+[appv2] lydia_kingdom: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_lydia_kingdom.npy
+[appv2] lydia_kingdom:   features shape=(745, 1536)
+[appv2] lydia_kingdom:   csv rows=745
+[appv2] lydia_kingdom:   built 102 centroids, 0 s10 rows
+[appv2] lykia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_lykia.npy
+[appv2] lykia:   features shape=(352, 1536)
+[appv2] lykia:   csv rows=352
+[appv2] lykia:   built 12 centroids, 0 s10 rows
+[appv2] lysimachos: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_lysimachos.npy
+[appv2] lysimachos:   features shape=(329, 1536)
+[appv2] lysimachos:   csv rows=329
+[appv2] lysimachos:   built 3 centroids, 0 s10 rows
+[appv2] macedon_kings: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_macedon_kings.npy
+[appv2] macedon_kings:   features shape=(650, 1536)
+[appv2] macedon_kings:   csv rows=650
+[appv2] macedon_kings:   built 10 centroids, 0 s10 rows
+[appv2] macedon_region: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_macedon_region.npy
+[appv2] macedon_region:   features shape=(494, 1536)
+[appv2] macedon_region:   csv rows=494
+[appv2] macedon_region:   built 43 centroids, 0 s10 rows
+[appv2] maximinus_gordian3: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_maximinus_gordian3_dena_inc/features.npy
+[appv2] maximinus_gordian3:   features shape=(1339, 1536)
+[appv2] maximinus_gordian3:   csv rows=1339
+[appv2] maximinus_gordian3:   built 25 centroids, 0 s10 rows
+[appv2] metapontion: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_metapontion.npy
+[appv2] metapontion:   features shape=(703, 1536)
+[appv2] metapontion:   csv rows=703
+[appv2] metapontion:   built 2 centroids, 0 s10 rows
+[appv2] mg_bronze: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_mg_bronze/features.npy
+[appv2] mg_bronze:   features shape=(1173, 1536)
+[appv2] mg_bronze:   csv rows=1173
+[appv2] mg_bronze:   built 59 centroids, 0 s10 rows
+[appv2] mid4c: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_mid4c/features.npy
+[appv2] mid4c:   features shape=(366, 1536)
+[appv2] mid4c:   csv rows=366
+[appv2] mid4c:   built 15 centroids, 0 s10 rows
+[appv2] mysia_other: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_mysia_other.npy
+[appv2] mysia_other:   features shape=(1098, 1536)
+[appv2] mysia_other:   csv rows=1098
+[appv2] mysia_other:   built 27 centroids, 0 s10 rows
+[appv2] mytilene: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_mytilene.npy
+[appv2] mytilene:   features shape=(1053, 1536)
+[appv2] mytilene:   csv rows=1053
+[appv2] mytilene:   built 18 centroids, 0 s10 rows
+[appv2] nerva: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_nerva_dena_inc/features.npy
+[appv2] nerva:   features shape=(4136, 1536)
+[appv2] nerva:   csv rows=4136
+[appv2] nerva:   built 97 centroids, 0 s10 rows
+[appv2] nerva_bronze: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_nerva_bronze/features.npy
+[appv2] nerva_bronze:   features shape=(2173, 1536)
+[appv2] nerva_bronze:   csv rows=2173
+[appv2] nerva_bronze:   built 96 centroids, 0 s10 rows
+[appv2] nerva_gold: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_nerva_gold/features.npy
+[appv2] nerva_gold:   features shape=(277, 1536)
+[appv2] nerva_gold:   csv rows=277
+[appv2] nerva_gold:   built 16 centroids, 0 s10 rows
+[appv2] paeonia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_paeonia.npy
+[appv2] paeonia:   features shape=(255, 1536)
+[appv2] paeonia:   csv rows=255
+[appv2] paeonia:   built 4 centroids, 0 s10 rows
+[appv2] pamphylia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_pamphylia.npy
+[appv2] pamphylia:   features shape=(416, 1536)
+[appv2] pamphylia:   csv rows=416
+[appv2] pamphylia:   built 10 centroids, 0 s10 rows
+[appv2] pantikapaion: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_pantikapaion.npy
+[appv2] pantikapaion:   features shape=(282, 1536)
+[appv2] pantikapaion:   csv rows=282
+[appv2] pantikapaion:   built 6 centroids, 0 s10 rows
+[appv2] parthian_drachm: loading features /home/claudeuser/trivalaya-pipeline/analysis/parthian_onboarding/features_masked_parthian.npy
+[appv2] parthian_drachm:   features shape=(1502, 1536)
+[appv2] parthian_drachm:   csv rows=1502
+[appv2] parthian_drachm:   built 44 centroids, 0 s10 rows
+[appv2] peloponnese_other: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_peloponnese_other.npy
+[appv2] peloponnese_other:   features shape=(731, 1536)
+[appv2] peloponnese_other:   csv rows=731
+[appv2] peloponnese_other:   built 131 centroids, 0 s10 rows
+[appv2] pergamon: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_pergamon.npy
+[appv2] pergamon:   features shape=(268, 1536)
+[appv2] pergamon:   csv rows=268
+[appv2] pergamon:   built 3 centroids, 0 s10 rows
+[appv2] phoenicia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_phoenicia.npy
+[appv2] phoenicia:   features shape=(679, 1536)
+[appv2] phoenicia:   csv rows=679
+[appv2] phoenicia:   built 111 centroids, 0 s10 rows
+[appv2] phokaia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_phokaia.npy
+[appv2] phokaia:   features shape=(397, 1536)
+[appv2] phokaia:   csv rows=397
+[appv2] phokaia:   built 3 centroids, 0 s10 rows
+[appv2] phokis: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_phokis.npy
+[appv2] phokis:   features shape=(157, 1536)
+[appv2] phokis:   csv rows=157
+[appv2] phokis:   built 4 centroids, 0 s10 rows
+[appv2] phrygia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_phrygia.npy
+[appv2] phrygia:   features shape=(48, 1536)
+[appv2] phrygia:   csv rows=48
+[appv2] phrygia:   built 3 centroids, 0 s10 rows
+[appv2] pisidia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_pisidia.npy
+[appv2] pisidia:   features shape=(269, 1536)
+[appv2] pisidia:   csv rows=269
+[appv2] pisidia:   built 4 centroids, 0 s10 rows
+[appv2] pontos_bithynia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_pontos_bithynia.npy
+[appv2] pontos_bithynia:   features shape=(309, 1536)
+[appv2] pontos_bithynia:   csv rows=309
+[appv2] pontos_bithynia:   built 40 centroids, 0 s10 rows
+[appv2] ptolemaic: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_ptolemaic.npy
+[appv2] ptolemaic:   features shape=(833, 1536)
+[appv2] ptolemaic:   csv rows=833
+[appv2] ptolemaic:   built 8 centroids, 0 s10 rows
+[appv2] republican_anon_early: loading features /home/claudeuser/trivalaya-pipeline/analysis/republican_anon_early/phase1_masked/paired_feats.npy
+[appv2] republican_anon_early:   features shape=(95, 1536)
+[appv2] republican_anon_early:   csv rows=95
+[appv2] republican_anon_early:   built 4 centroids, 0 s10 rows
+[appv2] republican_imp_portrait: loading features /home/claudeuser/trivalaya-pipeline/analysis/republican_imp_portrait/phase1_masked_rrinc/paired_feats.npy
+[appv2] republican_imp_portrait:   features shape=(797, 1536)
+[appv2] republican_imp_portrait:   csv rows=797
+[appv2] republican_imp_portrait:   built 22 centroids, 0 s10 rows
+[appv2] republican_imperatorial: loading features /home/claudeuser/trivalaya-pipeline/analysis/republican_imperatorial/phase1_masked_rrinc/paired_feats.npy
+[appv2] republican_imperatorial:   features shape=(1562, 1536)
+[appv2] republican_imperatorial:   csv rows=1562
+[appv2] republican_imperatorial:   built 32 centroids, 0 s10 rows
+[appv2] republican_slice1: loading features /home/claudeuser/trivalaya-pipeline/analysis/republican_slice1/phase1_masked_rrinc/paired_feats.npy
+[appv2] republican_slice1:   features shape=(2563, 1536)
+[appv2] republican_slice1:   csv rows=2563
+[appv2] republican_slice1:   built 132 centroids, 0 s10 rows
+[appv2] republican_slice2: loading features /home/claudeuser/trivalaya-pipeline/analysis/republican_slice2/phase1_masked/paired_feats.npy
+[appv2] republican_slice2:   features shape=(1430, 1536)
+[appv2] republican_slice2:   csv rows=1430
+[appv2] republican_slice2:   built 54 centroids, 0 s10 rows
+[appv2] republican_slice3: loading features /home/claudeuser/trivalaya-pipeline/analysis/republican_slice3/phase1_masked_rrinc/paired_feats.npy
+[appv2] republican_slice3:   features shape=(3006, 1536)
+[appv2] republican_slice3:   csv rows=3006
+[appv2] republican_slice3:   built 134 centroids, 0 s10 rows
+[appv2] rhodos: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_rhodos.npy
+[appv2] rhodos:   features shape=(765, 1536)
+[appv2] rhodos:   csv rows=765
+[appv2] rhodos:   built 2 centroids, 0 s10 rows
+[appv2] sasanian_drachm: loading features /home/claudeuser/trivalaya-pipeline/analysis/sasanian_onboarding/features_masked_sasanian_drachm.npy
+[appv2] sasanian_drachm:   features shape=(1251, 1536)
+[appv2] sasanian_drachm:   csv rows=1251
+[appv2] sasanian_drachm:   built 40 centroids, 0 s10 rows
+[appv2] satrapal_cilicia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_satrapal_cilicia.npy
+[appv2] satrapal_cilicia:   features shape=(308, 1536)
+[appv2] satrapal_cilicia:   csv rows=308
+[appv2] satrapal_cilicia:   built 50 centroids, 0 s10 rows
+[appv2] sceatta: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_sceatta.npy
+[appv2] sceatta:   features shape=(562, 1536)
+[appv2] sceatta:   csv rows=562
+[appv2] sceatta:   built 26 centroids, 0 s10 rows
+[appv2] seleukid_early: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_seleukid_early.npy
+[appv2] seleukid_early:   features shape=(1459, 1536)
+[appv2] seleukid_early:   csv rows=1459
+[appv2] seleukid_early:   built 90 centroids, 0 s10 rows
+[appv2] seleukid_late: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_seleukid_late.npy
+[appv2] seleukid_late:   features shape=(1545, 1536)
+[appv2] seleukid_late:   csv rows=1545
+[appv2] seleukid_late:   built 25 centroids, 0 s10 rows
+[appv2] severan: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_severan_dena_inc/features.npy
+[appv2] severan:   features shape=(9273, 1536)
+[appv2] severan:   csv rows=9273
+[appv2] severan:   built 227 centroids, 0 s10 rows
+[appv2] severan_bronze: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_severan_bronze/features.npy
+[appv2] severan_bronze:   features shape=(1733, 1536)
+[appv2] severan_bronze:   csv rows=1733
+[appv2] severan_bronze:   built 82 centroids, 0 s10 rows
+[appv2] sicily_other: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_sicily_other.npy
+[appv2] sicily_other:   features shape=(803, 1536)
+[appv2] sicily_other:   csv rows=803
+[appv2] sicily_other:   built 50 centroids, 0 s10 rows
+[appv2] syracuse: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_syracuse.npy
+[appv2] syracuse:   features shape=(806, 1536)
+[appv2] syracuse:   csv rows=806
+[appv2] syracuse:   built 14 centroids, 0 s10 rows
+[appv2] tarentum: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_1536.npy
+[appv2] tarentum:   features shape=(1133, 1536)
+[appv2] tarentum:   csv rows=1133
+[appv2] tarentum:   built 10 centroids, 0 s10 rows
+[appv2] tetrarchic: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_tetrarchic/features.npy
+[appv2] tetrarchic:   features shape=(4004, 1536)
+[appv2] tetrarchic:   csv rows=4004
+[appv2] tetrarchic:   built 132 centroids, 0 s10 rows
+[appv2] thasos: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_thasos.npy
+[appv2] thasos:   features shape=(282, 1536)
+[appv2] thasos:   csv rows=282
+[appv2] thasos:   built 4 centroids, 0 s10 rows
+[appv2] thebes: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_thebes.npy
+[appv2] thebes:   features shape=(206, 1536)
+[appv2] thebes:   csv rows=206
+[appv2] thebes:   built 3 centroids, 0 s10 rows
+[appv2] theodosian: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_theodosian/features.npy
+[appv2] theodosian:   features shape=(623, 1536)
+[appv2] theodosian:   csv rows=623
+[appv2] theodosian:   built 30 centroids, 0 s10 rows
+[appv2] thessaly_other: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_thessaly_other.npy
+[appv2] thessaly_other:   features shape=(1018, 1536)
+[appv2] thessaly_other:   csv rows=1018
+[appv2] thessaly_other:   built 209 centroids, 0 s10 rows
+[appv2] thrace: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_thrace.npy
+[appv2] thrace:   features shape=(636, 1536)
+[appv2] thrace:   csv rows=636
+[appv2] thrace:   built 23 centroids, 0 s10 rows
+[appv2] troas: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_troas.npy
+[appv2] troas:   features shape=(957, 1536)
+[appv2] troas:   csv rows=957
+[appv2] troas:   built 43 centroids, 0 s10 rows
+[appv2] valentinian: loading features /home/claudeuser/trivalaya-pipeline/cluster_output_valentinian/features.npy
+[appv2] valentinian:   features shape=(420, 1536)
+[appv2] valentinian:   csv rows=420
+[appv2] valentinian:   built 21 centroids, 0 s10 rows
+[appv2] velia: loading features /home/claudeuser/trivalaya-pipeline/analysis/civic_onboarding/features_masked_velia.npy
+[appv2] velia:   features shape=(191, 1536)
+[appv2] velia:   csv rows=191
+[appv2] velia:   built 3 centroids, 0 s10 rows
+[appv2] mention tokens: 34232 citations across 22830 coins
+
+fixture                            verdict    rank  margin  top-1
+--------------------------------------------------------------------------------------------
+01_geta_caesar_denarius            PASS       1     0.0246  severan/Geta/Geta / deity standing
+02_domitian_augustus_minerva       PASS       1     0.0095  flavian/Domitian/Domitian (Augustus) / minerva standing
+03_domitian_caesar_altar           PASS       1     0.0334  flavian/Domitian/Flavian / garlanded
+04_antonine_faustina_consecratio   PASS       1     0.0139  antonine/Diva Faustina Senior/Antonine / ceres standing
+05_aurelian_sol_captive            PASS       1     0.0060  antoniniani_gallic_window/Aurelian/Crisis era / sol with captive
+06_trajan_decius_dacia             PASS       1     0.0088  antoniniani_pre_gallic/Trajan Decius/Imperial crisis / dacia standing
+07_domitian_caesar_caduceus        PASS       1     0.0439  flavian/Vespasian/Flavian / [reverse type not yet catalogued]
+08_geta_augustus_victoriae_brit    PASS       1     0.0075  severan/Septimius Severus/Severan / victory advancing
+09_titus_caesar_victory            PASS       1     0.0224  flavian/Vespasian/Flavian / victory advancing
+10_titus_horseman                  PASS       1     0.0248  flavian/Titus/Titus (Augustus) / capricorn
+11_vespasian_caesars_facing        PASS       1     0.0071  flavian/Vespasian/Flavian / turreted
+12_vespasian_caesars_standing      PASS       1     0.0237  flavian/Vespasian/Flavian / [reverse type not yet catalogued]
+13_vespasian_iudaea                PASS       1     0.0242  flavian/Vespasian/Flavian / captive trophy scene
+14_macrinus_standing               PASS       1     0.0108  severan/Macrinus/Macrinus / [reverse type not yet catalogued]
+15_maximinus_pax                   PASS       1     0.0016  maximinus_gordian3/Maximinus I/Maximinus I - Gordian III (AD 235-244) / pax standing
+16_septimius_severus_standing      PASS       1     0.0015  severan/Septimius Severus/Severan / victory standing
+17_augustus_capricorn              PASS       1     0.0592  julio_claudian/Augustus/Julio-Claudian & Civil War (27 BC-AD 69) / capricorn
+18_diocletian_argenteus_campgate   PASS       1     0.0099  late_roman_silver/Diocletian/Late Roman silver (Tetrarchy - Theodosian, AD 294-450) / camp gate
+19_republican_apollo_horseman      PASS       1     0.0198  republican_slice1/None/Apollo / horseman
+20_republican_juno_bull_animal     PASS       1     0.0422  republican_slice1/None/Juno / animal
+21_republican_janus_galley         PASS       1     0.0620  republican_slice2/None/Janus / galley/prow
+22_athenian_owl_mass               PASS       1     0.0028  athenian_owls/Athens/Standard Owl (Athens)
+23_athenian_owl_new_style          PASS       1     0.0495  athenian_owls/Athens/New Style Owl (Athens)
+24_athenian_owl_imitation          PASS       1     0.0200  athenian_owls/Athens/Standard Owl (Athens)
+25_republican_wellhead_attributes  PASS       1     0.0433  republican_slice3/None/Bonus Eventus / attributes
+26_republican_villa_temple         PASS       1     0.0708  republican_slice3/None/Concordia / temple/altar
+27_imperatorial_caesar_elephant    PASS       1     0.1837  republican_imperatorial/None/(no deity) / elephant
+28_imperatorial_legionary_standards PASS       1     0.0638  republican_imperatorial/None/(no deity) / standards
+29_tarentum_nomos                  PASS       1     0.0450  tarentum/Tarentum/Tarentum Nomos — Taras on dolphin / horseman
+30_tarentum_diobol                 PASS       1     0.0469  tarentum/Tarentum/Tarentum Diobol — Athena / Herakles & lion
+31_republican_anon_dioscuri        PASS       1     0.0127  republican_anon_early/None/Roma / Dioscuri
+32_syracuse_arethusa_quadriga      PASS       2     0.0015  republican_slice1/None/Mars / biga
+33_syracuse_persephone             PASS       1     0.0227  syracuse/Syracuse/Syracuse — Persephone / Kore
+34_larissa_nymph_horse             PASS       1     0.0081  larissa/Larissa/Larissa — facing nymph / horse
+35_larissa_thessalos_bull          PASS       1     0.0269  larissa/Larissa/Larissa — Thessalos taming the bull
+36_kyzikos_el_hekte                PASS       1     0.0301  kyzikos/Kyzikos/Kyzikos — electrum hekte (1/6 stater)
+37_kyzikos_ar_lion                 PASS       1     0.0022  kyzikos/Kyzikos/Kyzikos — silver fraction
+38_pantikapaion_lion               PASS       1     0.0112  pantikapaion/Pantikapaion/Pantikapaion — facing lion head
+39_pantikapaion_satyr_griffin      PASS       1     0.0510  pantikapaion/Pantikapaion/Pantikapaion — Satyr / griffin
+40_mytilene_apollo                 PASS       1     0.0045  mytilene/Mytilene/Mytilene — Apollo (electrum hekte)
+41_mytilene_dionysos               PASS       1     0.0893  mytilene/Mytilene/Mytilene — Dionysos (electrum hekte)
+42_akragas_eagle_crab              PASS       1     0.0455  akragas/Akragas/Akragas — eagle / crab
+43_akragas_later                   OOS        -     0.0015  theodosian/Theodosian/Theodosian bronze — legend reverse (VOT / monogram / inscription in wreath)
+44_aegina_turtle                   PASS       1     0.0336  aegina/Aegina/Aegina — turtle / tortoise (incuse)
+45_akragas_eagle_hare              PASS       1     0.0376  akragas/Akragas/Akragas — eagle / crab
+46_phokaia_el_hekte                PASS       1     0.0162  phokaia/Phokaia/Phokaia — electrum hekte (1/6 stater)
+47_phokaia_ar_diobol               PASS       1     0.0371  phokaia/Phokaia/Phokaia — silver diobol (archaic head)
+48_rhodos_helios_rose              PASS       1     0.0306  rhodos/Rhodos/Rhodos — Helios / rose
+49_rhodos_plinthophoric            PASS       2     0.0146  lykia/Lykia (region)/Lykia, Lykian League — Apollo / lyre & bow-case
+50_severan_bronze_felicitas_standing PASS       2     0.0005  mg_bronze/Maximinus I – Gordian III/Maximinus I – Gordian III bronze — standing figure (deity / personification)
+51_severan_bronze_chariot          PASS       1     0.0232  severan_bronze/Severan/Severan bronze — emperor mounted (chariot / horseback)
+52_severan_bronze_victory_standing PASS       1     0.0065  severan_bronze/Severan/Severan bronze — standing figure (deity / personification)
+53_antonine_bronze_vesta_standing  PASS       1     0.0106  antonine_bronze/Antonine/Antonine bronze — standing figure (deity / personification)
+54_antonine_bronze_salus_seated    PASS       1     0.0059  antonine_bronze/Antonine/Antonine bronze — seated deity
+55_knidos_aphrodite_lion           PASS       2     0.0028  caria_other/Caria (region)/Caria — uncertain mint & other (Iasos / Aphrodisias / Kasolaba …)
+56_knidos_artemis_tripod           PASS       1     0.0489  knidos/Knidos/Knidos — Artemis / tripod (Hellenistic)
+57_gela_quadriga                   PASS       1     0.0129  gela/Gela/Gela — charioteer / man-headed bull (river-god Gelas)
+58_gela_horseman                   PASS       1     0.0432  gela/Gela/Gela — charioteer / man-headed bull (river-god Gelas)
+59_flavian_bronze_spes_standing    PASS       1     0.0221  flavian_bronze/Flavian/Flavian bronze — standing figure (deity / personification)
+60_flavian_bronze_vesta_seated     PASS       1     0.0074  flavian_bronze/Flavian/Flavian bronze — seated deity
+61_mg_bronze_laetitia_standing     PASS       1     0.0100  mg_bronze/Maximinus I – Gordian III/Maximinus I – Gordian III bronze — standing figure (deity / personification)
+62_mg_bronze_salus_seated          PASS       1     0.0235  mg_bronze/Maximinus I – Gordian III/Maximinus I – Gordian III bronze — seated deity
+63_nerva_bronze_fortuna_standing   PASS       1     0.0082  nerva_bronze/Nerva–Trajan–Hadrian/Nerva–Trajan–Hadrian bronze — standing figure (deity / personification)
+64_nerva_bronze_salus_seated       PASS       1     0.0056  nerva_bronze/Nerva–Trajan–Hadrian/Nerva–Trajan–Hadrian bronze — seated deity
+65_julio_claudian_bronze_neptune_standing PASS       1     0.0156  julio_claudian_bronze/Julio-Claudian/Julio-Claudian bronze — standing figure (deity / personification)
+66_julio_claudian_bronze_temple_janus PASS       1     0.0053  julio_claudian_bronze/Julio-Claudian/Julio-Claudian bronze — temple
+67_leukas_pegasos_athena           PASS       1     0.0012  leukas/Leukas/Leukas — Pegasos / Athena (Corinthian-type stater)
+68_leukas_pegasos_right            PASS       2     0.0136  akarnania/Akarnania/Akarnania — Pegasos / Athena (Corinthian-type colt stater)
+69_velia_athena_lion               PASS       1     0.0153  velia/Velia/Velia — Athena / lion (nomos)
+70_velia_nymph_owl                 PASS       1     0.0864  velia/Velia/Velia — nymph / owl (drachm & fractions)
+71_corinth_pegasos_athena          PASS       2     0.0070  akarnania/Akarnania/Akarnania — Pegasos / Athena (Corinthian-type colt stater)
+72_corinth_pegasos_aphrodite       PASS       2     0.0018  akarnania/Akarnania/Akarnania — Pegasos / Athena (Corinthian-type colt stater)
+73_metapontion_demeter_barley      PASS       1     0.0016  metapontion/Metapontion/Metapontion — head / barley ear (classical nomos)
+74_metapontion_incuse_barley       PASS       1     0.2872  metapontion/Metapontion/Metapontion — barley ear (archaic incuse)
+75_kyrene_zeus_ammon_gold_stater   PASS       1     0.0099  kyrene/Kyrene/Kyrene — silphium civic coinage (Zeus Ammon / Apollo / silphium · gold & silver)
+76_kyrene_apollo_silver            PASS       1     0.0398  kyrene/Kyrene/Kyrene — silphium civic coinage (Zeus Ammon / Apollo / silphium · gold & silver)
+77_crete_gortyna                   PASS       1     0.0965  crete/Crete/Crete, Gortyna — Europa / bull
+78_crete_kydonia                   PASS       1     0.1110  crete/Crete/Crete, Kydonia — nymph / archer (Kydon)
+79_first_meris_shield              PASS       1     0.0662  first_meris/Macedonian Koinon (First Meris)/Macedonian Koinon — First Meris (Artemis / Macedonian shield, club)
+80_first_meris_aesillas            PASS       1     0.1106  first_meris/Macedonian Koinon (First Meris)/Macedonian Koinon — Aesillas / Sura quaestor (Alexander / club, chest, chair)
+81_chalkidian_apollo_kithara_tet   PASS       1     0.0046  chalkidian_league/Chalkidian League/Chalkidian League — Apollo / kithara
+82_chalkidian_apollo_kithara_tetrobol PASS       1     0.0258  chalkidian_league/Chalkidian League/Chalkidian League — Apollo / kithara
+83_macedon_akanthos_lion_bull      PASS       1     0.1010  macedon_region/Macedon (region)/Macedon, Akanthos — lion attacking bull
+84_macedon_neapolis_gorgoneion     PASS       1     0.1149  macedon_region/Macedon (region)/Macedon, Neapolis — Gorgoneion / nymph
+85_macedon_mende_dionysos          PASS       1     0.0891  macedon_region/Macedon (region)/Macedon, Mende — Dionysos on donkey
+86_pergamon_cistophoric            PASS       1     0.0021  pergamon/Pergamon/Pergamon — cistophoric (cista mystica / bow-case & serpents)
+87_pergamon_herakles_diobol        PASS       1     0.0251  pergamon/Pergamon/Pergamon — autonomous (Herakles / Athena diobol)
+88_thebes_shield_amphora           PASS       1     0.0227  thebes/Thebes/Thebes — Boeotian shield / amphora (stater)
+89_thebes_dionysos                 PASS       1     0.1581  thebes/Thebes/Thebes — Dionysos / kantharos & club (Hellenistic)
+90_julio_claudian_gold_seated_deity PASS       1     0.0211  julio_claudian_gold/Julio-Claudian/Julio-Claudian gold — seated deity
+91_julio_claudian_gold_legend_wreath PASS       1     0.0174  julio_claudian_gold/Julio-Claudian/Julio-Claudian gold — legend reverse (inscription / legend in wreath)
+92_julio_claudian_gold_standing    PASS       1     0.0159  julio_claudian_gold/Julio-Claudian/Julio-Claudian gold — standing figure (deity / personification)
+93_campania_neapolis               PASS       1     0.0174  campania/Campania/Campania, Neapolis — nymph / man-headed bull (Acheloos)
+94_campania_phistelia              PASS       1     0.0691  campania/Campania/Campania, Phistelia — head / barley & dolphin
+95_lucania_thourioi                PASS       1     0.0558  lucania_other/Lucania/Lucania, Thourioi — Athena (Skylla helmet) / butting bull
+96_lucania_poseidonia              PASS       1     0.0998  lucania_other/Lucania/Lucania, Poseidonia — Poseidon striding with trident
+97_bruttium_kroton                 PASS       1     0.1358  bruttium/Bruttium/Bruttium, Kroton — tripod
+98_bruttium_terina                 PASS       2     0.0127  syracuse/Syracuse/Syracuse — Persephone / Kore
+99_sicily_messana_hare             PASS       1     0.0685  sicily_other/Sicily/Sicily, Messana — biga of mules / hare
+100_sicily_katane_quadriga         PASS       1     0.0423  sicily_other/Sicily/Sicily, Katane — Apollo / quadriga (facing Silenos)
+101_sicily_naxos_dionysos          PASS       1     0.0457  sicily_other/Sicily/Sicily, Naxos — Dionysos / squatting Silenos
+110_flavian_gold_standing          PASS       1     0.0156  flavian_gold/Flavian/Flavian gold — standing figure (deity / personification)
+111_flavian_gold_legend            PASS       1     0.0236  flavian_gold/Flavian/Flavian gold — legend reverse (inscription / legend in wreath)
+112_nerva_gold_standing            PASS       1     0.0025  nerva_gold/Nerva–Trajan–Hadrian/Nerva–Trajan–Hadrian gold — standing figure (deity / personification)
+113_nerva_gold_seated              PASS       1     0.0104  nerva_gold/Nerva–Trajan–Hadrian/Nerva–Trajan–Hadrian gold — seated deity
+114_antonine_gold_standing         PASS       1     0.0134  antonine_gold/Antonine/Antonine gold — standing figure (deity / personification)
+115_antonine_gold_seated           PASS       1     0.0241  antonine_gold/Antonine/Antonine gold — seated deity
+120_late_solidus_seated            PASS       1     0.0560  late_solidus/Late Roman Empire/Late Roman Empire gold — seated deity
+121_late_solidus_standing          PASS       1     0.0184  late_solidus/Late Roman Empire/Late Roman Empire gold — standing figure (deity / personification)
+122_late_solidus_captive_trophy    PASS       1     0.0214  late_solidus/Late Roman Empire/Late Roman Empire gold — trophy / captives
+123_thessaly_league                PASS       1     0.0050  thessaly_other/Thessaly (region)/Thessaly — facing/profile head / horse & horseman (regional silver)
+124_thessaly_pharsalos             PASS       1     0.0654  thessaly_other/Thessaly (region)/Thessaly — facing/profile head / horse & horseman (regional silver)
+125_boeotia_federal                PASS       1     0.0659  boeotia_other/Boeotia (region)/Boeotia, Federal/koinon — Boeotian shield / amphora (BOIΩΤΩΝ)
+126_boeotia_tanagra                PASS       1     0.0441  boeotia_other/Boeotia (region)/Boeotia, Tanagra — shield / forepart of horse
+127_akarnania_anaktorion           PASS       1     0.0831  akarnania/Akarnania/Akarnania — Pegasos / Athena (Corinthian-type colt stater)
+128_akarnania_thyrrheion           PASS       1     0.0080  akarnania/Akarnania/Akarnania — Pegasos / Athena (Corinthian-type colt stater)
+129_pelo_sikyon                    PASS       1     0.0004  peloponnese_other/Peloponnese (region)/Peloponnese, Sikyon — chimera / dove
+130_pelo_achaian_league            PASS       1     0.0842  peloponnese_other/Peloponnese (region)/Achaian League — Zeus Homarios / AΧ monogram (federal)
+131_pelo_elis                      PASS       1     0.0233  peloponnese_other/Peloponnese (region)/Peloponnese, Elis (Olympia) — eagle & thunderbolt / Nike
+132_pelo_argos                     PASS       1     0.0937  peloponnese_other/Peloponnese (region)/Peloponnese, Argos — wolf / Athena, harpa
+133_euboia_histiaia                PASS       2     0.0010  pontos_bithynia/Pontos / Bithynia (region)/Pontos / Bithynia — Amastris / Tieion & uncertain mint
+134_euboia_chalkis                 PASS       2     0.0012  troas/Troas (region)/Troas, Abydos — Apollo / eagle
+135_phokis_federal                 PASS       1     0.1001  phokis/Phokis (Phokian League)/Phokis, Phokian League — bull's head facing / Apollo or Artemis
+136_illyria_dyrrhachion            PASS       1     0.1132  illyria_epeiros/Illyria & Epeiros (region)/Illyria, Dyrrhachion — cow suckling calf / double-stellate pattern
+137_illyria_ambrakia               PASS       1     0.0129  illyria_epeiros/Illyria & Epeiros (region)/Epeiros, Ambrakia — Pegasos / Athena (Corinthian-type stater)
+138_illyria_korkyra                PASS       1     0.0449  illyria_epeiros/Illyria & Epeiros (region)/Korkyra — cow & calf / amphora & stellate (Pegasos staters)
+139_illyria_apollonia              PASS       1     0.1137  illyria_epeiros/Illyria & Epeiros (region)/Illyria, Dyrrhachion — cow suckling calf / double-stellate pattern
+140_gaul_massalia_obol             PASS       1     0.0819  gaul/Gaul (Massalia)/Gaul, Massalia — Apollo or Artemis head / lion (obol & drachm)
+141_gaul_massalia_drachm           PASS       1     0.0306  gaul/Gaul (Massalia)/Gaul, Massalia — Apollo or Artemis head / lion (obol & drachm)
+142_cgt_aitolian_league            PASS       1     0.0616  central_greece_tail/Central Greece (Aitolia / Lokris / Megaris)/Aitolia, Aitolian League — Athena or Herakles / Aitolia seated on shields
+143_cgt_lokris_opuntii             PASS       1     0.0303  central_greece_tail/Central Greece (Aitolia / Lokris / Megaris)/Lokris Opuntii — Demeter-Persephone / Ajax the Lesser
+144_troas_tenedos                  PASS       1     0.0419  troas/Troas (region)/Troas, Tenedos — janiform head / labrys (double-axe)
+145_troas_kebren                   PASS       1     0.0700  troas/Troas (region)/Troas, Kebren — ram's head / head of Apollo
+146_troas_abydos                   PASS       1     0.0384  troas/Troas (region)/Troas, Abydos — Apollo / eagle
+147_aeolis_kyme                    PASS       1     0.0532  aeolis/Aeolis (region)/Aeolis, Kyme — eagle / one-handled vase; Amazon Kyme / horse (stephanophoric tet)
+148_aeolis_myrina                  PASS       1     0.0282  aeolis/Aeolis (region)/Aeolis, Myrina — Apollo Gryneios / Apollo standing (stephanophoric tet)
+149_aeolis_aigai                   PASS       2     0.0019  ionia/Ionia (region)/Ionia, Magnesia ad Maeandrum — Apollo / Maeander (stephanophoric tet)
+150_lesbos_el                      PASS       2     0.0012  mytilene/Mytilene/Mytilene — Apollo (electrum hekte)
+151_lesbos_methymna                PASS       1     0.0596  lesbos_other/Lesbos (region)/Lesbos, Methymna — Athena / Arion on dolphin; warrior
+152_ionia_miletos                  PASS       1     0.0945  ionia/Ionia (region)/Ionia, Miletos — lion / star (floral)
+153_ionia_ephesos                  PASS       3     0.0050  phoenicia/Phoenicia (region)/Phoenicia, Arados — marine deity / galley & prow
+154_ionia_magnesia                 PASS       1     0.0187  ionia/Ionia (region)/Ionia, Magnesia ad Maeandrum — Apollo / Maeander (stephanophoric tet)
+155_ionia_teos                     PASS       1     0.0408  ionia/Ionia (region)/Ionia, Teos — griffin
+156_caria_antioch                  PASS       1     0.0288  caria_other/Caria (region)/Caria, Antioch ad Maeandrum — Apollo / humped bull (stephanophoric)
+157_caria_mylasa                   PASS       1     0.0841  caria_other/Caria (region)/Caria, Mylasa — lion / Zeus Labraundos
+158_caria_kaunos                   PASS       1     0.0796  caria_other/Caria (region)/Caria, Kaunos — winged figure / baetyl & sphinx
+159_mysia_lampsakos_gold           PASS       1     0.0592  mysia_other/Mysia (region)/Mysia, Lampsakos — Apollo / forepart of Pegasos (gold, electrum & silver)
+160_mysia_parion                   PASS       1     0.1222  mysia_other/Mysia (region)/Mysia, Parion — facing gorgoneion / bull
+161_mid4c_falling_horseman         PASS       1     0.0107  mid4c/Mid-4th century/Mid-4th century bronze — soldier spearing fallen horseman (FEL TEMP REPARATIO)
+162_mid4c_two_standards            PASS       1     0.0019  mid4c/Mid-4th century/Mid-4th century bronze — two figures (soldiers & standards / two Victories)
+163_mid4c_standing                 PASS       1     0.0004  mid4c/Mid-4th century/Mid-4th century bronze — standing figure (deity / personification)
+164_cilicia_kelenderis             PASS       1     0.1258  cilicia/Cilicia (region)/Cilicia, Kelenderis — youth on rearing horse / goat kneeling
+165_cilicia_nagidos                PASS       1     0.0933  cilicia/Cilicia (region)/Cilicia, Nagidos — Aphrodite seated / Dionysos standing
+166_cilicia_mallos                 PASS       1     0.0275  cilicia/Cilicia (region)/Cilicia, Mallos — winged androkephalic figure / swan
+167_pamphylia_aspendos             PASS       1     0.0072  pamphylia/Pamphylia (region)/Pamphylia, Aspendos — two wrestlers / slinger & triskeles
+168_pamphylia_side                 PASS       1     0.0668  pamphylia/Pamphylia (region)/Pamphylia, Side — Athena / Nike & pomegranate
+169_pamphylia_perge                PASS       1     0.0154  pamphylia/Pamphylia (region)/Pamphylia, Perge — Artemis Pergaia / temple & cult statue
+170_lydia_tralleis                 PASS       1     0.1295  lydia/Lydia (region)/Lydia — cistophoric tetradrachm (cista mystica / bowcase)
+171_valentinian_captive_trophy     PASS       1     0.0026  valentinian/Valentinianic dynasty/Valentinianic dynasty bronze — trophy / captives
+172_theodosian_captive_trophy      PASS       1     0.0034  theodosian/Theodosian/Theodosian bronze — trophy / captives
+173_lydia_kingdom_croeseid_gold    PASS       1     0.0506  lydia_kingdom/Lydia (Kingdom)/Lydia (Kingdom) — Croeseid & Alyattes electrum
+174_lydia_kingdom_croeseid_silver  PASS       1     0.0585  lydia_kingdom/Lydia (Kingdom)/Lydia (Kingdom) — Croeseid & Alyattes electrum
+175_lydia_kingdom_alyattes_electrum PASS       1     0.0480  lydia_kingdom/Lydia (Kingdom)/Lydia (Kingdom) — Croeseid & Alyattes electrum
+176_tetrarchic_genius_standing     PASS       1     0.0071  tetrarchic/Tetrarchy/Tetrarchy bronze — standing figure (deity / personification)
+177_tetrarchic_temple              PASS       1     0.0048  tetrarchic/Tetrarchy/Tetrarchy bronze — temple
+178_tetrarchic_camp_gate           PASS       1     0.0075  tetrarchic/Tetrarchy/Tetrarchy bronze — camp gate / city gate
+179_licinius_jupiter_standing      PASS       1     0.0032  licinius/Licinius/Licinius bronze — standing figure (deity / personification)
+180_constantinian_house_two_standards PASS       1     0.0049  constantinian_house/Constantinian dynasty/Constantinian dynasty bronze — two figures (soldiers & standards / two Victories)
+181_constantinian_house_camp_gate  PASS       1     0.0063  constantinian_house/Constantinian dynasty/Constantinian dynasty bronze — camp gate / city gate
+182_constantine_i_sol_standing     PASS       1     0.0114  constantine_i/Constantine I/Constantine I bronze — standing figure (deity / personification)
+183_constantine_i_wolf_twins       PASS       1     0.0085  constantine_i/Constantine I/Constantine I bronze — animal reverse (wolf & twins, etc.)
+184_thrace_chersonesos             PASS       1     0.1038  thrace/Thrace (region)/Thrace, Chersonesos (Kardia) — lion forepart looking back
+185_thrace_byzantion               PASS       1     0.0586  thrace/Thrace (region)/Thrace, Byzantion — cow on dolphin / mill-sail incuse
+186_thrace_ainos                   PASS       1     0.0305  thrace/Thrace (region)/Thrace, Ainos — head of Hermes / goat
+187_thasos_satyr                   PASS       1     0.0526  thasos/Islands off Thrace/Thasos — satyr carrying nymph / incuse square (archaic stater)
+188_thasos_dionysos                PASS       1     0.0169  thasos/Islands off Thrace/Thasos — wreathed Dionysos / Herakles standing (tetradrachm)
+189_black_sea_istros               PASS       1     0.0961  black_sea/Black Sea (region)/Black Sea, Istros — facing twin heads / sea-eagle on dolphin
+190_black_sea_tauric               PASS       1     0.0134  black_sea/Black Sea (region)/Black Sea, Tauric Chersonesos — Artemis / butting bull
+191_crisis_bronze_postumus_galley  PASS       1     0.0183  crisis_bronze/3rd-century crisis/3rd-century crisis bronze — galley / figure on prow
+192_crisis_bronze_standing         PASS       1     0.0077  crisis_bronze/3rd-century crisis/3rd-century crisis bronze — standing figure (deity / personification)
+193_crisis_bronze_temple           PASS       1     0.0220  crisis_bronze/3rd-century crisis/3rd-century crisis bronze — temple
+194_phoenicia_arados               PASS       1     0.0870  phoenicia/Phoenicia (region)/Phoenicia, Arados — marine deity / galley & prow
+195_phoenicia_tyre                 PASS       1     0.0191  phoenicia/Phoenicia (region)/Phoenicia, Tyre — Melqart / eagle on prow (Tyrian shekel)
+196_phoenicia_sidon                PASS       1     0.1118  phoenicia/Phoenicia (region)/Phoenicia, Sidon — galley / Persian king in chariot (city-kings)
+197_judaea_jewish_war              PASS       1     0.1774  judaea/Judaea (revolts)/Judaea, First Jewish War — chalice / three pomegranates
+198_judaea_bar_kochba              PASS       1     0.1616  judaea/Judaea (revolts)/Judaea, Bar Kochba Revolt — Temple facade / lulav & etrog
+199_lykia_dynasts                  PASS       1     0.1004  lykia/Lykia (region)/Lykia (Dynasts) — triskeles / facing lion-scalp & boar
+200_lykia_phaselis                 PASS       1     0.1290  lykia/Lykia (region)/Lykia, Phaselis — galley & prow / Athena
+201_pisidia_selge_stater           OOS        -     0.0035  antonine_bronze/Antonine/Antonine bronze — standing figure (deity / personification)
+202_pisidia_selge_obol             PASS       1     0.0394  pisidia/Pisidia (Selge)/Pisidia, Selge — gorgoneion / Athena & astragalos
+203_pontos_sinope                  PASS       1     0.0644  pontos_bithynia/Pontos / Bithynia (region)/Pontos, Sinope — nymph / sea-eagle on dolphin
+204_pontos_kalchedon               PASS       1     0.0960  pontos_bithynia/Pontos / Bithynia (region)/Bithynia, Kalchedon — bull on grain-ear / incuse
+205_pontos_amisos                  PASS       1     0.0472  pontos_bithynia/Pontos / Bithynia (region)/Pontos, Amisos — Hera / owl (Peiraieos drachms)
+206_phrygia_laodikeia              PASS       1     0.0319  phrygia/Phrygia (region)/Phrygia — cistophorus (cista mystica) & civic silver
+207_alexander_tetradrachm          PASS       1     0.0557  alexander/Kings of Macedon (Alexander)/Kings of Macedon — Alexander III & Philip III Arrhidaeus
+208_alexander_gold_stater          PASS       1     0.0222  alexander/Kings of Macedon (Alexander)/Kings of Macedon — Alexander III & Philip III Arrhidaeus
+209_alexander_drachm               PASS       1     0.0357  alexander/Kings of Macedon (Alexander)/Kings of Macedon — Alexander III & Philip III Arrhidaeus
+210_philip_iii                     PASS       1     0.0449  alexander/Kings of Macedon (Alexander)/Kings of Macedon — Alexander III & Philip III Arrhidaeus
+211_alexander_lifetime             PASS       1     0.0451  alexander/Kings of Macedon (Alexander)/Kings of Macedon — Alexander III & Philip III Arrhidaeus
+212_macedon_philip_ii_tet          PASS       1     0.0023  macedon_kings/Kings of Macedon/Kings of Macedon, Philip II — Zeus / youth on horseback & Apollo / biga
+213_macedon_philip_ii_gold_stater  PASS       1     0.0014  macedon_kings/Kings of Macedon/Kings of Macedon, Philip II — Zeus / youth on horseback & Apollo / biga
+214_macedon_demetrios_poliorketes  PASS       1     0.0987  macedon_kings/Kings of Macedon/Kings of Macedon, Demetrios I Poliorketes — Nike on prow / Poseidon & portrait
+215_macedon_antigonos_gonatas      PASS       1     0.0710  macedon_kings/Kings of Macedon/Kings of Macedon, Antigonos II Gonatas — Pan on Macedonian shield / Athena Alkidemos
+216_macedon_perseus                PASS       1     0.0647  macedon_kings/Kings of Macedon/Kings of Macedon, Perseus — portrait / eagle on thunderbolt in oak-wreath
+217_macedon_philip_v               PASS       1     0.2243  macedon_kings/Kings of Macedon/Kings of Macedon, Philip V — portrait / club in oak-wreath & Athena
+218_macedon_antigonos_doson        PASS       1     0.0605  macedon_kings/Kings of Macedon/Kings of Macedon, Antigonos III Doson — Poseidon / Apollo on prow
+219_lysimachos_tetradrachm         PASS       1     0.0293  lysimachos/Kings of Thrace (Lysimachos)/Kings of Thrace, Lysimachos — deified Alexander (horn of Ammon) / Athena Nikephoros enthroned
+220_lysimachos_gold_stater         PASS       1     0.0304  lysimachos/Kings of Thrace (Lysimachos)/Kings of Thrace, Lysimachos — deified Alexander (horn of Ammon) / Athena Nikephoros enthroned
+221_paeonia_patraos                PASS       1     0.0492  paeonia/Kings of Paeonia/Kings of Paeonia, Patraos — Apollo head / horseman spearing fallen enemy
+222_paeonia_lykkeios               PASS       1     0.0814  paeonia/Kings of Paeonia/Kings of Paeonia, Lykkeios — Zeus / Herakles strangling lion
+223_argead_perdikkas_ii            PASS       1     0.1117  early_argead_macedon/Kings of Macedon (early Argead)/Kings of Macedon, Perdikkas II — horseman / lion forepart light tetrobols
+224_argead_alexander_i             PASS       1     0.0468  early_argead_macedon/Kings of Macedon (early Argead)/Kings of Macedon, Alexander I — horseman & horse, Bisaltic heavy silver
+225_argead_late_didrachm           PASS       1     0.0332  early_argead_macedon/Kings of Macedon (early Argead)/Kings of Macedon, late Argeads — Archelaos to Perdikkas III (head / horse types)
+226_imperatorial_caesar_portrait   PASS       1     0.0168  republican_imp_portrait/None/Julius Caesar / Victory
+226_baktria_eukratides_helmeted    PASS       1     0.0482  baktria_indogreek/Baktria & Indo-Greek Kings/Baktria, Eukratides & the helmeted-bust kings — heroic bust / Dioskouroi charging
+227_baktria_menander               PASS       1     0.0120  baktria_indogreek/Baktria & Indo-Greek Kings/Baktria & Indo-Greek kings — diademed royal portrait / Zeus, Athena, Herakles
+228_baktria_antimachos_kausia      PASS       3     0.0002  julio_claudian/Augustus/Julio-Claudian & Civil War (27 BC-AD 69) / emperor figure
+229_seleukid_seleukos_i            PASS       1     0.0095  seleukid_early/Seleukid Empire/Seleukid Empire, Seleukos I Nikator — Zeus / Athena in elephant quadriga, horned horse & elephants
+230_seleukid_omphalos              PASS       1     0.0423  seleukid_early/Seleukid Empire/Seleukid Empire, the early Antiochoi — diademed head / Apollo seated on omphalos (house type)
+231_seleukid_late_zeus             PASS       1     0.0118  seleukid_late/Seleukid Empire/Seleukid Empire, post-Apamea — diademed head / Zeus enthroned, Apollo on omphalos & Tyche
+232_seleukid_eagle                 PASS       1     0.0105  seleukid_late/Seleukid Empire/Seleukid Empire — Phoenician-standard eagle tetradrachms (Balas & Demetrios II; Tyre / Sidon / Ake)
+233_ptolemaic_eagle_tet            PASS       1     0.0136  ptolemaic/Ptolemaic Kings of Egypt/Ptolemaic Kings of Egypt — diademed Ptolemy I / eagle on thunderbolt (the 250-year tetradrachm)
+234_ptolemaic_arsinoe_gold         PASS       1     0.0637  ptolemaic/Ptolemaic Kings of Egypt/Ptolemaic Kings of Egypt — dynastic-portrait gold (Arsinoe II mnaieia, Berenike II, Ptolemy IV)
+235_hk_mithradates_vi              PASS       1     0.1336  hellenistic_kingdoms/Hellenistic Kingdoms (minor)/Kings of Pontos & Bosporos — Mithradates VI (wind-swept portrait / stag & Pegasos) and the Black Sea kings
+236_hk_cappadocia_drachm           PASS       1     0.0168  hellenistic_kingdoms/Hellenistic Kingdoms (minor)/Kings of Cappadocia — Ariarathes & Ariobarzanes / Athena Nikephoros drachms
+237_hk_attalid_philetairos         PASS       1     0.0150  hellenistic_kingdoms/Hellenistic Kingdoms (minor)/Kings of Pergamon — the fixed Philetairos portrait / Athena enthroned (Eumenes & Attalos issues)
+238_sceatta_e_porcupine            PASS       1     0.1104  sceatta/Sceatta Series E — 'porcupine' (Frisian & imitations)/Sceatta Series E — 'porcupine' (Frisian & imitations)
+239_sceatta_x_wodan                PASS       1     0.1298  sceatta/Sceatta Series X — 'Wodan' head (Danish, Ribe)/Sceatta Series X — 'Wodan' head (Danish, Ribe)
+240_sceatta_k_figural              PASS       1     0.0674  sceatta/Secondary Figural Group (Series K & mules)/Secondary Figural Group (Series K & mules)
+241_alexandria_eagle               PASS       1     0.0163  alexandria_tetradrachm/Alexandria (Roman Egypt)/Alexandria — billon tetradrachm (eagle / Nilus / Serapis / Elpis / Tyche …)
+242_alexandria_hadrian_nilus_ry    PASS       1     0.0256  alexandria_tetradrachm/Alexandria (Roman Egypt)/Alexandria — billon tetradrachm (eagle / Nilus / Serapis / Elpis / Tyche …)
+243_hadrian_victory_ric400         OOS        -     0.0031  flavian/Vespasian/Flavian / mars standing
+244_aurelian_vabalathus_alexandria OOS        -     0.0089  theodosian/Theodosian/Theodosian bronze — trophy / captives
+245_sasanian_khusro_ii             PASS       1     0.0002  sasanian_drachm/Sasanian Empire/Sasanian Empire — silver drachm (crowned bust / fire altar with two attendants)
+246_sasanian_ardashir_i            PASS       1     0.0001  sasanian_drachm/Sasanian Empire/Sasanian Empire — silver drachm (crowned bust / fire altar with two attendants)
+250_parthian_mithradates_ii        PASS       1     0.0091  parthian_drachm/Parthian Empire/Parthian Empire — silver drachm (diademed royal bust / archer seated holding bow)
+251_parthian_vologases_i           PASS       1     0.0021  parthian_drachm/Parthian Empire/Parthian Empire — silver drachm (diademed royal bust / archer seated holding bow)
+252_parthian_era_fallback          PASS       1     0.0283  parthian_drachm/Parthian Empire/Parthian Empire — silver drachm (diademed royal bust / archer seated holding bow)
+253_cyprus_paphos_bull_eagle       PASS       1     0.0667  cyprus/Cyprus (Kingdoms)/Cyprus, Paphos — bull standing / eagle & astragalos
+254_cyprus_salamis_ram             PASS       1     0.0921  cyprus/Cyprus (Kingdoms)/Cyprus, Salamis — ram recumbent / ankh; Herakles (Evagoras)
+255_cyprus_kition_herakles         PASS       1     0.0404  cyprus/Cyprus (Kingdoms)/Cyprus, Kition — Herakles / lion attacking stag (Phoenician kings)
+256_satcil_mazaios                 PASS       1     0.0493  satrapal_cilicia/Cilicia (satrapal)/Cilicia, Tarsos — Mazaios (Mazday), satrap — Baaltars enthroned / lion attacking bull
+257_satcil_datames                 PASS       1     0.0371  satrapal_cilicia/Cilicia (satrapal)/Cilicia, Tarsos — Tarkumuwa (Datames), satrap — facing head / Baaltars & Ana
+258_satcil_pharnabazos             PASS       1     0.0895  satrapal_cilicia/Cilicia (satrapal)/Cilicia, Tarsos — Pharnabazos, Persian commander — facing Arethusa head / helmeted head
+259_cyprus_salamis_evagoras_cabinet PASS       1     0.0785  cyprus/Cyprus (Kingdoms)/Cyprus, Salamis — ram recumbent / ankh; Herakles (Evagoras)
+--------------------------------------------------------------------------------------------
+PASS 241 (top-1: 227, top2-3: 14)  |  RED_FLAG 0  |  OUT_OF_SCOPE 4
+BAR PASSED — no wrong-card red flags in scope.
