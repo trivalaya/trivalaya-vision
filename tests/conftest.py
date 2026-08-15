@@ -30,6 +30,14 @@ ENV_FRAC = "TRIVALAYA_CLOSE_KERNEL_FRAC"
 # EXACTLY — the suite must not change behaviour as a side effect of a
 # provenance change — and any test that wants a different knob asks for it
 # explicitly through the `mask_lane` fixture.
+#
+# Ticket #48 (2026-08-15): rim_neighbor_overlap_max / rim_hough_cap joined
+# the ruled knobs. Unlike the five above, these two were NEVER "off" in an
+# unset environment — the absent-key branch was always a concrete number
+# (0.0001, 1280) — so their TEST_BASE entries are that same code default, not
+# a null/False stand-in. Admitting them changes nothing here: the suite was
+# already exercising exactly these two numbers, just via a code path that
+# happened not to be gated by an env var at all.
 # ---------------------------------------------------------------------------
 TEST_BASE = dict(
     close_kernel_frac=None,          # fixed 7x7
@@ -37,6 +45,8 @@ TEST_BASE = dict(
     bg_corner_local_trust=False,     # M1 off
     rim_recovery_max_per_image=None,  # unlimited
     disable_two_coin_resolver=False,
+    rim_neighbor_overlap_max=0.0001,  # the code's own absent-key default
+    rim_hough_cap=1280,               # the code's own absent-key default
 )
 
 BG_LEVEL = 40   # flat dark background -> THRESH_BINARY polarity

@@ -35,26 +35,35 @@ def test_positive_control_every_lane_resolves():
     for lane in ALL_LANES:
         cfg = resolve_mask_config(lane)
         assert cfg.lane == lane
-        assert len(cfg.values) == 5
+        assert len(cfg.values) == 7  # five ruled + two ticket #48
 
 
 def test_lane_values_are_the_ruling():
     """The ruling's table, transcribed. If this test is edited, a knob's value
     changed for a lane — which is a mask-lane generation bump needing its own
-    ruling and its own bars, never a quiet edit."""
+    ruling and its own bars, never a quiet edit.
+
+    rim_neighbor_overlap_max / rim_hough_cap (ticket #48) are the same
+    everywhere on purpose: both were unset in every lane before admission, so
+    admitting them must reproduce that uniform absent-key value, not
+    introduce a per-lane split that never existed."""
     expected = {
         "serving":   dict(close_kernel_frac="auto", rim_neighbor_guard=True,
                           bg_corner_local_trust=True, rim_recovery_max_per_image=None,
-                          disable_two_coin_resolver=False),
+                          disable_two_coin_resolver=False,
+                          rim_neighbor_overlap_max=0.0001, rim_hough_cap=1280),
         "ingest":    dict(close_kernel_frac="auto", rim_neighbor_guard=True,
                           bg_corner_local_trust=False, rim_recovery_max_per_image=None,
-                          disable_two_coin_resolver=False),
+                          disable_two_coin_resolver=False,
+                          rim_neighbor_overlap_max=0.0001, rim_hough_cap=1280),
         "gpu_embed": dict(close_kernel_frac="auto", rim_neighbor_guard=True,
                           bg_corner_local_trust=False, rim_recovery_max_per_image=None,
-                          disable_two_coin_resolver=False),
+                          disable_two_coin_resolver=False,
+                          rim_neighbor_overlap_max=0.0001, rim_hough_cap=1280),
         "tools":     dict(close_kernel_frac="auto", rim_neighbor_guard=True,
                           bg_corner_local_trust=False, rim_recovery_max_per_image=None,
-                          disable_two_coin_resolver=False),
+                          disable_two_coin_resolver=False,
+                          rim_neighbor_overlap_max=0.0001, rim_hough_cap=1280),
     }
     for lane, want in expected.items():
         assert resolve_mask_config(lane).values == want, lane
@@ -115,6 +124,27 @@ def test_retired_key_raises_when_value_is_IDENTICAL_to_lane_config(monkeypatch):
     assert "PRESENCE" in msg
     for key in ("TRIVALAYA_BG_CORNER_LOCAL_TRUST", "TRIVALAYA_CLOSE_KERNEL_FRAC",
                 "TRIVALAYA_RIM_NEIGHBOR_GUARD"):
+        assert key in msg
+
+
+def test_ticket48_keys_raise_when_value_is_IDENTICAL_to_lane_config(monkeypatch):
+    """★ Same shape as the test above, for the two knobs admitted by ticket
+    #48 — bar 3's named scenario, precommitted before these were added to
+    LEGACY_ENV_KEYS. `ingest` resolves rim_neighbor_overlap_max=0.0001 and
+    rim_hough_cap=1280 (the code's own absent-key defaults, transcribed);
+    setting the retired env keys to those SAME values must still raise.
+    """
+    ingest = resolve_mask_config("ingest")
+    assert ingest.rim_neighbor_overlap_max == 0.0001
+    assert ingest.rim_hough_cap == 1280
+
+    monkeypatch.setenv("TRIVALAYA_RIM_NEIGHBOR_OVERLAP_MAX", "0.0001")  # == config
+    monkeypatch.setenv("TRIVALAYA_RIM_HOUGH_CAP", "1280")               # == config
+    with pytest.raises(MaskConfigError) as exc:
+        resolve_mask_config("ingest")
+    msg = str(exc.value)
+    assert "PRESENCE" in msg
+    for key in ("TRIVALAYA_RIM_NEIGHBOR_OVERLAP_MAX", "TRIVALAYA_RIM_HOUGH_CAP"):
         assert key in msg
 
 
@@ -203,6 +233,39 @@ def test_close_kernel_frac_empty_is_none():
 
 
 # ---------------------------------------------------------------------------
+# Ticket #48 (2026-08-15) — the two knobs admitted after the five-knob
+# amendment: rim_neighbor_overlap_max, rim_hough_cap. Same class, unset in
+# every lane before admission, not covered by the guard until now.
+# ---------------------------------------------------------------------------
+
+def test_overlap_max_and_hough_cap_accept_overrides():
+    """Unlike the recovery cap, neither knob has None/unlimited semantics —
+    the retired read was always a concrete number — so a plain numeric
+    override round-trips directly."""
+    assert resolve_mask_config("tools", rim_neighbor_overlap_max=0.01).rim_neighbor_overlap_max == 0.01
+    assert resolve_mask_config("tools", rim_neighbor_overlap_max="0.02").rim_neighbor_overlap_max == 0.02
+    assert resolve_mask_config("tools", rim_hough_cap=800).rim_hough_cap == 800
+    assert resolve_mask_config("tools", rim_hough_cap="1024").rim_hough_cap == 1024
+
+
+def test_hough_cap_zero_is_a_real_value_not_a_sentinel():
+    """0 means uncapped/legacy-full-res for this knob (unlike
+    rim_recovery_max_per_image's 0-vs-None distinction) — it must pass
+    through as a plain int, not be coerced to None."""
+    assert resolve_mask_config("tools", rim_hough_cap=0).rim_hough_cap == 0
+
+
+def test_mask_config_schema_version_bumped_for_ticket_48():
+    """schema_version tracks the STAMPED FIELD SET, independent of
+    mask_lane_version (values). It bumped 1->2 because admitting these two
+    knobs grew VALUE_KEYS from five to seven — no VALUE changed for the
+    original five, so mask_lane_version stayed put; this is the field that
+    says a digest from before this change is not comparable to one after."""
+    assert mask_config.mask_config_schema_version() == 2
+    assert resolve_mask_config("ingest").schema_version == 2
+
+
+# ---------------------------------------------------------------------------
 # Shape / immutability
 # ---------------------------------------------------------------------------
 
@@ -227,6 +290,8 @@ def test_describe_prints_the_arm():
     assert "lane=serving" in text
     assert "bg_corner_local_trust=True" in text
     assert "digest=" in text
+    assert "schema=2" in text
+    assert "rim_hough_cap=1280" in text
 
 
 def test_lane_file_has_no_extra_lanes():

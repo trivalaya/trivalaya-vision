@@ -108,12 +108,18 @@ def hough_rim_recovery(image_bgr, seed_contour):
     # Perf cap: HoughCircles cost grows ~dim^4 x edge density. Run it on a
     # bounded-resolution copy of the ROI and scale the winner back — the
     # annulus band (max(5, 0.02r)) dwarfs the <=1/s px remap error.
-    try:
-        cap = int(os.environ.get(
-            "TRIVALAYA_RIM_HOUGH_CAP",
-            str(getattr(RimRecoveryConfig, "HOUGH_ROI_CAP", 1024))))
-    except ValueError:
-        cap = 1024
+    #
+    # Ticket #48 (2026-08-15): sourced from the resolved per-lane mask config
+    # (src/mask_config.py, src/mask_lanes.json), not `os.environ` — same
+    # migration as TRIVALAYA_RIM_NEIGHBOR_GUARD et al. (ticket #47). Local
+    # import mirrors math_utils._bg_corner_local_trust_enabled's existing
+    # pattern, so this module does not gain a hard import-time dependency on
+    # mask_config. The true absent-key value in production was 1280
+    # (RimRecoveryConfig.HOUGH_ROI_CAP), not the `1024` literal below — that
+    # literal only ever fired if the attribute itself were missing, which it
+    # is not; mask_lanes.json transcribes the real value, 1280.
+    from src import mask_config as _mask_config
+    cap = _mask_config.active_mask_config().rim_hough_cap
     roi_full = roi
     s = 1.0
     if cap > 0 and max(roi.shape) > cap:

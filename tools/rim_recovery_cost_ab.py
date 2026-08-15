@@ -83,18 +83,15 @@ LANES = {
 
 
 def _set_env(cfg: Dict[str, str]):
-    # TRIVALAYA_RIM_HOUGH_CAP is still an environment knob: it is NOT one of
-    # the five keys the mask-config ruling migrated (it is reported as an open
-    # finding in analysis/mask_config_migration/REPORT.md, deliberately not
-    # migrated without a ruling). RIM_RECOVERY_MAX_PER_IMAGE *is*, so it goes
-    # through the resolver as an explicit override instead.
-    os.environ.pop(ENV_CAP, None)
+    # Ticket #48 (2026-08-15): TRIVALAYA_RIM_HOUGH_CAP joined the mask-config
+    # ruling (it was reported as an open finding in
+    # analysis/mask_config_migration/REPORT.md and admitted here). Both knobs
+    # now go through the resolver as explicit overrides — an environment
+    # write would raise (src/mask_config.py's legacy-key guard).
+    overrides = {"rim_recovery_max_per_image": cfg.get(ENV_MAX_RECOVERY)}
     if ENV_CAP in cfg:
-        os.environ[ENV_CAP] = cfg[ENV_CAP]
-    mask_config.activate(
-        "tools",
-        rim_recovery_max_per_image=cfg.get(ENV_MAX_RECOVERY),
-    )
+        overrides["rim_hough_cap"] = int(cfg[ENV_CAP])
+    mask_config.activate("tools", **overrides)
 
 
 def _split_sides(path: Path, tmpdir: Path) -> Tuple[Path, Path]:

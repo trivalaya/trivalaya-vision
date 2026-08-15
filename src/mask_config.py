@@ -14,6 +14,14 @@ Full incident: `analysis/gpu_run7/c1_determinism/REPORT.md` in the pipeline
 repo. Ruling: `specs/mask_config_provenance_ruling.md` (architect, 2026-08-15)
 plus its five-knob brain amendment. Ticket #47.
 
+Two more knobs of the identical class (unset in every lane, not covered by
+the guard) were found and deliberately left unmigrated pending a ruling on
+scope; admitted here by ticket #48 (`rim_neighbor_overlap_max`,
+`rim_hough_cap`) — same file, same resolver, same guard, no code shape
+change beyond `VALUE_KEYS`/`LEGACY_ENV_KEYS` growing from five to seven.
+`mask_lanes.json`'s `schema_version` bumped 1→2 to mark the stamped field
+SET changing; no knob's VALUE changed for the original five.
+
 Committed config travels with `git archive`. That is the whole fix: a pod gets
 the parameters BY CONSTRUCTION rather than by discipline.
 
@@ -32,9 +40,9 @@ something.
 
 THE LEGACY-KEY GUARD
 ====================
-After this migration, the presence of any of the five retired environment keys
-is an ERROR — never a silent override (ruling 2 rider 2: "the old path dies, it
-does not linger").
+After this migration, the presence of any of the seven retired environment
+keys is an ERROR — never a silent override (ruling 2 rider 2: "the old path
+dies, it does not linger").
 
   ★ The check fires on PRESENCE, REGARDLESS OF VALUE — including a value
     identical to the lane config's.
@@ -71,6 +79,7 @@ __all__ = [
     "use_lane",
     "lane_names",
     "mask_lane_version",
+    "mask_config_schema_version",
 ]
 
 LANES_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mask_lanes.json")
@@ -84,17 +93,21 @@ LANES_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mask_lane
 #: said. `appv2` enforces this.
 LANE_SELECTOR_ENV = "TRIVALAYA_MASK_LANE"
 
-#: The five retired keys. Ordered as in the ruling's amendment table.
-#: Presence of ANY of these in `os.environ` is a hard error.
+#: The seven retired keys. Ordered as in the ruling's amendment table, then
+#: the two ticket #48 additions (same class: mask-behaviour knobs read from
+#: `os.environ`, unset in every lane before their admission). Presence of
+#: ANY of these in `os.environ` is a hard error.
 LEGACY_ENV_KEYS = (
     "TRIVALAYA_CLOSE_KERNEL_FRAC",
     "TRIVALAYA_RIM_NEIGHBOR_GUARD",
     "TRIVALAYA_BG_CORNER_LOCAL_TRUST",
     "TRIVALAYA_RIM_RECOVERY_MAX_PER_IMAGE",
     "TRIVALAYA_DISABLE_TWO_COIN_RESOLVER",
+    "TRIVALAYA_RIM_NEIGHBOR_OVERLAP_MAX",
+    "TRIVALAYA_RIM_HOUGH_CAP",
 )
 
-#: The five knobs, in stamp order. Kept in one place so the config file, the
+#: The seven knobs, in stamp order. Kept in one place so the config file, the
 #: resolver, the digest and the embedding-store stamp cannot drift apart.
 VALUE_KEYS = (
     "close_kernel_frac",
@@ -102,6 +115,8 @@ VALUE_KEYS = (
     "bg_corner_local_trust",
     "rim_recovery_max_per_image",
     "disable_two_coin_resolver",
+    "rim_neighbor_overlap_max",
+    "rim_hough_cap",
 )
 
 
@@ -162,12 +177,32 @@ def _coerce_recovery_max(v: Any) -> Optional[int]:
     return int(v)
 
 
+def _coerce_overlap_max(v: Any) -> float:
+    """Ticket #48. Old read: `float(os.environ.get(K, str(DEFAULT)))` — always
+    a concrete number, never a None/"off" state (unlike the recovery cap
+    above), so a plain `float()` reproduces it exactly."""
+    return float(v)
+
+
+def _coerce_hough_cap(v: Any) -> int:
+    """Ticket #48. Old read: `int(os.environ.get(K, str(getattr(...))))` with a
+    `ValueError` fallback to a literal — that fallback only guarded against an
+    unparsable STRING reaching `int()`, which cannot happen here: the legacy-
+    key guard now refuses the env path entirely, and every lane's config value
+    is a real JSON number. A plain `int()` reproduces the parsed-value
+    semantics; 0 is a legitimate value (uncapped / legacy full-res), not a
+    sentinel, so it is not special-cased."""
+    return int(v)
+
+
 _COERCERS = {
     "close_kernel_frac": _coerce_close_kernel_frac,
     "rim_neighbor_guard": _coerce_flag_1_or_true,
     "bg_corner_local_trust": _coerce_flag_1_or_true,
     "rim_recovery_max_per_image": _coerce_recovery_max,
     "disable_two_coin_resolver": _coerce_flag_exactly_1,
+    "rim_neighbor_overlap_max": _coerce_overlap_max,
+    "rim_hough_cap": _coerce_hough_cap,
 }
 
 
@@ -190,10 +225,20 @@ class MaskConfig:
     bg_corner_local_trust: bool
     rim_recovery_max_per_image: Optional[int]
     disable_two_coin_resolver: bool
+    # Ticket #48 (2026-08-15): same class as the five above, admitted later.
+    rim_neighbor_overlap_max: float
+    rim_hough_cap: int
+    # The stamped FIELD SET's version (mask_lanes.json "schema_version"),
+    # carried alongside mask_lane_version for the identical reason rider 1
+    # names for that field: a hash/version says two generations differ, not
+    # how, and here specifically it is what tells a reader whether two
+    # digests are even comparable (they are NOT across schema_version, since
+    # the digest hashes VALUE_KEYS and that set's size is what changed).
+    schema_version: int
 
     @property
     def values(self) -> Dict[str, Any]:
-        """The five knobs, and only those — the thing the store stamps.
+        """The seven knobs, and only those — the thing the store stamps.
 
         Deliberately excludes `lane` and `mask_lane_version`: the values are
         what determine the vectors, and two lanes that share them are
@@ -203,7 +248,7 @@ class MaskConfig:
 
     @property
     def digest(self) -> str:
-        """sha256 over the five VALUES (never the lane name).
+        """sha256 over the seven VALUES (never the lane name).
 
         Convenience for cheap equality checks only. Per ruling 2 rider 1 the
         digest does NOT replace the values in the stamp: a hash says two
@@ -213,6 +258,11 @@ class MaskConfig:
         Because the lane name is excluded, `ingest` and `gpu_embed` digest
         EQUAL — which is what makes ruling 1 ("the corpus embeds under the
         ingest arm") a checkable claim rather than an asserted one.
+
+        ★ This digest is NOT comparable across `schema_version`: it hashes
+        whatever `VALUE_KEYS` currently is, so admitting a knob (ticket #48)
+        changes every digest's value even where no VALUE changed. Compare
+        digests only when `schema_version` also matches.
         """
         payload = json.dumps(self.values, sort_keys=True, separators=(",", ":"))
         return hashlib.sha256(payload.encode("utf-8")).hexdigest()
@@ -224,7 +274,7 @@ class MaskConfig:
         """
         vals = " ".join(f"{k}={self.values[k]!r}" for k in VALUE_KEYS)
         return (f"lane={self.lane} version={self.mask_lane_version} "
-                f"digest={self.digest[:16]} {vals}")
+                f"schema={self.schema_version} digest={self.digest[:16]} {vals}")
 
 
 # ---------------------------------------------------------------------------
@@ -259,6 +309,14 @@ def lane_names() -> tuple:
 
 def mask_lane_version() -> str:
     return str(_load_lanes()["mask_lane_version"])
+
+
+def mask_config_schema_version() -> int:
+    """The stamped FIELD SET's version (ticket #48). Bumped when a knob is
+    admitted or retired, independent of `mask_lane_version` (bumped for a
+    code/value generation of the existing knobs). See `MaskConfig.digest`:
+    digests are comparable only within one schema_version."""
+    return int(_load_lanes()["schema_version"])
 
 
 # ---------------------------------------------------------------------------
@@ -342,7 +400,8 @@ def resolve_mask_config(lane: str, **overrides: Any) -> MaskConfig:
         raw = overrides[key] if key in overrides else entry.get(key)
         resolved[key] = _COERCERS[key](raw)
 
-    return MaskConfig(lane=lane, mask_lane_version=mask_lane_version(), **resolved)
+    return MaskConfig(lane=lane, mask_lane_version=mask_lane_version(),
+                      schema_version=mask_config_schema_version(), **resolved)
 
 
 # ---------------------------------------------------------------------------

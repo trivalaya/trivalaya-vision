@@ -110,17 +110,21 @@ def test_guard_off_by_default_is_bit_identical_to_today():
     assert _overlap_frac(cands, img.shape[:2]) > 0
 
 
-def test_guard_respects_configurable_threshold(monkeypatch, mask_lane):
+def test_guard_respects_configurable_threshold(mask_lane):
     """
     A threshold set ABOVE the fixture's actual overlap fraction must not
     revert anything -- the guard is a real threshold comparison, not an
     unconditional revert-on-any-recovery switch.
+
+    Ticket #48 (2026-08-15): TRIVALAYA_RIM_NEIGHBOR_OVERLAP_MAX joined the
+    retired keys, so the threshold is now set via the `mask_lane` fixture's
+    override form (same as rim_neighbor_guard itself already was), not
+    `monkeypatch.setenv` -- an env write here would raise.
     """
     img = _render_overlapping_pair(500, 60, 90, 30)
     cands_off, _ = segment(img)
     frac = _overlap_frac(cands_off, img.shape[:2])
 
-    mask_lane(rim_neighbor_guard="1")
-    monkeypatch.setenv(ENV_OVERLAP_MAX, str(frac + 0.10))
+    mask_lane(rim_neighbor_guard="1", rim_neighbor_overlap_max=frac + 0.10)
     cands, _ = segment(img)
     assert not any(c["debug_data"].get("rim_neighbor_reverted") for c in cands)

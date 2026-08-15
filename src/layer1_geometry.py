@@ -420,14 +420,21 @@ def _build_candidate(contour: np.ndarray, edge_support: float, recovered: bool) 
 # sliver found in the sample reverts; see specs/results/
 # rim_neighbor_guard_sweep_2026-07-23.md for the full distribution.
 # Inert unless TRIVALAYA_RIM_NEIGHBOR_GUARD is also on.
+#
+# Ticket #48 (2026-08-15): this value is transcribed unchanged into
+# src/mask_lanes.json's `rim_neighbor_overlap_max` for all four lanes (it was
+# unset in every lane before admission, so every lane keeps the value it was
+# already getting). The constant stays here as the historical record of the
+# 2026-07-23 measurement; the read below now goes through the resolved
+# config, not `os.environ`, so a stale env var can no longer silently
+# override it (src/mask_config.py's legacy-key guard refuses the env path
+# entirely).
 RIM_NEIGHBOR_OVERLAP_MAX_DEFAULT = 0.0001
 
 
 def _revert_neighbor_overlapping_recoveries(candidates: List[Dict],
                                              shape: Tuple[int, int]) -> List[Dict]:
-    threshold = float(_os.environ.get(
-        "TRIVALAYA_RIM_NEIGHBOR_OVERLAP_MAX", str(RIM_NEIGHBOR_OVERLAP_MAX_DEFAULT)
-    ))
+    threshold = float(_mask_config.active_mask_config().rim_neighbor_overlap_max)
 
     def _fill(contour: np.ndarray) -> np.ndarray:
         m = np.zeros(shape, dtype=np.uint8)

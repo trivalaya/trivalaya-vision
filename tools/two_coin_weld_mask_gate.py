@@ -117,9 +117,16 @@ def _set_arm(arm: str):
 
 # Scope B (specs/rim_recovery_neighbor_aware.md) -- optional neighbor-aware
 # rim-recovery guard, orthogonal to the control/auto kernel arm above.
-# Default (--neighbor-guard not passed) means both env vars stay unset for
-# every arm, i.e. this script's output is bit-identical to before this
-# option existed.
+# Default (--neighbor-guard not passed) means both knobs stay at the `tools`
+# lane's default for every arm, i.e. this script's output is bit-identical to
+# before this option existed.
+#
+# Ticket #48 (2026-08-15): TRIVALAYA_RIM_NEIGHBOR_OVERLAP_MAX joined the
+# retired keys (mask_config.LEGACY_ENV_KEYS) — its PRESENCE in os.environ is
+# now a hard error, same as TRIVALAYA_RIM_NEIGHBOR_GUARD already was. Both
+# names below are kept only as documentary labels for the CLI help text; the
+# actual state is composed as explicit `activate()` overrides, never written
+# to the environment.
 ENV_GUARD = "TRIVALAYA_RIM_NEIGHBOR_GUARD"
 ENV_OVERLAP_MAX = "TRIVALAYA_RIM_NEIGHBOR_OVERLAP_MAX"
 
@@ -136,14 +143,15 @@ def _guard_state():
 
 def _set_guard(enabled: bool, overlap_max: Optional[float]):
     _GUARD_STATE["rim_neighbor_guard"] = bool(enabled)
-    # TRIVALAYA_RIM_NEIGHBOR_OVERLAP_MAX is NOT one of the five ruled knobs and
-    # is still read from the environment (layer1_geometry.py). See
-    # analysis/mask_config_migration/REPORT.md — reported as an open finding,
-    # deliberately not migrated without a ruling.
+    # Ticket #48: an explicit override on the `tools` lane, not an
+    # environment write — same treatment as rim_neighbor_guard itself.
+    # Omitting the key (rather than passing the lane's own default) lets the
+    # lane config remain the single source of truth when this script is run
+    # with the guard on but no explicit --neighbor-overlap-max.
     if enabled and overlap_max is not None:
-        os.environ[ENV_OVERLAP_MAX] = str(overlap_max)
+        _GUARD_STATE["rim_neighbor_overlap_max"] = float(overlap_max)
     else:
-        os.environ.pop(ENV_OVERLAP_MAX, None)
+        _GUARD_STATE.pop("rim_neighbor_overlap_max", None)
 
 
 def _fill(contours: List[np.ndarray], shape: Tuple[int, int]) -> np.ndarray:

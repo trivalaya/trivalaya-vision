@@ -31,7 +31,21 @@
     "a reason to bypass."
   ],
 
-  "schema_version": 1,
+  "_schema_version": [
+    "Version of the STAMPED FIELD SET (which knobs exist), independent of",
+    "mask_lane_version (which tracks the CODE/VALUES). Bumped 1->2 ticket #48",
+    "(2026-08-15): rim_neighbor_overlap_max + rim_hough_cap admitted, growing",
+    "VALUE_KEYS from five to seven. No knob's VALUE changed for the original",
+    "five, so mask_lane_version did NOT bump for this change -- only the field",
+    "set did. Consequence: MaskConfig.digest (sha256 over VALUE_KEYS) differs",
+    "before/after even for byte-identical resolved behaviour, because the",
+    "payload it hashes now has two more keys. Digests are comparable ONLY",
+    "within one schema_version; a digest captured under schema_version 1 must",
+    "never be compared against one captured under schema_version 2, and this",
+    "field is what lets that mistake be caught by inspection instead of by",
+    "archaeology."
+  ],
+  "schema_version": 2,
 
   "_mask_lane_version": [
     "Code version of the mask lane — bumped when the mask CODE changes shape,",
@@ -46,7 +60,9 @@
     "rim_neighbor_guard": "true => _revert_neighbor_overlapping_recoveries() runs and reverts recovered rims that overlap a neighbour.",
     "bg_corner_local_trust": "true => math_utils M1 per-corner local consistency in the background estimator. Serving only (M1 leg 1, owner-signed 2026-07-28). Leg 2 (ingest) is PARKED by ruling 1, not waived.",
     "rim_recovery_max_per_image": "null => unlimited (today's behaviour): every need_recovery contour attempts rim recovery. An integer caps how many may, largest-area first.",
-    "disable_two_coin_resolver": "true => the two-coin resolver is not consulted even when it imported cleanly. Kill-switch."
+    "disable_two_coin_resolver": "true => the two-coin resolver is not consulted even when it imported cleanly. Kill-switch.",
+    "rim_neighbor_overlap_max": "ticket #48 (2026-08-15). Overlap threshold (as a fraction of the NEIGHBOUR's filled area) above which a recovered rim is reverted by _revert_neighbor_overlapping_recoveries -- inert unless rim_neighbor_guard is also true. 0.0001 is the code's own absent-key default (layer1_geometry.RIM_NEIGHBOR_OVERLAP_MAX_DEFAULT, measured 2026-07-23 against the frozen weld-lane samples, specs/results/rim_neighbor_guard_sweep_2026-07-23.md), transcribed here unchanged -- it was unset in every lane before this admission, so every lane gets the same value.",
+    "rim_hough_cap": "ticket #48 (2026-08-15). Longest-side cap (px) the rim-recovery HoughCircles ROI is downscaled to before running (perf only; the full-res edge-support gate is still the acceptance judge). 1280 is the code's own absent-key default (RimRecoveryConfig.HOUGH_ROI_CAP, config.py), transcribed here unchanged -- it was unset in every lane before this admission, so every lane gets the same value. 0 means uncapped (legacy full-res), but that is a VALUE change from today and is not used by any lane here."
   },
 
   "lanes": {
@@ -56,7 +72,9 @@
       "rim_neighbor_guard": true,
       "bg_corner_local_trust": true,
       "rim_recovery_max_per_image": null,
-      "disable_two_coin_resolver": false
+      "disable_two_coin_resolver": false,
+      "rim_neighbor_overlap_max": 0.0001,
+      "rim_hough_cap": 1280
     },
     "ingest": {
       "_who": "trivalaya_pipeline vision_adapter — trivalaya-runner.service and the nightly vision backlog cron. The arm the existing corpus was built under.",
@@ -64,7 +82,9 @@
       "rim_neighbor_guard": true,
       "bg_corner_local_trust": false,
       "rim_recovery_max_per_image": null,
-      "disable_two_coin_resolver": false
+      "disable_two_coin_resolver": false,
+      "rim_neighbor_overlap_max": 0.0001,
+      "rim_hough_cap": 1280
     },
     "gpu_embed": {
       "_who": "Run 7 corpus embed on rented GPU hardware. Value-identical to ingest by ruling 1 — the corpus embeds under the INGEST arm, explicitly stamped.",
@@ -72,7 +92,9 @@
       "rim_neighbor_guard": true,
       "bg_corner_local_trust": false,
       "rim_recovery_max_per_image": null,
-      "disable_two_coin_resolver": false
+      "disable_two_coin_resolver": false,
+      "rim_neighbor_overlap_max": 0.0001,
+      "rim_hough_cap": 1280
     },
     "tools": {
       "_who": "ad-hoc analysis, measurement scripts, A/B harnesses. Value-identical to ingest: that is what an analysis script sourcing .env has always got.",
@@ -80,7 +102,9 @@
       "rim_neighbor_guard": true,
       "bg_corner_local_trust": false,
       "rim_recovery_max_per_image": null,
-      "disable_two_coin_resolver": false
+      "disable_two_coin_resolver": false,
+      "rim_neighbor_overlap_max": 0.0001,
+      "rim_hough_cap": 1280
     }
   }
 }
