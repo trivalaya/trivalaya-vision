@@ -63,6 +63,7 @@ def main():
     sys.path.insert(1, PIPELINE_ROOT)
     import src.pipeline_manager as pm            # noqa: F401
     import src.math_utils as mu
+    from src import mask_config
     import visual_search.appv2 as appv2
     sys.path.insert(0, os.path.join(VISION_ROOT, "tools"))
     from rim_stall_taxonomy import _load_and_resize, split_sides
@@ -102,14 +103,8 @@ def main():
         return Image.open(BytesIO(out.getvalue())).convert("RGB")
 
     def masked_bgr(pil, gate_on):
-        if gate_on:
-            os.environ[GATE] = "1"
-        else:
-            os.environ.pop(GATE, None)
-        try:
+        with mask_config.use_lane("tools", bg_corner_local_trust=bool(gate_on)):
             out_img, meta = appv2._mask_query_image_meta(pil)
-        finally:
-            os.environ.pop(GATE, None)
         arr = np.array(out_img.convert("RGB"))
         return cv2.cvtColor(arr, cv2.COLOR_RGB2BGR), meta
 

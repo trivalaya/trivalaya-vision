@@ -86,6 +86,7 @@ os.environ.setdefault("MKL_NUM_THREADS", "1")
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from src import mask_config  # noqa: E402
 from src.layer1_geometry import (                                    # noqa: E402
     _segment_and_extract_candidates,
     layer_1_structural_salience,
@@ -107,10 +108,11 @@ IOU_BAR = 0.995        # what "~= 1.0" means for an unchanged-outcome lot
 # --------------------------------------------------------------------------
 
 def _set_arm(arm: str):
-    if arm == "control":
-        os.environ.pop(ENV_FRAC, None)
-    else:
-        os.environ[ENV_FRAC] = arm
+    # Arms are explicit overrides on the `tools` lane, not environment writes:
+    # the retired keys now raise on PRESENCE (src/mask_config.py).
+    # "control" == the pre-`auto` default, i.e. close_kernel_frac unset (7x7).
+    mask_config.activate("tools", close_kernel_frac=(None if arm == "control" else arm),
+                         **_guard_state())
 
 
 # Scope B (specs/rim_recovery_neighbor_aware.md) -- optional neighbor-aware
@@ -122,13 +124,23 @@ ENV_GUARD = "TRIVALAYA_RIM_NEIGHBOR_GUARD"
 ENV_OVERLAP_MAX = "TRIVALAYA_RIM_NEIGHBOR_OVERLAP_MAX"
 
 
+# Scope B state, held here rather than in the environment so _set_arm can
+# re-apply it: activate() replaces the whole resolved config, so the two arms
+# have to be composed rather than layered.
+_GUARD_STATE = {"rim_neighbor_guard": False}
+
+
+def _guard_state():
+    return dict(_GUARD_STATE)
+
+
 def _set_guard(enabled: bool, overlap_max: Optional[float]):
-    if not enabled:
-        os.environ.pop(ENV_GUARD, None)
-        os.environ.pop(ENV_OVERLAP_MAX, None)
-        return
-    os.environ[ENV_GUARD] = "1"
-    if overlap_max is not None:
+    _GUARD_STATE["rim_neighbor_guard"] = bool(enabled)
+    # TRIVALAYA_RIM_NEIGHBOR_OVERLAP_MAX is NOT one of the five ruled knobs and
+    # is still read from the environment (layer1_geometry.py). See
+    # analysis/mask_config_migration/REPORT.md — reported as an open finding,
+    # deliberately not migrated without a ruling.
+    if enabled and overlap_max is not None:
         os.environ[ENV_OVERLAP_MAX] = str(overlap_max)
     else:
         os.environ.pop(ENV_OVERLAP_MAX, None)

@@ -69,14 +69,14 @@ def _golden_pre_m1(gray_image):
 # --------------------------------------------------------------------------
 
 @pytest.fixture(autouse=True)
-def _clean_gate_env(monkeypatch):
+def _clean_gate_env(mask_lane):
     """No test may inherit an operator's override of the M1 gate."""
-    monkeypatch.delenv(BG_CORNER_LOCAL_TRUST_ENV, raising=False)
+    mask_lane(bg_corner_local_trust=False)
 
 
 @pytest.fixture
-def gate_on(monkeypatch):
-    monkeypatch.setenv(BG_CORNER_LOCAL_TRUST_ENV, "1")
+def gate_on(mask_lane):
+    mask_lane(bg_corner_local_trust="1")
 
 
 def _corner_patches(gray, margin=5):
@@ -129,7 +129,7 @@ class TestBar2BitIdentity:
     """Where pooled corner-trust fires today, M1 must change nothing."""
 
     @pytest.mark.parametrize("level", [0, 12, 40, 90, 127, 128, 180, 240, 255])
-    def test_flat_backgrounds_identical_gate_on(self, level, monkeypatch):
+    def test_flat_backgrounds_identical_gate_on(self, level, monkeypatch, mask_lane):
         img = with_coin(flat_bg(level))
         # Precondition: this image really is on the pooled path.
         pooled_std = float(np.std(np.concatenate(
@@ -137,12 +137,12 @@ class TestBar2BitIdentity:
         assert pooled_std < 15, "fixture must exercise the pooled path"
 
         off = detect_background_histogram(img)
-        monkeypatch.setenv(BG_CORNER_LOCAL_TRUST_ENV, "1")
+        mask_lane(bg_corner_local_trust="1")
         on = detect_background_histogram(img)
 
         assert on == off == _golden_pre_m1(img)
 
-    def test_randomized_battery_pooled_path_is_untouched(self, monkeypatch):
+    def test_randomized_battery_pooled_path_is_untouched(self, monkeypatch, mask_lane):
         """Seeded sweep: wherever pooled std < 15, ON == OFF == golden.
 
         Asserted over the whole battery rather than a hand-picked case, so a
@@ -165,9 +165,9 @@ class TestBar2BitIdentity:
                 [p.flatten() for p in _corner_patches(img)])))
             golden = _golden_pre_m1(img)
 
-            monkeypatch.delenv(BG_CORNER_LOCAL_TRUST_ENV, raising=False)
+            mask_lane(bg_corner_local_trust=False)
             off = detect_background_histogram(img)
-            monkeypatch.setenv(BG_CORNER_LOCAL_TRUST_ENV, "1")
+            mask_lane(bg_corner_local_trust="1")
             on = detect_background_histogram(img)
 
             assert off == golden, "gate OFF must equal pre-M1 behavior"
@@ -195,14 +195,14 @@ class TestDefaultOff:
         assert detect_background_histogram(img) == _golden_pre_m1(img)
 
     @pytest.mark.parametrize("value", ["", "0", "no", "off", "false", "2", "yes"])
-    def test_unrecognized_values_do_not_enable(self, monkeypatch, value):
-        monkeypatch.setenv(BG_CORNER_LOCAL_TRUST_ENV, value)
+    def test_unrecognized_values_do_not_enable(self, monkeypatch, value, mask_lane):
+        mask_lane(bg_corner_local_trust=value)
         img = with_coin(ramp_bg(96.0, 99.4, 54.6, 53.4))
         assert detect_background_histogram(img) == _golden_pre_m1(img)
 
     @pytest.mark.parametrize("value", ["1", "true", "TRUE", "  True  "])
-    def test_recognized_values_enable(self, monkeypatch, value):
-        monkeypatch.setenv(BG_CORNER_LOCAL_TRUST_ENV, value)
+    def test_recognized_values_enable(self, monkeypatch, value, mask_lane):
+        mask_lane(bg_corner_local_trust=value)
         img = with_coin(ramp_bg(96.0, 99.4, 54.6, 53.4))
         assert detect_background_histogram(img) != _golden_pre_m1(img)
 
@@ -266,16 +266,16 @@ class TestM1Fires:
 class TestM1DeclinesWhenACornerIsGenuinelyNoisy:
     """M1 widens the corner test; it must not abolish it."""
 
-    def test_noisy_corner_falls_through(self, gate_on, monkeypatch):
+    def test_noisy_corner_falls_through(self, gate_on, monkeypatch, mask_lane):
         img = with_coin(ramp_bg(96.0, 99.4, 54.6, 53.4))
         # Wreck one corner -- a sticker, a caption, an intruding coin edge.
         rng = np.random.default_rng(7)
         img[0:5, 0:5] = rng.integers(0, 256, size=(5, 5), dtype=np.uint8)
         assert float(np.std(img[0:5, 0:5])) >= CORNER_LOCAL_STD_MAX
 
-        monkeypatch.delenv(BG_CORNER_LOCAL_TRUST_ENV, raising=False)
+        mask_lane(bg_corner_local_trust=False)
         off = detect_background_histogram(img)
-        monkeypatch.setenv(BG_CORNER_LOCAL_TRUST_ENV, "1")
+        mask_lane(bg_corner_local_trust="1")
         on = detect_background_histogram(img)
 
         assert on == off == _golden_pre_m1(img)

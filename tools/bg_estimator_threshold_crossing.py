@@ -51,6 +51,7 @@ def main():
     sys.path.insert(0, os.path.join(VISION_ROOT, "tools"))
     from rim_stall_taxonomy import _load_and_resize, split_sides, backdrop_ring_mean
     import src.math_utils as mu
+    from src import mask_config
 
     scan = json.load(open(a.scan))
     by_img = {}
@@ -69,11 +70,10 @@ def main():
             parts = split_sides(img)
         for side in sides:
             gray = cv2.cvtColor(parts[side], cv2.COLOR_BGR2GRAY)
-            os.environ.pop(mu.BG_CORNER_LOCAL_TRUST_ENV, None)
-            off_v, off_t = mu.detect_background_histogram(gray)
-            os.environ[mu.BG_CORNER_LOCAL_TRUST_ENV] = "1"
-            on_v, on_t = mu.detect_background_histogram(gray)
-            os.environ.pop(mu.BG_CORNER_LOCAL_TRUST_ENV, None)
+            with mask_config.use_lane("tools", bg_corner_local_trust=False):
+                off_v, off_t = mu.detect_background_histogram(gray)
+            with mask_config.use_lane("tools", bg_corner_local_trust=True):
+                on_v, on_t = mu.detect_background_histogram(gray)
             truth = backdrop_ring_mean(gray)
             off_pol = off_v > BRIGHT_BACKGROUND_THRESHOLD
             on_pol = on_v > BRIGHT_BACKGROUND_THRESHOLD

@@ -19,14 +19,27 @@ from src.math_utils import (
 from src.rim_logic import recover_rim
 from src.crop_quality import get_detection_quality_flag
 
-# Import two-coin resolver (graceful fallback if not available)
-# Kill-switch: set TRIVALAYA_DISABLE_TWO_COIN_RESOLVER=1 to force off
+# Import two-coin resolver (graceful fallback if not available).
+#
+# ★ TWO FACTS, DELIBERATELY SEPARATED (mask-config migration, ticket #47).
+# This used to be one flag combining "did the module import" with "is the
+# kill-switch set", and it was evaluated at MODULE IMPORT — so the answer
+# depended on WHEN this module happened to be first imported, and a caller
+# could not change it afterwards at all. That is exec-frozen configuration:
+# the same shape of provenance bug the mask-config migration exists to close,
+# and it is the reason the kill-switch could never have been honestly stamped
+# ("the value that was set" and "the value that ran" could differ).
+#
+#   _TWO_COIN_RESOLVER_IMPORTED  — genuinely an import-time fact, stays here.
+#   cfg.disable_two_coin_resolver — a lane parameter, read at CALL time from
+#                                   the resolved mask config (see below).
 import os as _os
+from src import mask_config as _mask_config
 try:
     from src.two_coin_resolver import TwoCoinResolver, CoinPairConfig, SourceType
-    TWO_COIN_RESOLVER_AVAILABLE = _os.environ.get("TRIVALAYA_DISABLE_TWO_COIN_RESOLVER") != "1"
+    _TWO_COIN_RESOLVER_IMPORTED = True
 except ImportError:
-    TWO_COIN_RESOLVER_AVAILABLE = False
+    _TWO_COIN_RESOLVER_IMPORTED = False
     SourceType = Literal["auction", "unknown"]
 
 
@@ -224,7 +237,12 @@ def _segment_and_extract_candidates(
     # houses bit-identical to today, so the blast radius of enabling is
     # exactly the three measured houses.  Houses join one A/B at a time.
     # See specs/two_coin_weld_morph_close.md SS6.7.
-    _frac_env = _os.environ.get("TRIVALAYA_CLOSE_KERNEL_FRAC")
+    #
+    # Source of the value: the resolved per-lane mask config (src/mask_config.py,
+    # src/mask_lanes.json), NOT the environment. Same three branches, same
+    # semantics — None here is what an absent TRIVALAYA_CLOSE_KERNEL_FRAC was.
+    _cfg = _mask_config.active_mask_config()
+    _frac_env = _cfg.close_kernel_frac
     if not _frac_env:
         k = 7
     elif _frac_env.strip().lower() == "auto":
@@ -290,15 +308,19 @@ def _segment_and_extract_candidates(
     # rim recovery at all. Unset (default) = unlimited = today's behavior,
     # bit-identical: every need_recovery contour attempts recovery, exactly
     # as before this restructuring. Runtime override:
-    # TRIVALAYA_RIM_RECOVERY_MAX_PER_IMAGE. A cluttered image can otherwise
+    # the `rim_recovery_max_per_image` lane parameter. A cluttered image can otherwise
     # stack 2-5+ HoughCircles calls -- the mechanism the KS-17 diagnosis
     # measured (specs/results/ks17_mask_stall_diagnosis_2026-07-22.md).
     # This function is only ever called twice per image, and the second
     # call is a polarity-flip fallback that fires solely when the first
     # call yielded zero candidates (see layer_1_structural_salience) -- so
     # "per call" and "per image" never double up in practice.
-    _max_recovery = _os.environ.get("TRIVALAYA_RIM_RECOVERY_MAX_PER_IMAGE")
-    if _max_recovery:
+    # None == unlimited == today's behaviour. Note `is not None` rather than a
+    # falsiness test: an explicit cap of 0 means "cap at zero", which the old
+    # string-truthiness read also did, and which `if _cap:` would silently turn
+    # back into "unlimited".
+    _max_recovery = _cfg.rim_recovery_max_per_image
+    if _max_recovery is not None:
         _cap = int(_max_recovery)
         _qualifying = sorted(
             (p for p in pending if p["need_recovery"]),
@@ -342,7 +364,7 @@ def _segment_and_extract_candidates(
     # i.e. before any revert, so the decision is order-independent -- and
     # falls back to the pre-recovery seed contour if the overlap (as a
     # fraction of the NEIGHBOUR's area) exceeds a threshold.
-    if _os.environ.get("TRIVALAYA_RIM_NEIGHBOR_GUARD", "").strip().lower() in ("1", "true"):
+    if _cfg.rim_neighbor_guard:
         candidates = _revert_neighbor_overlapping_recoveries(candidates, (h, w))
 
     for cand in candidates:
@@ -668,7 +690,11 @@ def layer_1_structural_salience(image_or_path, sensitivity: str = "standard",
     # 3. Wide aspect ratio (suggests side-by-side coins)
     # 4. Large area (not a fragment)
     
-    if TWO_COIN_RESOLVER_AVAILABLE and len(candidates) == 1:
+    # Import fact AND lane parameter, evaluated separately — the kill-switch is
+    # now read at CALL time, so it is the value that actually ran.
+    _two_coin_enabled = (_TWO_COIN_RESOLVER_IMPORTED
+                         and not _mask_config.active_mask_config().disable_two_coin_resolver)
+    if _two_coin_enabled and len(candidates) == 1:
         two_coin_result = _try_two_coin_resolution(
             img, binary, gray_enhanced, candidates[0], (h, w), edge_zone,
             source_type=source_type,

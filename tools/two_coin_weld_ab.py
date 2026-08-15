@@ -63,6 +63,7 @@ os.environ.setdefault("MKL_NUM_THREADS", "1")
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from src import mask_config  # noqa: E402
 from src.config import Layer1Config                                  # noqa: E402
 from src.layer1_geometry import (                                    # noqa: E402
     _close_kernel_size,
@@ -167,10 +168,10 @@ def _diagnostics(img: np.ndarray) -> Dict:
 # --------------------------------------------------------------------------
 
 def _set_arm(arm: str):
-    if arm == "control":
-        os.environ.pop(ENV_FRAC, None)
-    else:
-        os.environ[ENV_FRAC] = arm
+    # Explicit override on the `tools` lane; the retired key now raises on
+    # PRESENCE (src/mask_config.py). "control" == close_kernel_frac unset.
+    mask_config.activate("tools",
+                         close_kernel_frac=(None if arm == "control" else arm))
 
 
 def _kernel_for(arm: str, h: int, w: int, house: Optional[str]) -> int:

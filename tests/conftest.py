@@ -9,11 +9,35 @@ import cv2
 import numpy as np
 import pytest
 
+from src import mask_config
 from src.config import Layer1Config
 from src.layer1_geometry import _segment_and_extract_candidates
 from src.math_utils import detect_background_histogram
 
 ENV_FRAC = "TRIVALAYA_CLOSE_KERNEL_FRAC"
+
+# ---------------------------------------------------------------------------
+# The suite's mask arm, DECLARED rather than inherited.
+#
+# Before the mask-config migration these tests ran with every knob absent from
+# the environment, so the arm they measured was "all code defaults" — fixed 7x7
+# kernel, neighbour guard off, M1 off, no recovery cap, two-coin resolver on.
+# That is not any production lane; it is what an unset environment happens to
+# produce, and it is precisely the shape of accident the migration exists to
+# close (analysis/gpu_run7/c1_determinism/REPORT.md, pipeline repo).
+#
+# So it is written down instead. TEST_BASE reproduces the pre-migration arm
+# EXACTLY — the suite must not change behaviour as a side effect of a
+# provenance change — and any test that wants a different knob asks for it
+# explicitly through the `mask_lane` fixture.
+# ---------------------------------------------------------------------------
+TEST_BASE = dict(
+    close_kernel_frac=None,          # fixed 7x7
+    rim_neighbor_guard=False,
+    bg_corner_local_trust=False,     # M1 off
+    rim_recovery_max_per_image=None,  # unlimited
+    disable_two_coin_resolver=False,
+)
 
 BG_LEVEL = 40   # flat dark background -> THRESH_BINARY polarity
 FG_LEVEL = 210  # coin fill
@@ -145,5 +169,41 @@ def close_kernels(monkeypatch):
 
 @pytest.fixture(autouse=True)
 def _clean_env(monkeypatch):
-    """No test may inherit the operator's env override."""
-    monkeypatch.delenv(ENV_FRAC, raising=False)
+    """No test may inherit the operator's environment, and every test runs
+    under a declared mask arm.
+
+    The retired keys are deleted rather than tolerated: after the migration
+    their mere presence raises (`src/mask_config.py`), so a developer with one
+    exported in their shell would otherwise see the whole suite error out with
+    a message about provenance instead of running.
+    """
+    for key in mask_config.LEGACY_ENV_KEYS:
+        monkeypatch.delenv(key, raising=False)
+    monkeypatch.delenv(mask_config.LANE_SELECTOR_ENV, raising=False)
+    with mask_config.use_lane("tools", **TEST_BASE):
+        yield
+
+
+@pytest.fixture
+def mask_lane():
+    """Set mask-lane knobs for one test, WITHOUT touching os.environ.
+
+    The sanctioned replacement for `monkeypatch.setenv(TRIVALAYA_*, ...)`.
+    Layers on TEST_BASE, so a test changes exactly the knob it names and
+    inherits the declared arm for the rest.
+
+        def test_something(mask_lane):
+            mask_lane(close_kernel_frac="0.5")
+            ...
+    """
+    opened = []
+
+    def _set(**overrides):
+        cm = mask_config.use_lane("tools", **{**TEST_BASE, **overrides})
+        cfg = cm.__enter__()
+        opened.append(cm)
+        return cfg
+
+    yield _set
+    for cm in reversed(opened):
+        cm.__exit__(None, None, None)

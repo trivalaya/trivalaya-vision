@@ -102,13 +102,13 @@ def test_orientation_symmetry():
         assert _close_kernel_size(a, b) == _close_kernel_size(b, a)
 
 
-def test_helper_ignores_env(monkeypatch):
+def test_helper_ignores_env(mask_lane):
     """
     The helper is a pure function of its arguments -- the env gate lives at the
     call site.  If the helper ever starts reading env, the tests above stop
     testing what they claim to.
     """
-    monkeypatch.setenv(ENV_FRAC, "0.5")
+    mask_lane(close_kernel_frac="0.5")
     assert _close_kernel_size(100, 500) == 3
 
 
@@ -138,18 +138,18 @@ def test_default_env_unset_is_literally_seven_by_seven(width, close_kernels):
 
 @pytest.mark.parametrize("width,expected", WIDTH_TABLE)
 def test_env_set_enables_scale_relative_path(width, expected, close_kernels,
-                                             monkeypatch):
+                                             mask_lane):
     """The other half of the gate: setting the var routes through the helper."""
-    monkeypatch.setenv(ENV_FRAC, str(1 / 400))
+    mask_lane(close_kernel_frac=str(1 / 400))
     segment(render_pair(width, gap=8))
     assert set(close_kernels) == {(expected, expected)}, close_kernels
 
 
-def test_env_value_overrides_config_frac(close_kernels, monkeypatch):
+def test_env_value_overrides_config_frac(close_kernels, mask_lane):
     """
     The env value overrides CLOSE_KERNEL_FRAC, so the SS4.2 sweep can A/B
     without a deploy.
     """
-    monkeypatch.setenv(ENV_FRAC, str(1 / 100))
+    mask_lane(close_kernel_frac=str(1 / 100))
     segment(render_pair(500, gap=8))
     assert set(close_kernels) == {(5, 5)}, close_kernels

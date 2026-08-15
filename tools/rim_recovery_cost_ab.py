@@ -62,6 +62,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from src import mask_config  # noqa: E402
 from src.pipeline_manager import analyze_image  # noqa: E402
 
 ENV_CAP = "TRIVALAYA_RIM_HOUGH_CAP"
@@ -82,10 +83,18 @@ LANES = {
 
 
 def _set_env(cfg: Dict[str, str]):
-    for k in (ENV_CAP, ENV_MAX_RECOVERY):
-        os.environ.pop(k, None)
-    for k, v in cfg.items():
-        os.environ[k] = v
+    # TRIVALAYA_RIM_HOUGH_CAP is still an environment knob: it is NOT one of
+    # the five keys the mask-config ruling migrated (it is reported as an open
+    # finding in analysis/mask_config_migration/REPORT.md, deliberately not
+    # migrated without a ruling). RIM_RECOVERY_MAX_PER_IMAGE *is*, so it goes
+    # through the resolver as an explicit override instead.
+    os.environ.pop(ENV_CAP, None)
+    if ENV_CAP in cfg:
+        os.environ[ENV_CAP] = cfg[ENV_CAP]
+    mask_config.activate(
+        "tools",
+        rim_recovery_max_per_image=cfg.get(ENV_MAX_RECOVERY),
+    )
 
 
 def _split_sides(path: Path, tmpdir: Path) -> Tuple[Path, Path]:

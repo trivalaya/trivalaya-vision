@@ -50,9 +50,9 @@ def test_cap_unset_recovers_both_today():
     assert all(c["debug_data"]["rim_recovered"] for c in cands)
 
 
-def test_cap_one_recovers_only_the_larger_qualifying_contour(monkeypatch):
+def test_cap_one_recovers_only_the_larger_qualifying_contour(mask_lane):
     img = _render_two_independent_bitten()
-    monkeypatch.setenv(ENV_CAP, "1")
+    mask_lane(rim_recovery_max_per_image="1")
     cands, _ = segment(img)
     assert len(cands) == 2, "the cap must skip recovery, not drop a candidate"
     a, b = _by_x(cands)
@@ -61,20 +61,20 @@ def test_cap_one_recovers_only_the_larger_qualifying_contour(monkeypatch):
 
 
 @pytest.mark.parametrize("cap", ["2", "5"])
-def test_cap_at_or_above_qualifying_count_is_a_no_op(cap, monkeypatch):
+def test_cap_at_or_above_qualifying_count_is_a_no_op(cap, mask_lane):
     """A cap >= the number of qualifying contours must match the unset (today) behavior."""
     img = _render_two_independent_bitten()
     baseline, _ = segment(img)
-    monkeypatch.setenv(ENV_CAP, cap)
+    mask_lane(rim_recovery_max_per_image=cap)
     capped, _ = segment(img)
     assert [c["debug_data"]["rim_recovered"] for c in _by_x(capped)] == \
            [c["debug_data"]["rim_recovered"] for c in _by_x(baseline)]
 
 
-def test_cap_zero_recovers_neither(monkeypatch):
+def test_cap_zero_recovers_neither(mask_lane):
     """cap=0 is the most restrictive setting -- nobody attempts recovery, distinct from unset."""
     img = _render_two_independent_bitten()
-    monkeypatch.setenv(ENV_CAP, "0")
+    mask_lane(rim_recovery_max_per_image="0")
     cands, _ = segment(img)
     assert len(cands) == 2
     assert not any(c["debug_data"]["rim_recovered"] for c in cands)

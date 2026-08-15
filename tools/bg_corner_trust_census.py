@@ -93,12 +93,14 @@ def classify(gray, mu):
     pooled_std = float(np.std(pooled))
     local_stds = [float(np.std(p)) for p in patches]
 
+    # The lock still matters: the resolved config is process-wide (see
+    # src/mask_config.py on why it is not thread-local), so two workers
+    # flipping arms concurrently would read each other's.
     with _GATE_LOCK:
-        os.environ.pop(mu.BG_CORNER_LOCAL_TRUST_ENV, None)
-        off_v, _ = mu.detect_background_histogram(gray)
-        os.environ[mu.BG_CORNER_LOCAL_TRUST_ENV] = "1"
-        on_v, _ = mu.detect_background_histogram(gray)
-        os.environ.pop(mu.BG_CORNER_LOCAL_TRUST_ENV, None)
+        with mask_config.use_lane("tools", bg_corner_local_trust=False):
+            off_v, _ = mu.detect_background_histogram(gray)
+        with mask_config.use_lane("tools", bg_corner_local_trust=True):
+            on_v, _ = mu.detect_background_histogram(gray)
 
     if pooled_std < POOLED_STD_MAX:
         bucket = "pooled_fires"
@@ -133,6 +135,7 @@ def main():
     sys.path.insert(0, VISION_ROOT)
     sys.path.insert(1, PIPELINE_ROOT)
     import src.math_utils as mu  # noqa: E402
+    from src import mask_config
     assert os.path.realpath(mu.__file__).startswith(
         os.path.realpath(VISION_ROOT) + os.sep), mu.__file__
     from trivalaya_pipeline.storage import create_reader  # noqa: E402

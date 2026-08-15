@@ -91,10 +91,10 @@ def test_naive_recovery_overlaps_the_neighbor(overlap_px, erase_half_width):
 
 
 @pytest.mark.parametrize("overlap_px,erase_half_width", OVERLAPPING_PAIRS)
-def test_neighbor_guard_reverts_the_overlap_to_zero(overlap_px, erase_half_width, monkeypatch):
+def test_neighbor_guard_reverts_the_overlap_to_zero(overlap_px, erase_half_width, mask_lane):
     """The fix, stated as one assertion: guard ON drives the same overlap to exactly zero."""
     img = _render_overlapping_pair(500, 60, overlap_px, erase_half_width)
-    monkeypatch.setenv(ENV_GUARD, "1")
+    mask_lane(rim_neighbor_guard="1")
     cands, _ = segment(img)
     assert len(cands) == 2, "the guard must revert a candidate, not drop it"
     assert _overlap_frac(cands, img.shape[:2]) == 0.0
@@ -110,7 +110,7 @@ def test_guard_off_by_default_is_bit_identical_to_today():
     assert _overlap_frac(cands, img.shape[:2]) > 0
 
 
-def test_guard_respects_configurable_threshold(monkeypatch):
+def test_guard_respects_configurable_threshold(monkeypatch, mask_lane):
     """
     A threshold set ABOVE the fixture's actual overlap fraction must not
     revert anything -- the guard is a real threshold comparison, not an
@@ -120,7 +120,7 @@ def test_guard_respects_configurable_threshold(monkeypatch):
     cands_off, _ = segment(img)
     frac = _overlap_frac(cands_off, img.shape[:2])
 
-    monkeypatch.setenv(ENV_GUARD, "1")
+    mask_lane(rim_neighbor_guard="1")
     monkeypatch.setenv(ENV_OVERLAP_MAX, str(frac + 0.10))
     cands, _ = segment(img)
     assert not any(c["debug_data"].get("rim_neighbor_reverted") for c in cands)

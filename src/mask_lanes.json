@@ -1,0 +1,86 @@
+{
+  "_README": [
+    "COMMITTED per-lane mask configuration. This file is the answer to",
+    "'which mask parameters produced this vector' — a file you read, not",
+    "archaeology across .env, systemd drop-ins, and code defaults.",
+    "",
+    "Why it exists: analysis/gpu_run7/c1_determinism/REPORT.md (pipeline repo).",
+    "The knobs used to live in the pipeline repo's .env; .env is gitignored, so",
+    "'git archive HEAD' correctly does not ship it, and a rented GPU pod ran L1",
+    "with different parameters and produced different vectors from identical",
+    "bytes — silently (masked:true, no fallback, no no-op). Committed config",
+    "travels with git archive, so a pod gets these BY CONSTRUCTION rather than",
+    "by discipline.",
+    "",
+    "Governing: specs/mask_config_provenance_ruling.md (pipeline repo),",
+    "architect 2026-08-15, plus its five-knob brain amendment. THE VALUES BELOW",
+    "ARE THE RULING, TRANSCRIBED. Do not re-derive them and do not tune them",
+    "here: a value change is a mask-lane generation bump and needs its own",
+    "ruling, its own bars, and a mask_lane_version bump.",
+    "",
+    "JSON and not YAML on purpose: neither trivalaya-vision venv has PyYAML, and",
+    "the repo that owns the knobs must be able to read its own config.",
+    "",
+    "gpu_embed is value-identical to ingest by ruling 1. It is written as its",
+    "own entry anyway, so the corpus arm is a line someone can read rather than",
+    "an equivalence they must infer. (Their digests are equal by construction —",
+    "the digest covers values only, not the lane name — which is what makes",
+    "'the corpus embedded under the ingest arm' checkable rather than asserted.)",
+    "",
+    "tools exists so ad-hoc and analysis scripts have a lane to NAME instead of",
+    "a reason to bypass."
+  ],
+
+  "schema_version": 1,
+
+  "_mask_lane_version": [
+    "Code version of the mask lane — bumped when the mask CODE changes shape,",
+    "independently of these values. Carried alongside the resolved values in",
+    "the embedding-store stamp; it is not a substitute for them (ruling 2",
+    "rider 1: a version/hash says two generations differ, not how)."
+  ],
+  "mask_lane_version": "2026-08-15.1",
+
+  "_keys": {
+    "close_kernel_frac": "null => today's fixed 7x7 CLOSE kernel. 'auto' => membership-gated per-house table (layer1_geometry._close_kernel_size). A numeric string forces that fraction for every house (the SS4.2 sweep knob).",
+    "rim_neighbor_guard": "true => _revert_neighbor_overlapping_recoveries() runs and reverts recovered rims that overlap a neighbour.",
+    "bg_corner_local_trust": "true => math_utils M1 per-corner local consistency in the background estimator. Serving only (M1 leg 1, owner-signed 2026-07-28). Leg 2 (ingest) is PARKED by ruling 1, not waived.",
+    "rim_recovery_max_per_image": "null => unlimited (today's behaviour): every need_recovery contour attempts rim recovery. An integer caps how many may, largest-area first.",
+    "disable_two_coin_resolver": "true => the two-coin resolver is not consulted even when it imported cleanly. Kill-switch."
+  },
+
+  "lanes": {
+    "serving": {
+      "_who": "visual_search/appv2.py — the trivalaya-search FastAPI service (POST /identify, /compare-images).",
+      "close_kernel_frac": "auto",
+      "rim_neighbor_guard": true,
+      "bg_corner_local_trust": true,
+      "rim_recovery_max_per_image": null,
+      "disable_two_coin_resolver": false
+    },
+    "ingest": {
+      "_who": "trivalaya_pipeline vision_adapter — trivalaya-runner.service and the nightly vision backlog cron. The arm the existing corpus was built under.",
+      "close_kernel_frac": "auto",
+      "rim_neighbor_guard": true,
+      "bg_corner_local_trust": false,
+      "rim_recovery_max_per_image": null,
+      "disable_two_coin_resolver": false
+    },
+    "gpu_embed": {
+      "_who": "Run 7 corpus embed on rented GPU hardware. Value-identical to ingest by ruling 1 — the corpus embeds under the INGEST arm, explicitly stamped.",
+      "close_kernel_frac": "auto",
+      "rim_neighbor_guard": true,
+      "bg_corner_local_trust": false,
+      "rim_recovery_max_per_image": null,
+      "disable_two_coin_resolver": false
+    },
+    "tools": {
+      "_who": "ad-hoc analysis, measurement scripts, A/B harnesses. Value-identical to ingest: that is what an analysis script sourcing .env has always got.",
+      "close_kernel_frac": "auto",
+      "rim_neighbor_guard": true,
+      "bg_corner_local_trust": false,
+      "rim_recovery_max_per_image": null,
+      "disable_two_coin_resolver": false
+    }
+  }
+}

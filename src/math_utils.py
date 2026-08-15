@@ -183,7 +183,18 @@ CORNER_LOCAL_STD_MAX = 15.0
 
 
 def _bg_corner_local_trust_enabled() -> bool:
-    return os.environ.get(BG_CORNER_LOCAL_TRUST_ENV, "").strip().lower() in ("1", "true")
+    """Read from the resolved per-lane mask config, not the environment.
+
+    This knob used to be set ONLY by the trivalaya-search systemd drop-in
+    (M1 leg 1, owner-signed 2026-07-28), which meant "which arm is serving on"
+    was a fact stored in /etc rather than in the repo — and which meant a
+    `git archive` deploy could not carry it at all. It is now the `serving`
+    lane's entry in src/mask_lanes.json. Leg 2 (turning it on for ingest) is
+    PARKED by ruling, not waived: changing a lane's value here is a mask-lane
+    generation bump with its own ruling and its own bars.
+    """
+    from src import mask_config
+    return bool(mask_config.active_mask_config().bg_corner_local_trust)
 
 
 def detect_background_histogram(gray_image: np.ndarray) -> Tuple[float, str]:

@@ -187,9 +187,8 @@ def test_typoed_key_would_otherwise_be_silent(house_table):
 
 # --- Call-site plumbing -----------------------------------------------------
 
-def test_house_reaches_the_kernel_through_segmentation(close_kernels, monkeypatch,
-                                                       house_table):
-    monkeypatch.setenv(ENV_FRAC, "auto")
+def test_house_reaches_the_kernel_through_segmentation(close_kernels, house_table, mask_lane):
+    mask_lane(close_kernel_frac="auto")
     house_table({"cng_feature": {"frac": 1 / 100}})
 
     segment(render_pair(500, gap=8))                      # no house
@@ -205,10 +204,9 @@ def test_house_reaches_the_kernel_through_segmentation(close_kernels, monkeypatc
     assert set(close_kernels) == {(5, 5)}
 
 
-def test_house_reaches_the_kernel_through_analyze_image(close_kernels, monkeypatch,
-                                                        house_table, tmp_path):
+def test_house_reaches_the_kernel_through_analyze_image(close_kernels, house_table, tmp_path, mask_lane):
     """End-to-end through the public entry point callers actually use."""
-    monkeypatch.setenv(ENV_FRAC, "auto")
+    mask_lane(close_kernel_frac="auto")
     house_table({"cng_feature": {"frac": 1 / 100}})
 
     p = tmp_path / "lot.jpg"
@@ -242,14 +240,14 @@ def test_per_house_is_dormant_while_the_default_is_fixed_seven(close_kernels,
     assert set(close_kernels) == {(7, 7)}
 
 
-def test_auto_enables_configured_values(close_kernels, monkeypatch, house_table):
+def test_auto_enables_configured_values(close_kernels, house_table, mask_lane):
     """
     'auto' means "scale-relative, use configured values" -- but only for a
     house that HAS configured values.  A bare numeric env value would pin one
     frac corpus-wide and make per-house overrides untestable, which is why
     the 'auto' spelling exists.
     """
-    monkeypatch.setenv(ENV_FRAC, "auto")
+    mask_lane(close_kernel_frac="auto")
     house_table({"h": {"frac": 1 / 100}})
 
     segment(render_pair(3000, gap=25), house="h")
@@ -264,7 +262,7 @@ def test_auto_enables_configured_values(close_kernels, monkeypatch, house_table)
 
 @pytest.mark.parametrize("house", [None, "", "not_in_table", "CNG", "gorny"])
 def test_auto_leaves_untabled_houses_on_the_fixed_seven(house, close_kernels,
-                                                        monkeypatch, house_table):
+                                                        house_table, mask_lane):
     """
     The blast radius of enabling `auto` is exactly the houses in the table.
 
@@ -273,28 +271,27 @@ def test_auto_leaves_untabled_houses_on_the_fixed_seven(house, close_kernels,
     rejected for leu -- and push cng's large plates to k=9, MORE bridging than
     today.  Only measured houses deviate.  See SS6.7.
     """
-    monkeypatch.setenv(ENV_FRAC, "auto")
+    mask_lane(close_kernel_frac="auto")
     house_table({"leu": {"min": 5, "max": 5}})
     segment(render_pair(500, gap=8), house=house)
     assert set(close_kernels) == {(7, 7)}
 
 
-def test_auto_still_applies_to_a_tabled_house(close_kernels, monkeypatch,
-                                              house_table):
+def test_auto_still_applies_to_a_tabled_house(close_kernels, house_table, mask_lane):
     """The other half of the gate: membership is what switches it on."""
-    monkeypatch.setenv(ENV_FRAC, "auto")
+    mask_lane(close_kernel_frac="auto")
     house_table({"leu": {"min": 5, "max": 5}})
     segment(render_pair(1200, gap=12), house="leu")
     assert set(close_kernels) == {(5, 5)}
 
 
 def test_membership_gate_matches_house_case_insensitively(close_kernels,
-                                                          monkeypatch, house_table):
+                                                          house_table, mask_lane):
     """
     The gate and the override lookup must agree on spelling, or a house could
     pass the gate and then miss its own entry (or vice versa).
     """
-    monkeypatch.setenv(ENV_FRAC, "auto")
+    mask_lane(close_kernel_frac="auto")
     house_table({"leu": {"min": 5, "max": 5}})
     for spelling in ["leu", "LEU", "  Leu  "]:
         close_kernels.clear()
@@ -302,22 +299,21 @@ def test_membership_gate_matches_house_case_insensitively(close_kernels,
         assert set(close_kernels) == {(5, 5)}, spelling
 
 
-def test_an_explicit_frac_is_NOT_membership_gated(close_kernels, monkeypatch,
-                                                  house_table):
+def test_an_explicit_frac_is_NOT_membership_gated(close_kernels, house_table, mask_lane):
     """
     The sweep knob must still reach untabled houses -- that is how a house
     gets measured in the first place.  Gating it would make the table
     unpopulatable, since no house could ever be swept before it had an entry.
     """
-    monkeypatch.setenv(ENV_FRAC, "0.01")
+    mask_lane(close_kernel_frac="0.01")
     house_table({"leu": {"min": 5, "max": 5}})
     segment(render_pair(500, gap=8), house="never_measured")
     assert set(close_kernels) == {(5, 5)}   # 500 * 0.01 = 5, not the gated 7
 
 
 @pytest.mark.parametrize("spelling", ["auto", "AUTO", " Auto "])
-def test_auto_spelling(spelling, close_kernels, monkeypatch, house_table):
-    monkeypatch.setenv(ENV_FRAC, spelling)
+def test_auto_spelling(spelling, close_kernels, house_table, mask_lane):
+    mask_lane(close_kernel_frac=spelling)
     house_table({"h": {"min": 3, "max": 3}})
     segment(render_pair(500, gap=8), house="h")
     assert set(close_kernels) == {(3, 3)}

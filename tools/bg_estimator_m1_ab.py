@@ -73,6 +73,7 @@ def _worker_main() -> None:
     sys.path.insert(1, PIPELINE_ROOT)
     import src.pipeline_manager as pm          # noqa: E402
     import src.math_utils as mu                # noqa: E402
+    from src import mask_config
     from src.math_utils import detect_background_histogram  # noqa: E402
 
     resolved = os.path.realpath(mu.__file__)
@@ -357,12 +358,13 @@ def main():
     }
     print(json.dumps(meta), flush=True)
 
-    env_extra = {"M1_VISION_ROOT": vision_root}
-    if a.gate == "on":
-        env_extra[GATE_ENV] = "1"
-    else:
-        env_extra.pop(GATE_ENV, None)
-        os.environ.pop(GATE_ENV, None)
+    # The arm now travels to the worker as a LANE NAME, not as a knob value.
+    # `serving` and `ingest` differ in exactly bg_corner_local_trust (M1 leg 1),
+    # so the gate on/off arms ARE those two lanes — which is strictly better
+    # than the old spelling: the worker's arm is now a lane someone can look up
+    # rather than an env var someone has to interpret.
+    env_extra = {"M1_VISION_ROOT": vision_root,
+                 mask_config.LANE_SELECTOR_ENV: ("serving" if a.gate == "on" else "ingest")}
 
     lock = threading.Lock()
     fh = open(a.out, "w")

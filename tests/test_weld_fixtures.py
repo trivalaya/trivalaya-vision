@@ -57,19 +57,19 @@ def test_bridging_model_at_fixed_seven(scale, gap):
 
 @pytest.mark.parametrize("scale", SCALES)
 @pytest.mark.parametrize("gap", GAPS)
-def test_bridging_model_scale_relative(scale, gap, monkeypatch):
+def test_bridging_model_scale_relative(scale, gap, mask_lane):
     """
     Same model, with the kernel sized per-image.  The weld signature must
     appear ONLY below the predicted threshold for that scale's kernel.
     """
-    monkeypatch.setenv(ENV_FRAC, str(1 / 400))
+    mask_lane(close_kernel_frac=str(1 / 400))
     img = render_pair(scale, gap)
     k = _close_kernel_size(img.shape[0], img.shape[1])
     expected = 1 if gap < bridging_px(k) else 2
     assert blob_count_post_close(img) == expected
 
 
-def test_scale_relative_fixes_the_cng_feature_case(monkeypatch):
+def test_scale_relative_fixes_the_cng_feature_case(mask_lane):
     """
     The change, stated as one assertion.  cng_feature is 500px wide with a
     measured 5-8px inter-coin gap: welded today (7px < 12px of bridging),
@@ -79,25 +79,25 @@ def test_scale_relative_fixes_the_cng_feature_case(monkeypatch):
     assert blob_count_pre_close(img) == 2, "Otsu should already find both coins"
     assert blob_count_post_close(img) == 1, "today's 7x7 welds them"
 
-    monkeypatch.setenv(ENV_FRAC, str(1 / 400))
+    mask_lane(close_kernel_frac=str(1 / 400))
     assert blob_count_post_close(img) == 2, "k=3 must preserve the separation"
 
 
-def test_kuenker_case_is_unaffected(monkeypatch):
+def test_kuenker_case_is_unaffected(mask_lane):
     """The ~25px-gap control: survives under both kernels, at any scale."""
     for scale in SCALES:
         img = render_pair(scale, gap=25)
         assert blob_count_post_close(img) == 2
-        monkeypatch.setenv(ENV_FRAC, str(1 / 400))
+        mask_lane(close_kernel_frac=str(1 / 400))
         assert blob_count_post_close(img) == 2
-        monkeypatch.delenv(ENV_FRAC)
+        mask_lane(close_kernel_frac=None)
 
 
 # --- SS4.3 equivalence, run in CI rather than only at the manual gate --------
 
 @pytest.mark.parametrize("width", [2400, 3000, 3199])
 @pytest.mark.parametrize("gap", [5, 12, 25])
-def test_large_format_output_is_identical(width, gap, monkeypatch):
+def test_large_format_output_is_identical(width, gap, mask_lane):
     """
     In the 2400-3199 band the kernel stays 7, so enabling the scale-relative
     path must be a no-op -- bbox-identical output.  Any diff at large scale
@@ -110,7 +110,7 @@ def test_large_format_output_is_identical(width, gap, monkeypatch):
     img = render_pair(width, gap)
 
     before, _ = segment(img)
-    monkeypatch.setenv(ENV_FRAC, str(1 / 400))
+    mask_lane(close_kernel_frac=str(1 / 400))
     after, _ = segment(img)
 
     assert [c["bbox"] for c in before] == [c["bbox"] for c in after]
@@ -136,7 +136,7 @@ def _fragmented_pair(scale: int, gap: int, band: int) -> np.ndarray:
     return img
 
 
-def test_under_closing_fragments_small_images(monkeypatch):
+def test_under_closing_fragments_small_images(mask_lane):
     """
     SS7.2, the cost of the fix.  A 9px fracture that k=7 heals is left open by
     k=3, turning a 2-coin lot into a 3-blob lot.  Gap is 25px so the coins are
@@ -149,7 +149,7 @@ def test_under_closing_fragments_small_images(monkeypatch):
 
     assert len(segment(img)[0]) == 2, "k=7 heals a 9px fracture (9 < 12)"
 
-    monkeypatch.setenv(ENV_FRAC, str(1 / 400))
+    mask_lane(close_kernel_frac=str(1 / 400))
     frags = segment(img)[0]
     assert len(frags) > 2, "k=3 leaves a 9px fracture open (9 > 4)"
 
