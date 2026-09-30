@@ -7,6 +7,23 @@ Used by layer1_geometry.py for all L1 detections (two-coin splits and single-coi
 
 from typing import Dict, List, Optional, Tuple, Any
 
+# ---- #231 full-frame tripwire --------------------------------------------------------------
+# A crop box that covers >= T of the frame AND a detection whose coin_likelihood is below the
+# PAIRING gate's own threshold is an unsplit photo (obverse+reverse on one frame, the split failed),
+# not a coin: pairing already drops it (trivalaya-pipeline catalog.py:681-682, coin_likelihood >= 0.5),
+# so the gate now says so where the quality counts can see it (it used to read GREEN 'clean').
+#
+# T = 0.85 is the silent set's MINIMUM measured crop-box fraction (#231-A: 0.855 on one lot; the other
+# 882 of 883 are >= 0.98) rounded down to 2 dp so that lot is inside. The likelihood half is a SIBLING of
+# MLConfig.min_coin_likelihood (trivalaya_pipeline/config.py:111) -- pinned by
+# trivalaya-pipeline/tests/test_full_frame_gate_sibling.py so the two cannot drift apart silently.
+# Area alone is NOT the rule: a single coin that fills the frame is legitimate (#231-A §T: paired GREEN
+# detections at >= 0.98 exist), which is why this is a conjunction.
+FULL_FRAME_MIN_REL_AREA = 0.85
+FULL_FRAME_MAX_LIKELIHOOD = 0.5
+FULL_FRAME_REASON = "full_frame_unsplit"
+
+
 def get_detection_quality_flag(
     candidate: Dict,
     crop_box: Tuple[int, int, int, int],
@@ -23,6 +40,8 @@ def get_detection_quality_flag(
     low_solidity_thr: float = 0.90,
     offcenter_thr: float = 0.15,     # >15% deviation
     clamp_tol_px: int = 1,
+    full_frame_min_rel_area: float = FULL_FRAME_MIN_REL_AREA,
+    full_frame_max_likelihood: float = FULL_FRAME_MAX_LIKELIHOOD,
 ) -> Tuple[str, str, Dict[str, Any]]:
     """
     Evaluates crop quality for ML readiness.
@@ -163,6 +182,18 @@ def get_detection_quality_flag(
     if edge_hits >= 2 and (is_weak_geometry or is_smallish):
         reasons.insert(0, "severe_clamp_escalation")
         return "RED", "severe_clamp", {"reasons": reasons, "metrics": metrics}
+
+    # ---- 3b. #231 full-frame tripwire: upgrade to RED, never relabel an existing RED ----
+    # Full-frame AND below the pairing likelihood gate => unsplit photo. Evaluated only when the caller supplies
+    # coin_likelihood (absent => never fires: the gate may not guess a proposition it has no evidence for).
+    # Placed AFTER every existing RED path (empty / aspect / tiny above, severe_clamp just above) so an already-RED
+    # detection keeps its reason; only a would-be YELLOW or GREEN is upgraded.
+    ff_lik = candidate.get("coin_likelihood")
+    if ff_lik is not None and rel_area >= full_frame_min_rel_area and ff_lik < full_frame_max_likelihood:
+        ff_metrics = dict(metrics)
+        ff_metrics["rel_area"] = round(rel_area, 3)
+        ff_metrics["coin_likelihood"] = ff_lik
+        return "RED", FULL_FRAME_REASON, {"reasons": [FULL_FRAME_REASON] + reasons, "metrics": ff_metrics}
 
     # ---- 4. FINAL VERDICT ----
     if reasons:

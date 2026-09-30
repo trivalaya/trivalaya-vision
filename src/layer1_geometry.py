@@ -819,7 +819,11 @@ def _flag_single_coin_candidates(candidates: List[Dict], shape: tuple) -> None:
                     min(w, bx + bw + m), min(h, by + bh + m))
 
         flag, primary_reason, details = get_detection_quality_flag(
-            candidate={"solidity": solidity, "cx": cx, "cy": cy},
+            # coin_likelihood feeds ONLY the #231 full-frame tripwire (crop_quality.py); it is computed in
+            # L1 before this point (single-coin candidates carry geometry.coin_likelihood). Two-coin split
+            # candidates below deliberately do not pass it (their 0.90 is a fixed split score).
+            candidate={"solidity": solidity, "cx": cx, "cy": cy,
+                       "coin_likelihood": cand["geometry"].get("coin_likelihood")},
             crop_box=crop_box,
             img_w=w, img_h=h,
             neighbor_midpoint=None,
