@@ -9,9 +9,11 @@ from typing import Dict, List, Optional, Tuple, Any
 
 # ---- #231 full-frame tripwire --------------------------------------------------------------
 # A crop box that covers >= T of the frame AND a detection whose coin_likelihood is below the
-# PAIRING gate's own threshold is an unsplit photo (obverse+reverse on one frame, the split failed),
-# not a coin: pairing already drops it (trivalaya-pipeline catalog.py:681-682, coin_likelihood >= 0.5),
-# so the gate now says so where the quality counts can see it (it used to read GREEN 'clean').
+# PAIRING gate's own threshold: pairing already drops it (trivalaya-pipeline catalog.py:681-682,
+# coin_likelihood >= 0.5), so the gate now says so where the quality counts can see it (it used to read
+# GREEN 'clean'). The reason is named for what the predicate PROVES -- area and likelihood -- not for a
+# cause it never reads: a legitimate many-coin lay-down is also full-frame and low-likelihood (#231 A2,
+# architect ruling Amendment 5 / canon #17 #19). It is a REJECT-VISIBILITY count, not a miss count.
 #
 # T = 0.85 is the silent set's MINIMUM measured crop-box fraction (#231-A: 0.855 on one lot; the other
 # 882 of 883 are >= 0.98) rounded down to 2 dp so that lot is inside. The likelihood half is a SIBLING of
@@ -21,7 +23,7 @@ from typing import Dict, List, Optional, Tuple, Any
 # detections at >= 0.98 exist), which is why this is a conjunction.
 FULL_FRAME_MIN_REL_AREA = 0.85
 FULL_FRAME_MAX_LIKELIHOOD = 0.5
-FULL_FRAME_REASON = "full_frame_unsplit"
+FULL_FRAME_REASON = "full_frame_low_likelihood"
 
 
 def get_detection_quality_flag(
@@ -184,7 +186,7 @@ def get_detection_quality_flag(
         return "RED", "severe_clamp", {"reasons": reasons, "metrics": metrics}
 
     # ---- 3b. #231 full-frame tripwire: upgrade to RED, never relabel an existing RED ----
-    # Full-frame AND below the pairing likelihood gate => unsplit photo. Evaluated only when the caller supplies
+    # Full-frame AND below the pairing likelihood gate => RED (full_frame_low_likelihood). Evaluated only when the caller supplies
     # coin_likelihood (absent => never fires: the gate may not guess a proposition it has no evidence for).
     # Placed AFTER every existing RED path (empty / aspect / tiny above, severe_clamp just above) so an already-RED
     # detection keeps its reason; only a would-be YELLOW or GREEN is upgraded.
