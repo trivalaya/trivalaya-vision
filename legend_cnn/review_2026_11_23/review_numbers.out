@@ -1,0 +1,33 @@
+coins 6232; train 4996, val 618, test 618
+
+-- 1. which side of the coin
+{'named reverse': 5715, 'other (numbered crop)': 517}
+
+-- 2. baselines that never see an image (validation set)
+largest class Hadrian: 0.149
+entropy of the class shares (nats): 2.267; ln(10) = 2.303
+most common authority of the coin's dealer (9 in train): 0.184
+most common authority of the coin's sale (131 in train): 0.241
+sampling error at 19.6% on 618 coins: 1.60 points (one standard error)
+
+-- 3. training logs (validation only; no test output exists)
+train_log_run0_baseline.csv: epochs 24; at lowest val loss (epoch 19): val acc 0.1958; best val acc any epoch 0.1958; train loss first 2.272 last 2.072
+train_log_run1_baseline.csv: epochs 24; at lowest val loss (epoch 19): val acc 0.1958; best val acc any epoch 0.1958; train loss first 2.272 last 2.072
+train_log_run2_lr3e4_bs64.csv: epochs 15; at lowest val loss (epoch 10): val acc 0.1845; best val acc any epoch 0.1974; train loss first 2.266 last 2.121
+train_log_run3_filtered.csv: epochs 21; at lowest val loss (epoch 16): val acc 0.2026; best val acc any epoch 0.2026; train loss first 2.264 last 2.025
+train_log_run4_h128.csv: epochs 23; at lowest val loss (epoch 18): val acc 0.1845; best val acc any epoch 0.1877; train loss first 2.264 last 2.091
+train_log_run4_h128_pod.csv: epochs 23; at lowest val loss (epoch 18): val acc 0.1845; best val acc any epoch 0.1877; train loss first 2.264 last 2.091
+
+-- 4. geometry of the training ribbons, from the run's own ribbon_stats.csv (the images are 512 x 512)
+ 1989   31.9%  fixed fallback centre (256, 256), radius 220
+ 3032   48.7%  own centre, radius above 256 px (larger than the image allows)
+  928   14.9%  own centre, radius within 256 px, centre over 40 px from the image centre
+  283    4.5%  own centre, radius within 256 px, centre within 40 px
+fallback reasons: {'center_out_of_bounds': 1961, 'radius_too_small': 28}
+'good' bucket: 3807 of 6232; among radius above 256 px: 1774 of 3032
+ribbons less than half non-black: 2086 of 6232
+run_20260410_013529_promoted_v1: radial samples in the band 61, stored ribbon height 64
+run_20260410_161829_promoted_v1_h128: radial samples in the band 61, stored ribbon height 128
+
+-- 5. size of the mask files (the images are 512 x 512)
+masks read 237 (sample of 240, seed 11); exactly 512 x 512: 0; width 5th / median / 95th percentile: 89 / 665 / 1201; sides differing by over 5%: 156

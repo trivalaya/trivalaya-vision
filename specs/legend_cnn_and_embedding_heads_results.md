@@ -7,6 +7,13 @@
 
 ## Part 1: Legend Ribbon CNN (dead end)
 
+> **Notice, 2026-11-23: the conclusions of Part 1 are not supported by its stored outputs.** A review
+> (`legend_cnn/review_2026_11_23/REPORT.md`) found that the ribbons were cut from the reverse side (5,715 of 6,232
+> images; none named obverse), that the centre and radius were measured on the mask file and applied to a different
+> 512 px image (48.7% of ribbons used a radius above 256 px, 31.9% a fixed fallback circle), and that the 18% to 20%
+> is level with a guess from the coin's dealer that uses no image (18.4%). Whether a correctly cut strip helps is
+> unmeasured. The text below is left as written in April.
+
 ### Question
 Can a lightweight CNN on grayscale polar-unwrapped legend ribbons separate 10 Roman Imperial authorities?
 
